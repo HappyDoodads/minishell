@@ -1,0 +1,64 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/05/13 10:53:47 by jcoquet           #+#    #+#              #
+#    Updated: 2024/05/15 08:23:51 by jcoquet          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = minishell
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g
+RM = rm -f
+
+SRC_DIR = src/
+
+OBJ_DIR = obj/
+
+LIBFT			= ./libft/libft.a
+LIBFT_DIR		= ./libft
+LIBFT_MAKE		= make -C $(LIBFT_DIR)
+LIBFT_CLEAN		= make clean -C $(LIBFT_DIR)
+LIBFT_FCLEAN	= make fclean -C $(LIBFT_DIR)
+
+SRCS =		errors.c \
+			free.c \
+			main.c \
+			minishell.c \
+			parsing.c \
+			signal.c \
+			utils.c \
+		
+OBJS = $(SRCS:%.c=$(OBJ_DIR)%.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -lreadline $(LIBFT)
+#check readline
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT):	
+				@$(LIBFT_MAKE)
+				@$(LIBFT_CLEAN)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+clean:
+	$(RM) -r $(OBJ_DIR)
+	
+fclean: 	clean
+			$(RM) $(NAME)
+			@$(LIBFT_FCLEAN)
+
+re: fclean all
+
+.PHONY = all re clean fclean
