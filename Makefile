@@ -6,7 +6,7 @@
 #    By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 10:53:47 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/15 08:23:51 by jcoquet          ###   ########.fr        #
+#    Updated: 2024/05/15 16:01:25 by jcoquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,13 @@ LIBFT_CLEAN		= make clean -C $(LIBFT_DIR)
 LIBFT_FCLEAN	= make fclean -C $(LIBFT_DIR)
 
 SRCS =		errors.c \
+			cd.c \
+			echo.c \
+			env.c \
+			exit.c \
+			export.c \
+			pwd.c \
+			unset.c \
 			free.c \
 			main.c \
 			minishell.c \
