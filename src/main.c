@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:37 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/15 14:29:18 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/16 17:01:08 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,22 @@
 
 int	main(void)
 {
-	char	*commande;
+	char		*input;
 
-	commande = NULL;
 	signal(SIGINT, sigint_handler);
 	while (1)
 	{
-		commande = readline("\033[1;32mminishell$ \033[0m");
-		if (strncmp(commande, "exit", 4) == 0)
+		input = readline("Minishell $ ");
+		if (input && *input)
+			add_history(input);
+		if (input && ft_strncmp(input, "exit", 4) == 0)
 		{
-			free(commande);
+			free(input);
 			printf("%sexit minishell\n%s", RED, RST);
 			exit(EXIT_SUCCESS);
 		}
-		printf("%scommande not found%s\n", BLUE, RST);
-		free(commande);
+		printf("%sCommand not found%s\n", BLUE, RST);
+		free(input);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/15 16:04:47 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/16 15:35:07 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 /////////////////////////      DEFINES     ///////////////////////////////////
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
-# include "unistd.h"
-# include "stdio.h"
-# include "stdlib.h"
-# include "signal.h"
-# include "string.h"
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <signal.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "./libft/include/libft.h"
 
 ///////////////////////////     COLORS    ////////////////////////////////////
 
