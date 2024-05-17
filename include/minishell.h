@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 08:49:46 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/17 11:43:58 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,6 @@
 # define WHITE "\033[1;36m"
 
 ///////////////////////////////////STRUCTURES///////////////////////////////////
-
-enum e_arg_type
-{
-	OUTPUT_FILE,
-	INPUT_FILE,
-	CMD,
-};
 
 typedef struct s_command
 {
