@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 07:52:32 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/17 08:49:46 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ enum e_arg_type
 	INPUT_FILE,
 	CMD,
 };
+
+typedef struct s_command
+{
+	char	*argv;
+	int		fd_in;
+	int		fd_out;
+}			t_command;
 
 /**********************************PROTOTYPES**********************************/
 
