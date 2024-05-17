@@ -6,7 +6,7 @@
 #    By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 10:53:47 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/16 19:54:00 by jdemers          ###   ########.fr        #
+#    Updated: 2024/05/17 08:18:34 by jcoquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBFT_MAKE		= make -C $(LIBFT_DIR)
 LIBFT_CLEAN		= make clean -C $(LIBFT_DIR)
 LIBFT_FCLEAN	= make fclean -C $(LIBFT_DIR)
 
-HEADERS =	-I./include -I$(LIBFT_DIR)/include -lreadline
+HEADERS =	-I./include -I$(LIBFT_DIR)/include
 
 SRCS =		errors.c \
 			cd.c \
@@ -48,8 +48,7 @@ OBJS = $(SRCS:%.c=$(OBJ_DIR)%.o)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(HEADERS)
-#check readline
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(HEADERS) -lreadline
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)

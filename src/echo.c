@@ -6,8 +6,8 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:01 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/15 15:50:13 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/17 08:16:00 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"

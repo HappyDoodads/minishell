@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/16 21:27:28 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/17 07:52:32 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <string.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "./libft/include/libft.h"
+# include "../libft/include/libft.h"
 
 ///////////////////////////     COLORS    ////////////////////////////////////
 
@@ -43,7 +44,7 @@ enum e_arg_type
 	OUTPUT_FILE,
 	INPUT_FILE,
 	CMD,
-}
+};
 
 /**********************************PROTOTYPES**********************************/
 
@@ -54,6 +55,10 @@ enum e_arg_type
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
+
+///////////////////////////////   PWD   ////////////////////////////////////
+
+void	ft_pwd(void);
 
 //////////////////////////////    SIGNAL   /////////////////////////////////////
 
