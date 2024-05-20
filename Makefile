@@ -6,7 +6,7 @@
 #    By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 10:53:47 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/17 08:18:34 by jcoquet          ###   ########.fr        #
+#    Updated: 2024/05/20 11:57:16 by jcoquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,11 +44,11 @@ SRCS =		errors.c \
 		
 OBJS = $(SRCS:%.c=$(OBJ_DIR)%.o)
 
-
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(HEADERS) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(HEADERS) -L readline-8.2 -l ncurses readline-8.2/libhistory.a \
+readline-8.2/libreadline.a
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
@@ -71,3 +71,10 @@ fclean: 	clean
 re: fclean all
 
 .PHONY = all re clean fclean
+
+
+#in the folder readline make distclean
+
+# add regle export in zshrc
+# export LDFLAGS="-L/Users/jcoquet/.brew/opt/readline/lib"
+# export CPPFLAGS="-I/Users/jcoquet/.brew/opt/readline/include"

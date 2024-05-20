@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 09:38:49 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/17 15:46:14 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@
 
 ///////////////////////////     COLORS    ////////////////////////////////////
 
-# define RST "\033[0m"
-# define RED "\033[1;31m"
-# define GREEN "\033[1;32m"
-# define YELLOW "\033[1;33m"
-# define BLUE "\033[1;34m"
-# define MAGENTA "\033[1;35m"
-# define CYAN "\033[1;35m"
-# define WHITE "\033[1;36m"
+# define RST "\e[0m"
+# define RED "\e[1;31m"
+# define GREEN "\e[1;32m"
+# define YELLOW "\e[1;33m"
+# define BLUE "\e[1;34m"
+# define MAGENTA "\e[1;35m"
+# define CYAN "\e[1;35m"
+# define WHITE "\e[1;36m"
 
 ///////////////////////////////////STRUCTURES///////////////////////////////////
 
@@ -57,6 +57,10 @@ typedef struct s_command
 }			t_command;
 
 /**********************************PROTOTYPES**********************************/
+
+///////////////////////////////   ECHO  ///////////////////////////////////
+
+void	ft_echo(char *input);
 
 ///////////////////////////////   ERRORS   ///////////////////////////////////
 
