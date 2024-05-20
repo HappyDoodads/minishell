@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 15:46:14 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:13:08 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,19 @@
 
 typedef struct s_command
 {
-	char	*argv;
+	char	**argv;
 	int		fd_in;
 	int		fd_out;
 }			t_command;
+
+///////////////////////////     ENUMS     //////////////////////////////////////
+
+enum e_quote_status
+{
+	NO_QUOTE = 0,
+	SQUOTE,
+	DQUOTE
+};
 
 /**********************************PROTOTYPES**********************************/
 
