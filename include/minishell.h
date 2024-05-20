@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 15:46:14 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/20 15:15:01 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	ft_pwd(void);
 
 //////////////////////////////    SIGNAL   /////////////////////////////////////
 
+void	sigint_handler(int sig);
+void	signal_handler(int signal, siginfo_t *info, void *ucontext);
 void	sigint_handler(int sig);
 
 //////////////////////////////    UTILS   /////////////////////////////////////

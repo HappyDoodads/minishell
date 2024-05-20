@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:37 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 11:42:20 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/20 16:44:11 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(void)
 {
-	signal(SIGINT, sigint_handler);
+	// sigint_handler(SIGINT);
 	ft_create_prompt();
 	return (EXIT_SUCCESS);
 }
