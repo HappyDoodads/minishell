@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/20 18:34:49 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/22 16:12:38 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ typedef struct s_command
 enum e_quote_status
 {
 	NO_QUOTE = 0,
-	SQUOTE,
-	DQUOTE
+	DQUOTE = 34,
+	SQUOTE = 39
 };
 
 /**********************************PROTOTYPES**********************************/
@@ -78,6 +78,9 @@ void	ft_create_prompt(void);
 int		command_handler(char *input);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
+
+t_list	**parse_input(char *cmdline);
+char	**split_args(const char *s);
 
 ///////////////////////////////   PWD   ////////////////////////////////////
 
