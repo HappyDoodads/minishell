@@ -6,45 +6,24 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:09:04 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/24 14:34:25 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/24 16:46:36 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	signal_handler(int signal, siginfo_t *info, void *ucontext)
+void	sigint_handler(int sig_num)
 {
-	struct sigaction	sa;
-
-	(void)*info;
-	(void)*ucontext;
-	if (signal == SIGINT)
-	{
-		ft_printf("\n");
-		ft_create_prompt();
-		// sa.sa_handler = SIG_DFL;
-		// sigemptyset(&sa.sa_mask);
-		sa.sa_flags = 0;
-		sigaction(SIGINT, &sa, NULL);
-	}
+	(void)sig_num;
+	rl_on_new_line();
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
-void	sigint_handler(int sig)
+void	sigquit_handler(int sig_num)
 {
-	struct sigaction	sa;
-
-	(void)sig;
-	printf("\n");
-	sa.sa_sigaction = &signal_handler;
-	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = SIG_DFL;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	if (sigaction(SIGUSR1, &sa, NULL) == -1 || \
-	sigaction(SIGUSR2, &sa, NULL) == -1 || sigaction(SIGINT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		exit(EXIT_FAILURE);
-	}
+	(void)sig_num;
+	rl_redisplay();
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/24 16:27:16 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/24 16:55:51 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,8 @@ void	ft_pwd(void);
 
 //////////////////////////////    SIGNAL   /////////////////////////////////////
 
-void	sigint_handler(int sig);
-void	signal_handler(int signal, siginfo_t *info, void *ucontext);
-void	sigint_handler(int sig);
+void	sigint_handler(int sig_num);
+void	sigquit_handler(int sig_num);
 
 //////////////////////////////    UTILS   /////////////////////////////////////
 
