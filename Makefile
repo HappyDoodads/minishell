@@ -6,7 +6,7 @@
 #    By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 07:32:04 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/24 16:06:01 by jcoquet          ###   ########.fr        #
+#    Updated: 2024/05/24 16:34:17 by jcoquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
 
 # Compiler and flags
 CC				=	gcc
-CFLAGS			=	-Wall -Werror -Wextra -g
+CFLAGS			=	-Wall -Werror -Wextra -Iinclude/ -g
 #-fsanitize=address
 RM				=	rm -f
 
@@ -81,13 +81,13 @@ rl:
 	@if test $(TEST) = 1 ; then \
 		cd readline && ./configure && make ; \
 	else \
-		echo readline all ready make ; sleep 1; \
+		echo readline all ready make ; sleep 2; \
 	fi
 
 libft:
 	@printf $(L)making libft\n$(L)
 	@make -s -C $(LIBFT_DIR)
-	@printf $(L)libft done\n$(L)
+	@printf $(L)libft done\n$(L); sleep 2; 
 
 readline:
 	cd $(RL_DIR) && ./configure && $(MAKE)
