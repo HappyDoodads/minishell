@@ -3,11 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:09:17 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/17 08:16:33 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:34:02 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"

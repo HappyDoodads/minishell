@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:09:04 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/20 16:46:22 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:34:25 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 void	signal_handler(int signal, siginfo_t *info, void *ucontext)
 {

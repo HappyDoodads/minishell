@@ -3,78 +3,123 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jcoquet <jcoquet@student.42.fr>            +#+  +:+       +#+         #
+#    By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/05/13 10:53:47 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/20 11:57:16 by jcoquet          ###   ########.fr        #
+#    Created: 2024/05/24 07:32:04 by jcoquet           #+#    #+#              #
+#    Updated: 2024/05/24 16:06:01 by jcoquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
-RM = rm -f
+NAME			=	minishell
 
-SRC_DIR = src/
+LIBFT			=	libft.a
+LIBFT_DIR		=	libft/
 
-OBJ_DIR = obj/
+RL_DIR			=	readline/
+RL_H			=	libhistory.a
+RL_L			=	libreadline.a
 
-LIBFT			= ./libft/libft.a
-LIBFT_DIR		= ./libft
-LIBFT_MAKE		= make -C $(LIBFT_DIR)
-LIBFT_CLEAN		= make clean -C $(LIBFT_DIR)
-LIBFT_FCLEAN	= make fclean -C $(LIBFT_DIR)
+#		config		#
 
-HEADERS =	-I./include -I$(LIBFT_DIR)/include
+# version = \"$(shell cat .config/version)\"
 
-SRCS =		errors.c \
-			cd.c \
-			echo.c \
-			env.c \
-			exit.c \
-			export.c \
-			pwd.c \
-			unset.c \
-			free.c \
-			main.c \
-			minishell.c \
-			parsing.c \
-			signal.c \
-			utils.c \
-		
-OBJS = $(SRCS:%.c=$(OBJ_DIR)%.o)
+USER = $(shell whoami)
+PWD  = \"$(shell pwd)\"
 
-all: $(NAME)
+ifeq ($(shell uname -s), Darwin)
+    BIN_DIR = \"/Users/$(USER)/Mini_bin/\"
+    L = "
+else
+    BIN_DIR = \"/home/$(USER)/Mini_bin/\"
+    L = '
+endif
 
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(HEADERS) -L readline-8.2 -l ncurses readline-8.2/libhistory.a \
-readline-8.2/libreadline.a
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS) && printf "Compiling $(notdir $<)\n"
+ifeq ($(shell test -d /Users/$(USER)/.brew/opt/readline; echo $$?), 0)
+    BREW = .brew
+else ifeq ($(shell test -d /Users/$(USER)/homebrew/opt/readline; echo $$?), 0)
+    BREW = homebrew
+endif
 
-$(LIBFT):	
-	@$(LIBFT_MAKE)
-	@$(LIBFT_CLEAN)
+TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+# Compiler and flags
+CC				=	gcc
+CFLAGS			=	-Wall -Werror -Wextra -g
+#-fsanitize=address
+RM				=	rm -f
 
+# Sources are all .c files
+SRCS	=	src/main.c \
+			src/cd.c \
+			src/echo.c \
+			src/env.c \
+			src/errors.c \
+ 			src/exit.c \
+			src/export.c \
+			src/free.c \
+ 			src/minishell.c \
+ 			src/pwd.c \
+ 			src/signal.c \
+			src/unset.c \
+			src/utils.c \
+			# src/parsing.c \
+ 			src/split_args.c \
+			
+
+#env -i ./minishell
+
+OBJS	=	$(SRCS:.c=.o)
+
+all: rl libft $(NAME)
+
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)$(LIBFT) -L readline -l readline -l ncurses \
+	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L) -o $(NAME)
+
+rl:
+	@if test $(TEST) = 1 ; then \
+		cd readline && ./configure && make ; \
+	else \
+		echo readline all ready make ; sleep 1; \
+	fi
+
+libft:
+	@printf $(L)making libft\n$(L)
+	@make -s -C $(LIBFT_DIR)
+	@printf $(L)libft done\n$(L)
+
+readline:
+	cd $(RL_DIR) && ./configure && $(MAKE)
+
+rm_readline:
+	cd $(RL_DIR) && make distclean
+
+
+# Removes objects
 clean:
-	$(RM) -r $(OBJ_DIR)
-	
-fclean: 	clean
-	$(RM) $(NAME)
-	@$(LIBFT_FCLEAN)
+	@$(RM) $(OBJS)
+	@make -C $(LIBFT_DIR)	clean
+	@echo $(shell clear)
+	@printf $(L)clean ok\n$(L)
+
+# Removes objects and executables
+fclean: clean
+	@$(RM) $(NAME)
+	@$(RM) -fr minishell.dSYM 
+	@make -C $(LIBFT_DIR)     fclean
+	@echo $(shell clear)
+	@printf $(L)fclean ok\n$(L)
+
+ffclean: rm_readline fclean
+
+run: all
+	@./$(NAME)
 
 re: fclean all
 
-.PHONY = all re clean fclean
+cp:
+	cp supp.txt /tmp
 
 
-#in the folder readline make distclean
-
-# add regle export in zshrc
-# export LDFLAGS="-L/Users/jcoquet/.brew/opt/readline/lib"
-# export CPPFLAGS="-I/Users/jcoquet/.brew/opt/readline/include"
+.PHONY: all libft run mc readline rm_readline
