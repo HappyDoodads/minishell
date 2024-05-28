@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/24 16:55:51 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:54:18 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 
 # define PWD "pwd"
 # define EXIT "exit"
+# ifndef MAX_FD
+#  define MAX_FD 256
+# endif
+# define STDIN_DUP 3
+# define STDOUT_DUP 4
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 # include <unistd.h>
@@ -45,8 +50,8 @@
 typedef struct s_command
 {
 	char	**argv;
-	int		fd_in;
-	int		fd_out;
+	int		rd_fd;
+	int		wr_fd;
 }			t_command;
 
 ///////////////////////////     ENUMS     //////////////////////////////////////
@@ -66,6 +71,8 @@ void	ft_echo(char *input);
 
 ///////////////////////////////   ERRORS   ///////////////////////////////////
 
+void	free_command(void *data);
+
 ///////////////////////////////   EXIT   ///////////////////////////////////
 
 void	ft_exit(char *input);
@@ -75,11 +82,12 @@ void	ft_exit(char *input);
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
 void	ft_create_prompt(void);
-int		command_handler(char *input);
+int		command_handler(t_list *cmd_list, int fd_arr[MAX_FD]);
+void	exec_command(t_command *command, int fd_arr[MAX_FD]);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
 
-t_list	**parse_input(char *cmdline);
+t_list	*parse_input(char *input, int fd_arr[MAX_FD]);
 char	**split_args(const char *s);
 
 ///////////////////////////////   PWD   ////////////////////////////////////
@@ -92,5 +100,10 @@ void	sigint_handler(int sig_num);
 void	sigquit_handler(int sig_num);
 
 //////////////////////////////    UTILS   /////////////////////////////////////
+
+void	reset_fd_array(int fd_arr[MAX_FD]);
+void	add_fd(int fd_arr[MAX_FD], int fd);
+int		get_last_fd(int fd_arr[MAX_FD]);
+int		close_all(int fd_arr[MAX_FD], int fd1, int fd2);
 
 #endif
