@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 15:54:18 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/29 15:35:07 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@
 # define STDOUT_DUP 4
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
+
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <string.h>
 # include <limits.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/include/libft.h"
@@ -65,45 +67,52 @@ enum e_quote_status
 
 /**********************************PROTOTYPES**********************************/
 
-///////////////////////////////   ECHO  ///////////////////////////////////
+///////////////////////////////   BUILTINS   ///////////////////////////////////
 
-void	ft_echo(char *input);
+int		ft_cd(t_command *cmd);
+int		ft_pwd(t_command *cmd);
+int		ft_env(t_command *cmd);
+int		ft_echo(t_command *cmd);
+int		ft_export(t_command *cmd);
+int		ft_unset(t_command *cmd);
+void	ft_exit(t_command *cmd, t_list **cmd_list);
 
-///////////////////////////////   ERRORS   ///////////////////////////////////
+///////////////////////////////   ERRORS    ////////////////////////////////////
+
+
+///////////////////////////////    EXEC    /////////////////////////////////////
+
+int		exec_builtin(t_command *command, t_list **cmd_list);
+void	exec_command(t_command *command, int fd_arr[MAX_FD], t_list **cmd_list);
+
+////////////////////////////////   FREE    /////////////////////////////////////
 
 void	free_command(void *data);
-
-///////////////////////////////   EXIT   ///////////////////////////////////
-
-void	ft_exit(char *input);
-
-//////////////////////////////    FREE      ///////////////////////////////////
 
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
 void	ft_create_prompt(void);
-int		command_handler(t_list *cmd_list, int fd_arr[MAX_FD]);
-void	exec_command(t_command *command, int fd_arr[MAX_FD]);
+int		command_handler(t_list **cmd_list, int fd_arr[MAX_FD]);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
 
 t_list	*parse_input(char *input, int fd_arr[MAX_FD]);
 char	**split_args(const char *s);
 
-///////////////////////////////   PWD   ////////////////////////////////////
+/////////////////////////////   REDIRECTING   //////////////////////////////////
 
-void	ft_pwd(void);
 
-//////////////////////////////    SIGNAL   /////////////////////////////////////
+//////////////////////////////    SIGNAL    ////////////////////////////////////
 
 void	sigint_handler(int sig_num);
 void	sigquit_handler(int sig_num);
 
-//////////////////////////////    UTILS   /////////////////////////////////////
+//////////////////////////////    UTILS    /////////////////////////////////////
 
 void	reset_fd_array(int fd_arr[MAX_FD]);
 void	add_fd(int fd_arr[MAX_FD], int fd);
 int		get_last_fd(int fd_arr[MAX_FD]);
 int		close_all(int fd_arr[MAX_FD], int fd1, int fd2);
+char	**get_envp(void);
 
 #endif

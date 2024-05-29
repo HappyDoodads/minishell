@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:04:52 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 15:54:49 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/29 14:42:47 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	get_last_fd(int fd_arr[MAX_FD])
 int	close_all(int fd_arr[MAX_FD], int fd1, int fd2)
 {
 	int	i;
+	
 
 	i = -1;
 	while (fd_arr[++i] != -1)

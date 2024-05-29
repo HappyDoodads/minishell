@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:39 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 15:50:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/29 16:05:18 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,32 @@ void	ft_create_prompt(void)
 	}
 }
 
-int	command_handler(t_list *cmd_list, int fd_arr[MAX_FD])
+int	command_handler(t_list **cmd_list, int fd_arr[MAX_FD])
 {
+	t_list	*cmd;
 	pid_t	pid;
 	int		child_n;
+	int		status;
 
+	cmd = *cmd_list;
+	status = -1;
+	if (cmd->next == NULL)
+		status = exec_builtin(cmd->data, cmd_list);
+	if (status >= 0)
+		return (status);
 	child_n = 0;
-	while (cmd_list)
+	while (cmd != NULL)
 	{
 		pid = fork();
 		if (pid == 0)
-			exec_command(cmd_list->data, fd_arr);
+			exec_command(cmd->data, fd_arr, cmd_list);
 		child_n++;
-		cmd_list = cmd_list->next;
+		cmd = cmd->next;
 	}
 	close_all(fd_arr, -1, -1);
 	while (child_n-- > 0)
-		wait(NULL);
-	return (0);
-}
-
-void	exec_command(t_command *command, int fd_arr[MAX_FD])
-{
-	
+		wait(&status);
+	return (status);
 }
 
 // int	command_handler(char *input)
