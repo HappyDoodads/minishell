@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:50 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/24 14:34:22 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/28 18:15:28 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	cwd[PATH_MAX];
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	if (getcwd(cwd, PATH_MAX) != NULL)
+	{
 		printf("%s%s%s\n", YELLOW, cwd, RST);
-	else
-		perror("getcwd() error");
+		return (0);
+	}
+	perror("getcwd() error");
+	return (errno);
 }
