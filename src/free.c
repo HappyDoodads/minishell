@@ -6,11 +6,11 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:09:31 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 14:24:27 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:19:22 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	free_command(void *data)
 {

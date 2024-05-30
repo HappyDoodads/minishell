@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 13:59:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/05/22 15:42:25 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:16:20 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static unsigned int	ft_arglen(const char *str)
 	char			quote;
 
 	i = 0;
+	len = 0;
 	quote = 0;
 	while (str[i] && (str[i] != ' ' || quote != 0))
 	{
@@ -90,7 +91,10 @@ char	**split_args(const char *s)
 	char			**argv;
 	unsigned int	i;
 
-	argv = ft_calloc(count_args(s) + 1, sizeof(char *));
+	i = count_args(s);
+	if (i == 0)
+		return (NULL);
+	argv = ft_calloc(i + 1, sizeof(char *));
 	if (!argv)
 		return (NULL);
 	i = 0;

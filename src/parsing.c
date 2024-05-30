@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:42 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 15:29:29 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:20:42 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,3 @@ t_list	*parse_input(char *input, int fd_arr[MAX_FD])
 	parse_last_cmd(ft_substr(input, start, i - start), &cmd_list, fd_arr);
 	return (cmd_list);
 }
-
-// int	parse_redirect(t_command *command, char *cmd_str, int i)
-// {
-// 	char	*filename;
-// 	char	redirect;
-// 	int		len;
-// 	int		quote_stat;
-
-// 	redirect = cmd_str[i++];
-// 	quote_stat = NO_QUOTE;
-// 	while (cmd_str[i] == ' ')
-// 		i++;
-// 	len = 0;
-// 	while (cmd_str[i] && cmd_str[i] != ' ')
-// 	{
-		
-// 	}
-// }

@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/29 15:35:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 18:43:26 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ typedef struct s_command
 	int		wr_fd;
 }			t_command;
 
+typedef struct s_misc
+{
+	int		fd_arr[MAX_FD];
+	char	**envp;
+	int		prev_status;
+	t_list	*cmd_list;
+}			t_misc;
+
 ///////////////////////////     ENUMS     //////////////////////////////////////
 
 enum e_quote_status
@@ -75,15 +83,15 @@ int		ft_env(t_command *cmd);
 int		ft_echo(t_command *cmd);
 int		ft_export(t_command *cmd);
 int		ft_unset(t_command *cmd);
-void	ft_exit(t_command *cmd, t_list **cmd_list);
+int		ft_exit(t_command *cmd, t_misc *misc);
 
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 
-int		exec_builtin(t_command *command, t_list **cmd_list);
-void	exec_command(t_command *command, int fd_arr[MAX_FD], t_list **cmd_list);
+int		exec_builtin(t_command *command, t_misc *misc);
+void	exec_command(t_command *command, t_misc *misc);
 
 ////////////////////////////////   FREE    /////////////////////////////////////
 
@@ -91,8 +99,8 @@ void	free_command(void *data);
 
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
-void	ft_create_prompt(void);
-int		command_handler(t_list **cmd_list, int fd_arr[MAX_FD]);
+void	ft_create_prompt(t_misc *misc);
+int		command_handler(t_misc *misc);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
 

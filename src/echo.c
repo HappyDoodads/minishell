@@ -6,11 +6,11 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:01 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/29 15:24:35 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:18:31 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 // static void	write_echo(char *input)
 // {
@@ -41,18 +41,22 @@
 int	ft_echo(t_command *cmd)
 {
 	unsigned int	i;
-	void	(*print_func)(char *, int);
+	char			end;
 
-	print_func = ft_putendl_fd;
 	i = 1;
-	if (cmd->argv[i] == NULL)
-		ft_putchar_fd('\n', 1);
-	else if (ft_strncmp(cmd->argv[i], "-n", 3) == 0)
+	end = '\n';
+	if (cmd->argv[i] != NULL && ft_strncmp(cmd->argv[i], "-n", 3) == 0)
 	{
-		print_func = ft_putstr_fd;
+		end = 0;
 		i++;
 	}
 	while (cmd->argv[i] != NULL)
-		print_func(cmd->argv[i++], cmd->wr_fd);
+	{
+		ft_putstr_fd(cmd->argv[i++], cmd->wr_fd);
+		if (cmd->argv[i] != NULL)
+			ft_putchar_fd(' ', cmd->wr_fd);
+	}
+	if (end)
+		ft_putchar_fd(end, cmd->wr_fd);
 	return (0);
 }

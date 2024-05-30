@@ -1,23 +1,15 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/05/24 07:32:04 by jcoquet           #+#    #+#              #
-#    Updated: 2024/05/24 16:34:17 by jcoquet          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME			=	minishell
 
-LIBFT			=	libft.a
-LIBFT_DIR		=	libft/
+LIBFT_DIR		=	./libft
+LIBFT			=	$(LIBFT_DIR)/libft.a
 
-RL_DIR			=	readline/
-RL_H			=	libhistory.a
-RL_L			=	libreadline.a
+RL_DIR			=	./readline
+RL_H			=	$(RL_DIR)/libhistory.a
+RL_L			=	$(RL_DIR)/libreadline.a
+
+HEADERS			=	-I./include -I$(LIBFT_DIR)/include
+LINKERS			=	-Lreadline -lreadline -lncurses
+LIBS			= $(RL_H) $(RL_L) $(LIBFT)
 
 #		config		#
 
@@ -45,49 +37,59 @@ TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
 
 # Compiler and flags
 CC				=	gcc
-CFLAGS			=	-Wall -Werror -Wextra -Iinclude/ -g
+CFLAGS			=	-Wall -Werror -Wextra -g
 #-fsanitize=address
 RM				=	rm -f
 
+SRC_DIR	=	./src
+OBJ_DIR	=	./obj
+
 # Sources are all .c files
-SRCS	=	src/main.c \
-			src/cd.c \
-			src/echo.c \
-			src/env.c \
-			src/errors.c \
- 			src/exit.c \
-			src/export.c \
-			src/free.c \
- 			src/minishell.c \
- 			src/pwd.c \
- 			src/signal.c \
-			src/unset.c \
-			src/utils.c \
-			# src/parsing.c \
- 			src/split_args.c \
+SRCS	=	main.c \
+			cd.c \
+			echo.c \
+			env.c \
+			errors.c \
+			exit.c \
+			export.c \
+			free.c \
+			minishell.c \
+			pwd.c \
+			unset.c \
+			utils.c \
+			parsing.c \
+			split_args.c \
+			exec.c \
+#			signal.c
 			
 
 #env -i ./minishell
 
-OBJS	=	$(SRCS:.c=.o)
+OBJS	=	$(addprefix $(OBJ_DIR)/, ${SRCS:.c=.o})
 
-all: rl libft $(NAME)
 
-$(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)$(LIBFT) -L readline -l readline -l ncurses \
-	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L) -o $(NAME)
+all: $(NAME)
+
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+
+$(NAME): rl $(LIBFT) $(OBJ_DIR) $(OBJS)
+	@$(CC) $(CFLAGS) $(HEADERS) $(LINKERS) $(LIBS) $(OBJS) -o $(NAME)
 
 rl:
 	@if test $(TEST) = 1 ; then \
 		cd readline && ./configure && make ; \
 	else \
-		echo readline all ready make ; sleep 2; \
+		echo readline already make ; \
 	fi
 
-libft:
+$(LIBFT):
 	@printf $(L)making libft\n$(L)
 	@make -s -C $(LIBFT_DIR)
-	@printf $(L)libft done\n$(L); sleep 2; 
+	@printf $(L)libft done\n$(L); 
 
 readline:
 	cd $(RL_DIR) && ./configure && $(MAKE)
@@ -98,16 +100,16 @@ rm_readline:
 
 # Removes objects
 clean:
-	@$(RM) $(OBJS)
-	@make -C $(LIBFT_DIR)	clean
+	@$(RM) -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) clean
 	@echo $(shell clear)
 	@printf $(L)clean ok\n$(L)
 
 # Removes objects and executables
 fclean: clean
 	@$(RM) $(NAME)
-	@$(RM) -fr minishell.dSYM 
-	@make -C $(LIBFT_DIR)     fclean
+	@$(RM) -rf minishell.dSYM
+	@rm $(LIBFT)
 	@echo $(shell clear)
 	@printf $(L)fclean ok\n$(L)
 
@@ -122,4 +124,4 @@ cp:
 	cp supp.txt /tmp
 
 
-.PHONY: all libft run mc readline rm_readline
+.PHONY: all rl run mc readline rm_readline

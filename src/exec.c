@@ -6,13 +6,18 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/05/29 15:36:14 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:31:59 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_builtin(t_command *command, t_list **cmd_list)
+static char	*get_fullpath(char *name)
+{
+	return (ft_strdup(name));
+}
+
+int	exec_builtin(t_command *command, t_misc *misc)
 {
 	const char	*name;
 	int			status;
@@ -31,27 +36,28 @@ int	exec_builtin(t_command *command, t_list **cmd_list)
 	else if (ft_strncmp(name, "unset", 6) == 0)
 		status = ft_unset(command);
 	else if (ft_strncmp(name, "exit", 5) == 0)
-		ft_exit(command, cmd_list);
+		status = ft_exit(command, misc);
 	else
 		return (-1);
 	return (status);
 }
 
-void	exec_command(t_command *command, int fd_arr[MAX_FD], t_list **cmd_list)
+void	exec_command(t_command *command, t_misc *misc)
 {
-	char	*fullpath;
+	char	*full_path;
 	int		status;
 
-	close_all(fd_arr, command->wr_fd, command->rd_fd);
-	status = find_command(command->argv, cmd_list);
+	close_all(misc->fd_arr, command->wr_fd, command->rd_fd);
+	status = exec_builtin(command, misc);
 	if (status == -1)
 	{
-		fullpath = get_fullpath(command->argv[0]);
-		execve(fullpath, command->argv, get_envp());
+		full_path = get_fullpath(command->argv[0]);
+		execve(full_path, command->argv, NULL);
+		free(full_path);
 		status = errno;
 	}
 	close(command->rd_fd);
 	close(command->wr_fd);
-	ft_lstclear(cmd_list, free_command);
+	ft_lstclear(&misc->cmd_list, free_command);
 	exit(status);
 }

@@ -6,11 +6,11 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:04:52 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/29 14:42:47 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:19:54 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	reset_fd_array(int fd_arr[MAX_FD])
 {

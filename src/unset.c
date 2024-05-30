@@ -6,11 +6,11 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:58:15 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/29 16:10:01 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:19:49 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	ft_unset(t_command *cmd)
 {

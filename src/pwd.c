@@ -6,19 +6,27 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:50 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/28 18:15:28 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:42:07 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_pwd(t_command *cmd)
 {
 	char	cwd[PATH_MAX];
 
+	if (cmd->argv[1] != NULL)
+	{
+		if (cmd->argv[1][0] == '-')
+			ft_dprintf(2, "pwd: bad option: %s\n", cmd->argv[1]);
+		else
+			ft_dprintf(2, "pwd: too many arguments\n");
+		return (1);
+	}
 	if (getcwd(cwd, PATH_MAX) != NULL)
 	{
-		printf("%s%s%s\n", YELLOW, cwd, RST);
+		ft_dprintf(cmd->wr_fd, "%s%s%s\n", YELLOW, cwd, RST);
 		return (0);
 	}
 	perror("getcwd() error");
