@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:39 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/30 19:30:55 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:40:19 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	ft_create_prompt(t_misc *misc)
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
 		}
+		else
+			free(input);
 	}
 }
 

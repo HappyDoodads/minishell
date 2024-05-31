@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:37 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/30 18:58:26 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 12:58:20 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_dprintf(2, "Could not dup stdin or stdout\n"), EXIT_FAILURE);
 	misc.envp = dup_envp(envp);
 	misc.prev_status = 0;
+	misc.cmd_list = NULL;
 	ft_create_prompt(&misc);
 	return (EXIT_SUCCESS);
 }

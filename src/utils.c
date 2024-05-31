@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 11:04:52 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/30 17:19:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:24:12 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	reset_fd_array(int fd_arr[MAX_FD])
 	i = 0;
 	while (i < MAX_FD)
 		fd_arr[i++] = -1;
-	fd_arr[0] = 0;
 	dup2(STDIN_DUP, 0);
 	dup2(STDOUT_DUP, 1);
 }
