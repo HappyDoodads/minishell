@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/05/30 19:31:59 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 10:07:19 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	exec_builtin(t_command *command, t_misc *misc)
 	else if (ft_strncmp(name, "echo", 5) == 0)
 		status = ft_echo(command);
 	else if (ft_strncmp(name, "env", 4) == 0)
-		status = ft_env(command);
+		status = ft_env(command, misc);
 	else if (ft_strncmp(name, "export", 7) == 0)
-		status = ft_export(command);
+		status = ft_export(command, misc);
 	else if (ft_strncmp(name, "pwd", 4) == 0)
 		status = ft_pwd(command);
 	else if (ft_strncmp(name, "unset", 6) == 0)

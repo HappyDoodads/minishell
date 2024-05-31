@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/30 18:43:26 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:50:49 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ enum e_quote_status
 
 int		ft_cd(t_command *cmd);
 int		ft_pwd(t_command *cmd);
-int		ft_env(t_command *cmd);
+int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
-int		ft_export(t_command *cmd);
+void	replace_env_var(char **envar_addr, char *var_name, const char *var_value);
+int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
