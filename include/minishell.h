@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/03 12:04:00 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/06 07:29:06 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
 int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd, t_misc *misc);
+int		ft_isvalid_envname(char *var_name);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
 ///////////////////////////////   ERRORS    ////////////////////////////////////
