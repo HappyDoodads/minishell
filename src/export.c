@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:59:02 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/10 08:32:41 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/10 10:58:21 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	j = 0;
 	while (misc->envp[j])
 	{
-		if (ft_strncmp(misc->envp[j], var_name, ft_strlen(var_name)) == 0
-			&& !ft_isvalid_envname(var_name)
-			&& misc->envp[j][strlen(var_name)] == '=')
+		if ((ft_strncmp(misc->envp[j], var_name, ft_strlen(var_name)) == 0
+				&& !ft_isvalid_envname(var_name)
+				&& misc->envp[j][strlen(var_name)] == '=')
+			|| misc->envp[j][strlen(var_name)] == '\0')
 		{
 			replace_env_var(&misc->envp[j], var_name, var_value);
 			flag = 1;
@@ -118,10 +119,16 @@ int	ft_export(t_command *cmd, t_misc *misc)
 		}
 		else
 		{
-			var_name = cmd->argv[i];
-			var_value = "";
+			if (ft_isvalid_envname(cmd->argv[i]) == 0)
+			{
+				var_name = cmd->argv[i];
+				var_value = "";
+			}
 		}
-		ft_loopenv(misc, var_name, var_value);
+		if (ft_isvalid_envname(var_name) == 0)
+			ft_loopenv(misc, var_name, var_value);
+		else
+			return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
