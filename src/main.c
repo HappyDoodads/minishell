@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:37 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/06 10:13:51 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/12 13:32:17 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	**dup_envp(char **envp)
 {
 	char	**new;
 	int		i;
-	
+
 	i = 1;
 	while (envp[i - 1])
 		i++;

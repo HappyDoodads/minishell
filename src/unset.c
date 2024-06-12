@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:58:15 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/12 09:13:10 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/12 13:32:12 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ int	ft_isvalid_envname(char *var_name)
 	int	i;
 
 	i = 1;
-	if (!ft_isalnum(var_name[0]) && var_name[0] != '_')
+	if (!ft_isalpha(var_name[0]) && var_name[0] != '_')
 		return (ft_dprintf(2, "minishell: `%s':\
-		not a valid identifier\n", var_name), 1);
+		not a valid identifierDEBUG1\n", var_name), 1);
 	while (var_name[i])
 	{
-		if (ft_isalpha(var_name[i]) && var_name[i] != '_')
+		if (!ft_isalnum(var_name[i]) && var_name[i] != '_')
 			return (ft_dprintf(2, "minishell: `%s':\
-			not a valid identifier\n", var_name), 1);
+			not a valid identifierDEBUG2\n", var_name), 1);
 		i++;
 	}
 	return (0);
