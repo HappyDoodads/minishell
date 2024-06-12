@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:58:15 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/12 08:26:43 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/12 09:13:10 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,38 @@ int	ft_isvalid_envname(char *var_name)
 	return (0);
 }
 
+static void	ft_loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
+{
+	int	j;
+	int	k;
+
+	j = 0;
+	k = 0;
+	while (misc->envp[j])
+	{
+		if (ft_strncmp(misc->envp[j], cmd->argv[i], \
+			ft_strlen(cmd->argv[i])) == 0
+			&& ((misc->envp[j][ft_strlen(cmd->argv[i])] == '=')
+			|| (misc->envp[j][ft_strlen(cmd->argv[i])] == '\0')))
+		{
+			free(misc->envp[j]);
+		}
+		else
+		{
+			cpy_envp[k] = misc->envp[j];
+			k++;
+		}
+		j++;
+	}
+	cpy_envp[k] = NULL;
+	free(misc->envp);
+	misc->envp = cpy_envp;
+}
+
 int	ft_unset(t_command *cmd, t_misc *misc)
 {
 	int		i;
 	int		j;
-	int		k;
 	char	**cpy_envp;
 
 	i = 0;
@@ -43,34 +70,12 @@ int	ft_unset(t_command *cmd, t_misc *misc)
 	while (cmd->argv[++i])
 	{
 		j = 0;
-		k = 0;
 		while (misc->envp[j])
 			j++;
 		cpy_envp = ft_calloc((j), sizeof(char *));
 		if (!cpy_envp)
 			return (EXIT_FAILURE);
-		j = 0;
-		while (misc->envp[j])
-		{
-			if (ft_strncmp(misc->envp[j], cmd->argv[i], ft_strlen(cmd->argv[i])) == 0
-					&& ((misc->envp[j][ft_strlen(cmd->argv[i])] == '=')
-					|| (misc->envp[j][ft_strlen(cmd->argv[i])] == '\0')))
-			{
-				ft_printf("DEBUG3\n");
-				free(misc->envp[j]);
-			}
-			else
-			{
-				cpy_envp[k] = misc->envp[j];
-				ft_printf("DEBUG4\n");
-				k++;
-			}
-			j++;
-		}
-		cpy_envp[k] = NULL;
-		free(misc->envp);
-		ft_printf("DEBUG5\n");
-		misc->envp = cpy_envp;
+		ft_loopenv(cmd, misc, cpy_envp, i);
 	}
 	return (EXIT_SUCCESS);
 }
