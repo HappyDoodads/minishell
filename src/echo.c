@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:01 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/03 11:37:36 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/12 15:54:20 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,3 +34,4 @@ int	ft_echo(t_command *cmd)
 		ft_putchar_fd(end, cmd->wr_fd);
 	return (0);
 }
+
