@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/12 08:04:20 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/13 11:41:12 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	exec_builtin(t_command *command, t_misc *misc)
 
 	name = command->argv[0];
 	if (ft_strncmp(name, "cd", 3) == 0)
-		status = ft_cd(command, misc);
+		status = ft_cd(command);
 	else if (ft_strncmp(name, "echo", 5) == 0)
 		status = ft_echo(command);
 	else if (ft_strncmp(name, "env", 4) == 0)

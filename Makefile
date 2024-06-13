@@ -9,7 +9,7 @@ RL_L			=	$(RL_DIR)/libreadline.a
 
 HEADERS			=	-I./include -I$(LIBFT_DIR)/include
 LINKERS			=	-Lreadline -lreadline -lncurses
-LIBS			= $(RL_H) $(RL_L) $(LIBFT)
+LIBS			=	$(RL_H) $(RL_L) $(LIBFT)
 
 #		config		#
 

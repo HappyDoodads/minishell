@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/10 07:40:51 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/13 11:39:59 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ enum e_quote_status
 
 ///////////////////////////////   BUILTINS   ///////////////////////////////////
 
-int		ft_cd(t_command *cmd, t_misc *misc);
+int		ft_cd(t_command *cmd);
 int		ft_pwd(t_command *cmd);
 int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
