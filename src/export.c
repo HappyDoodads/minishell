@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:59:02 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/13 08:23:21 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/14 10:32:44 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	ft_export(t_command *cmd, t_misc *misc)
 		}
 		if (ft_isvalid_envname(var_name) == 0)
 			ft_loopenv(misc, var_name, var_value);
+		free(var_name);
 	}
 	return (EXIT_SUCCESS);
 }

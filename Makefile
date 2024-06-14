@@ -26,7 +26,6 @@ else
     L = '
 endif
 
-
 ifeq ($(shell test -d /Users/$(USER)/.brew/opt/readline; echo $$?), 0)
     BREW = .brew
 else ifeq ($(shell test -d /Users/$(USER)/homebrew/opt/readline; echo $$?), 0)
@@ -67,7 +66,6 @@ SRCS	=	main.c \
 
 OBJS	=	$(addprefix $(OBJ_DIR)/, ${SRCS:.c=.o})
 
-
 all: $(NAME)
 
 $(OBJ_DIR):
@@ -97,7 +95,6 @@ readline:
 rm_readline:
 	cd $(RL_DIR) && make distclean
 
-
 # Removes objects
 clean:
 	@$(RM) -rf $(OBJ_DIR)
@@ -119,9 +116,5 @@ run: all
 	@./$(NAME)
 
 re: fclean all
-
-cp:
-	cp supp.txt /tmp
-
 
 .PHONY: all rl run mc readline rm_readline

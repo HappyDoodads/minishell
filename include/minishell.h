@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/13 11:39:59 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:02:33 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <signal.h>
 # include <string.h>
 # include <limits.h>
+# include <stdbool.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>

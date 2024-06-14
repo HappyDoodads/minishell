@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/13 11:41:12 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/14 10:54:42 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static char	*get_fullpath(char *name, char	**envp)
 		fullpath = ft_strjoin(paths[i], name);
 		if (!fullpath)
 			return (perror("minishell"), free(name), NULL);
-		if (access(fullpath, X_OK) == true)
+		if (access(fullpath, X_OK) == 0)
 			break ;
 		free(fullpath);
 		fullpath = NULL;
 	}
-	if (!fullpath)
-		fullpath = ft_strdup(name + 1);
+	// if (!fullpath)
+		// fullpath = ft_strdup(name + 1);
 	return (ft_free_split(paths), free(name), fullpath);
 }
 
@@ -95,7 +95,6 @@ void	exec_command(t_command *command, t_misc *misc)
 	if (status == -1)
 	{
 		fullpath = get_fullpath(command->argv[0], misc->envp);
-		dprintf(2, "fullpath='%s'\n", fullpath);
 		execve(fullpath, command->argv, misc->envp);
 		free(fullpath);
 		status = errno;

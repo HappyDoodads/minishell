@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <marvin@42quebec.com>              +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:13:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/03/12 18:04:01 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:01:28 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stdlib.h>
-
-typedef enum e_bool
-{
-	false = 0,
-	true = 1,
-}	t_bool;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
