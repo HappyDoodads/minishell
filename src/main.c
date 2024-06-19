@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:37 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/31 12:58:20 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/06/03 12:03:11 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**dup_envp(char **envp)
+char	**dup_envp(char **envp)
 {
 	char	**new;
 	int		i;
