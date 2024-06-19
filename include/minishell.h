@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/31 17:04:13 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/05/31 19:45:28 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 
+# include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -54,6 +55,9 @@ typedef struct s_command
 	char	**argv;
 	int		rd_fd;
 	int		wr_fd;
+	char	*infile;
+	char	*outfile;
+	t_bool	append_out;
 }			t_command;
 
 typedef struct s_misc
@@ -81,8 +85,8 @@ int		ft_cd(t_command *cmd, t_misc *misc);
 int		ft_pwd(t_command *cmd);
 int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
-int		ft_export(t_command *cmd);
-int		ft_unset(t_command *cmd);
+int		ft_export(t_command *cmd, t_misc *misc);
+int		ft_unset(t_command *cmd, t_misc *misc);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
 ///////////////////////////////   ERRORS    ////////////////////////////////////

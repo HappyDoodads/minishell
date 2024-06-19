@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 15:58:45 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/31 17:51:40 by jdemers          ###   ########.fr       */
+/*   Created: 2024/05/31 19:23:30 by jdemers           #+#    #+#             */
+/*   Updated: 2024/05/31 19:50:55 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include"minishell.h"
 
-int	ft_env(t_command *cmd, t_misc *misc)
+int	redirections(t_command *cmd)
 {
-	int	i;
-	
-	i = 0;
-	while(misc->envp[i])
-		ft_dprintf(cmd->wr_fd, "%s\n", misc->envp[i++]);
-	return (1);
+	int	fd;
+
+	if (cmd->infile)
+	{
+		fd = open(cmd->infile, O_RDONLY);
+		if (fd < 0)
+		{
+			ft_dprintf(2, "minishell: %s: %s\n", cmd->infile, strerror(errno));
+			return (1);
+		}
+		dup2(fd, cmd->rd_fd);
+	}
+	if (cmd->outfile)
+	{
+		fd = O_TRUNC;
+		if (cmd->append_out)
+			fd = O_APPEND;
+		fd = open(cmd->outfile, O_WRONLY | O_CREAT | fd);
+	}
 }

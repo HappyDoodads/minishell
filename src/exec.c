@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/31 10:07:19 by jcoquet          ###   ########.fr       */
-=======
-/*   Updated: 2024/05/31 16:52:17 by jdemers          ###   ########.fr       */
->>>>>>> faafb70c3f2f729ad1304930ba299bdbf2026d13
+/*   Updated: 2024/05/31 18:58:04 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +50,7 @@ static char	*get_fullpath(char *name, char	**envp)
 		fullpath = ft_strjoin(paths[i], name);
 		if (!fullpath)
 			return (perror("minishell"), free(name), NULL);
-		if (access(fullpath, X_OK) == true)
+		if (access(fullpath, X_OK) == 0)
 			break ;
 		free(fullpath);
 		fullpath = NULL;
@@ -98,8 +94,9 @@ void	exec_command(t_command *command, t_misc *misc)
 	status = exec_builtin(command, misc);
 	if (status == -1)
 	{
+		dup2(command->rd_fd, 0);
+		dup2(command->wr_fd, 1);
 		fullpath = get_fullpath(command->argv[0], misc->envp);
-		dprintf(2, "fullpath='%s'\n", fullpath);
 		execve(fullpath, command->argv, misc->envp);
 		free(fullpath);
 		status = errno;

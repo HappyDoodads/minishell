@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:50:50 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/30 17:42:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 19:07:48 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ int	ft_pwd(t_command *cmd)
 	}
 	if (getcwd(cwd, PATH_MAX) != NULL)
 	{
-		ft_dprintf(cmd->wr_fd, "%s%s%s\n", YELLOW, cwd, RST);
+		if (cmd->wr_fd == 1)
+			ft_dprintf(cmd->wr_fd, "%s%s%s\n", YELLOW, cwd, RST);
+		else
+			ft_dprintf(cmd->wr_fd, "%s\n", cwd);
 		return (0);
 	}
 	perror("getcwd() error");

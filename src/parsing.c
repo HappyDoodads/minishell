@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:42 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/05/31 13:24:31 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:59:40 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static void	parse_last_cmd(char *cmd_str, t_list **cmd_list, int fd_arr[MAX_FD])
 
 	command = malloc(sizeof(t_command));
 	command->rd_fd = get_last_fd(fd_arr);
+	if (command->rd_fd == -1)
+		command->rd_fd = 0;
 	command->wr_fd = 1;
 	command->argv = split_args(cmd_str);
 	new = ft_lstnew(command);
