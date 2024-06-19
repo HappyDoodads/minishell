@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:59:02 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/14 10:32:44 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/19 17:00:29 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,25 +97,6 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	}
 }
 
-static int	handle_equal_sign(t_command *cmd, char *equal_sign, char **var_name, char **var_value, int i)
-{
-	if (equal_sign == cmd->argv[i])
-		return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", cmd->argv[i]), EXIT_FAILURE);
-	*var_value = equal_sign;
-	*var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(*var_value)));
-	return (EXIT_SUCCESS);
-}
-
-static int	handle_no_equal_sign(t_command *cmd, char **var_name, char **var_value, int i)
-{
-	if (ft_isvalid_envname(cmd->argv[i]) == 0)
-	{
-		*var_name = cmd->argv[i];
-		*var_value = ft_strdup("");
-	}
-	return (EXIT_SUCCESS);
-}
-
 int	ft_export(t_command *cmd, t_misc *misc)
 {
 	int		i;
@@ -131,15 +112,29 @@ int	ft_export(t_command *cmd, t_misc *misc)
 		equal_sign = ft_strchr(cmd->argv[i], '=');
 		if (equal_sign != NULL)
 		{
-			handle_equal_sign(cmd, equal_sign, &var_name, &var_value, i);
+			if (equal_sign == cmd->argv[i])
+				return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", cmd->argv[i]), EXIT_FAILURE);
+			var_value = equal_sign;
+			var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(var_value)));
 		}
 		else
 		{
-			handle_no_equal_sign(cmd, &var_name, &var_value, i);
+			if (ft_isvalid_envname(cmd->argv[i]) == 0)
+			{
+				var_name = cmd->argv[i];
+				var_value = "";
+			}
 		}
 		if (ft_isvalid_envname(var_name) == 0)
+		{
 			ft_loopenv(misc, var_name, var_value);
-		free(var_name);
+			free(var_name);
+		}
+		else 
+		{
+			free(var_name);
+			return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
