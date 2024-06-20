@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/14 10:54:42 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/20 08:29:10 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void	exec_command(t_command *command, t_misc *misc)
 	status = exec_builtin(command, misc);
 	if (status == -1)
 	{
+		dup2(command->rd_fd, 0);
+		dup2(command->wr_fd, 1);
 		fullpath = get_fullpath(command->argv[0], misc->envp);
 		execve(fullpath, command->argv, misc->envp);
 		free(fullpath);

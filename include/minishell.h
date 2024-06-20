@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/13 14:02:33 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/06/20 08:29:00 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 
+# include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -55,6 +56,9 @@ typedef struct s_command
 	char	**argv;
 	int		rd_fd;
 	int		wr_fd;
+	char	*infile;
+	char	*outfile;
+	t_bool	append_out;
 }			t_command;
 
 typedef struct s_misc
