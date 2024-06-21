@@ -13,7 +13,7 @@ void	ft_create_prompt(t_misc *misc)
 		else if (*input)
 		{
 			add_history(input);
-			misc->cmd_list = parse_input(input, misc->fd_arr);
+			misc->cmd_list = parse_input(input, misc);
 			free(input);
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
