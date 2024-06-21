@@ -4,7 +4,7 @@ char	**dup_envp(char **envp)
 {
 	char	**new;
 	int		i;
-	
+
 	i = 1;
 	while (envp[i - 1])
 		i++;

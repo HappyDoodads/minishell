@@ -1,9 +1,11 @@
 #include "minishell.h"
 
-//	Doit modifier $OLDPWD et $PWD avec ft_export
-int	ft_cd(t_command *cmd, t_misc *misc)
+int	ft_cd(t_command *cmd)
 {
-	(void)misc;
-	ft_dprintf(2, "%s builtin not implemented\n", cmd->argv[0]);
-	return (1);
+	if (cmd->argv[1] && cmd->argv[2])
+		return (ft_dprintf(2, "cd: too many arguments\n"), 1);
+	if (!chdir(cmd->argv[1]))
+		return (EXIT_SUCCESS);
+	perror("minishell: cd");
+	return (EXIT_FAILURE);
 }

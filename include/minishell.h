@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 10:57:44 by jcoquet           #+#    #+#             */
-/*   Updated: 2024/06/19 15:20:50 by jdemers          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -32,6 +21,7 @@
 # include <signal.h>
 # include <string.h>
 # include <limits.h>
+# include <stdbool.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -57,7 +47,7 @@ typedef struct s_command
 	int		wr_fd;
 	char	*infile;
 	char	*outfile;
-	t_bool	append_out;
+	bool	append_out;
 }			t_command;
 
 typedef struct s_misc
@@ -81,12 +71,13 @@ enum e_quote_status
 
 ///////////////////////////////   BUILTINS   ///////////////////////////////////
 
-int		ft_cd(t_command *cmd, t_misc *misc);
+int		ft_cd(t_command *cmd);
 int		ft_pwd(t_command *cmd);
 int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
 int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd, t_misc *misc);
+int		ft_isvalid_envname(char *var_name);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
 ///////////////////////////////   ERRORS    ////////////////////////////////////
@@ -100,6 +91,10 @@ void	exec_command(t_command *command, t_misc *misc);
 ////////////////////////////////   FREE    /////////////////////////////////////
 
 void	free_command(void *data);
+
+///////////////////////////////     HEREDOC     //////////////////////////////////
+
+int		ft_heredoc(t_command *cmd);
 
 ///////////////////////////////     MAIN     //////////////////////////////////
 

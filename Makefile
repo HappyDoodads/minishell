@@ -9,7 +9,7 @@ RL_L			=	$(RL_DIR)/libreadline.a
 
 HEADERS			=	-I./include -I$(LIBFT_DIR)/include
 LINKERS			=	-Lreadline -lreadline -lncurses
-LIBS			= $(RL_H) $(RL_L) $(LIBFT)
+LIBS			=	$(RL_H) $(RL_L) $(LIBFT)
 
 #		config		#
 
@@ -25,7 +25,6 @@ else
     BIN_DIR = \"/home/$(USER)/Mini_bin/\"
     L = '
 endif
-
 
 ifeq ($(shell test -d /Users/$(USER)/.brew/opt/readline; echo $$?), 0)
     BREW = .brew
@@ -53,6 +52,7 @@ SRCS	=	main.c \
 			exit.c \
 			export.c \
 			free.c \
+			heredoc.c \
 			minishell.c \
 			pwd.c \
 			unset.c \
@@ -66,7 +66,6 @@ SRCS	=	main.c \
 #env -i ./minishell
 
 OBJS	=	$(addprefix $(OBJ_DIR)/, ${SRCS:.c=.o})
-
 
 all: $(NAME)
 
@@ -97,7 +96,6 @@ readline:
 rm_readline:
 	cd $(RL_DIR) && make distclean
 
-
 # Removes objects
 clean:
 	@$(RM) -rf $(OBJ_DIR)
@@ -119,9 +117,5 @@ run: all
 	@./$(NAME)
 
 re: fclean all
-
-cp:
-	cp supp.txt /tmp
-
 
 .PHONY: all rl run mc readline rm_readline
