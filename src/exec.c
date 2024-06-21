@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 16:24:10 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/20 08:29:10 by jcoquet          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -55,8 +44,8 @@ static char	*get_fullpath(char *name, char	**envp)
 		free(fullpath);
 		fullpath = NULL;
 	}
-	// if (!fullpath)
-		// fullpath = ft_strdup(name + 1);
+	if (!fullpath)
+		fullpath = ft_strdup(name + 1);
 	return (ft_free_split(paths), free(name), fullpath);
 }
 
