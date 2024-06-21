@@ -86,44 +86,47 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	}
 }
 
+static int	equal_sign_handler (t_command *cmd, t_misc *misc, int i)
+{
+	char	*equal_sign;
+	char	*var_name;
+	char	*var_value;
+	var_name = NULL;
+	var_value = NULL;
+	equal_sign = ft_strchr(cmd->argv[i], '=');
+	if (equal_sign != NULL)
+	{
+		if (equal_sign == cmd->argv[i])
+			return (ft_dprintf(2, "minishell: `%s`: not valid\n", cmd->argv[i]), 1);
+		var_value = equal_sign;
+		var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(var_value)));
+	}
+	else
+	{
+		if (ft_isvalid_envname(cmd->argv[i]) == 0)
+		{
+			var_name = cmd->argv[i];
+			var_value = "";
+		}
+	}
+	if (ft_isvalid_envname(var_name) == 0)
+	{
+		ft_loopenv(misc, var_name, var_value);
+		free(var_name);
+	}
+	else
+		return (free(var_name), ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
+	return (0);
+}
+
 int	ft_export(t_command *cmd, t_misc *misc)
 {
 	int		i;
-	char	*var_name;
-	char	*var_value;
-	char	*equal_sign;
 
 	i = 0;
 	if (cmd->argv[1] == NULL)
 		return (ft_ascii_sort(cmd, misc), EXIT_SUCCESS);
 	while (cmd->argv[++i])
-	{
-		equal_sign = ft_strchr(cmd->argv[i], '=');
-		if (equal_sign != NULL)
-		{
-			if (equal_sign == cmd->argv[i])
-				return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", cmd->argv[i]), EXIT_FAILURE);
-			var_value = equal_sign;
-			var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(var_value)));
-		}
-		else
-		{
-			if (ft_isvalid_envname(cmd->argv[i]) == 0)
-			{
-				var_name = cmd->argv[i];
-				var_value = "";
-			}
-		}
-		if (ft_isvalid_envname(var_name) == 0)
-		{
-			ft_loopenv(misc, var_name, var_value);
-			free(var_name);
-		}
-		else 
-		{
-			free(var_name);
-			return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
-		}
-	}
+		equal_sign_handler(cmd, misc, i);
 	return (EXIT_SUCCESS);
 }
