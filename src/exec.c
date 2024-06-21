@@ -69,6 +69,8 @@ int	exec_builtin(t_command *command, t_misc *misc)
 		status = ft_unset(command, misc);
 	else if (ft_strncmp(name, "exit", 5) == 0)
 		status = ft_exit(command, misc);
+	else if (ft_strncmp(name, "<<", 3) == 0)
+		status = ft_heredoc(command);
 	else
 		return (-1);
 	return (status);

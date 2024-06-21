@@ -52,6 +52,7 @@ SRCS	=	main.c \
 			exit.c \
 			export.c \
 			free.c \
+			heredoc.c \
 			minishell.c \
 			pwd.c \
 			unset.c \

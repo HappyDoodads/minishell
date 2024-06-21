@@ -92,6 +92,10 @@ void	exec_command(t_command *command, t_misc *misc);
 
 void	free_command(void *data);
 
+///////////////////////////////     HEREDOC     //////////////////////////////////
+
+int		ft_heredoc(t_command *cmd);
+
 ///////////////////////////////     MAIN     //////////////////////////////////
 
 char	**dup_envp(char **envp);
