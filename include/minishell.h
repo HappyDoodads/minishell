@@ -56,6 +56,7 @@ typedef struct s_misc
 	char	**envp;
 	int		prev_status;
 	t_list	*cmd_list;
+	int		tmpfile_count;
 }			t_misc;
 
 ///////////////////////////     ENUMS     //////////////////////////////////////
@@ -92,9 +93,9 @@ void	exec_command(t_command *command, t_misc *misc);
 
 void	free_command(void *data);
 
-///////////////////////////////     HEREDOC     //////////////////////////////////
+///////////////////////////////     HEREDOC     ////////////////////////////////
 
-int		ft_heredoc(t_command *cmd);
+int		ft_heredoc(char *eof, t_command *cmd, t_misc *misc);
 
 ///////////////////////////////     MAIN     //////////////////////////////////
 

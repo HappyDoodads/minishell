@@ -1,22 +1,22 @@
 
 #include "minishell.h"
 
-int	ft_heredoc(t_command *cmd)
+int	ft_heredoc(char *eof, t_command *cmd, t_misc *misc)
 {
 	int fd;
-	int i = 1; // Index a passer en pointeur lors du parsing
 	char *input;
-	char *file = ft_strjoin (".tmpfile", ft_itoa(i)); // creation tmp file pour heredoc
-	if (cmd->argv[1] == NULL)
+
+	if (eof == NULL)
 	{
 		ft_dprintf(2, "minishell: syntax error\n");
 		return (EXIT_FAILURE);
 	}
-	fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
+	cmd->infile = ft_strjoin(".tmpfile", ft_itoa(misc->tmpfile_count++));
+	fd = open(cmd->infile, O_CREAT | O_RDWR | O_APPEND, 0644);
 	while ((1))
 	{
 		input = readline("> ");
-		if (strncmp(input, cmd->argv[1], ft_strlen(cmd->argv[1])) == 0)
+		if (ft_strncmp(input, eof, ft_strlen(eof)) == 0)
 		{
 			close(fd);
 			free(input);
@@ -25,5 +25,6 @@ int	ft_heredoc(t_command *cmd)
 		ft_dprintf(fd, "%s\n", input);
 			free(input);
 	}
+	free(eof);
 	return (0);
 }
