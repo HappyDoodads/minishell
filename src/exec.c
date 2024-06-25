@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static char	**find_binpaths(char **envp)

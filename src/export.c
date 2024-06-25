@@ -1,40 +1,6 @@
 
 #include "minishell.h"
 
-static void	ft_ascii_sort(t_command *cmd, t_misc *misc)
-{
-	int		i;
-	char	*tmp;
-	char	**cpy_envp;
-
-	cpy_envp = dup_envp(misc->envp);
-	i = 0;
-	while (cpy_envp[i] && cpy_envp[i + 1])
-	{
-		if (ft_strncmp(cpy_envp[i], cpy_envp[i + 1], 1) > 0)
-		{
-			tmp = cpy_envp[i];
-			cpy_envp[i] = cpy_envp[i + 1];
-			cpy_envp[i + 1] = tmp;
-			i = 0;
-		}
-		else
-			i++;
-	}
-	i = 0;
-	while (cpy_envp[i])
-		ft_dprintf(cmd->wr_fd, "%s\n", cpy_envp[i++]);
-	ft_free_split(cpy_envp);
-}
-
-void	replace_env_var(char **envar_addr, char *var_name, char *var_value)
-{
-	if (var_name == NULL)
-		exit(EXIT_FAILURE);
-	free(*envar_addr);
-	*envar_addr = ft_strjoin(var_name, var_value);
-}
-
 static void	ft_new_export(t_misc *misc, char *var_name, char *var_value)
 {
 	int		i;
@@ -86,36 +52,37 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	}
 }
 
-static int	equal_sign_handler (t_command *cmd, t_misc *misc, int i)
+static	void	get_v_val(t_command *cmd, int i, char **v_name, char **v_val)
 {
 	char	*equal_sign;
-	char	*var_name;
-	char	*var_value;
-	var_name = NULL;
-	var_value = NULL;
+	int		size_name;
+
 	equal_sign = ft_strchr(cmd->argv[i], '=');
+	size_name = 0;
 	if (equal_sign != NULL)
 	{
-		if (equal_sign == cmd->argv[i])
-			return (ft_dprintf(2, "minishell: `%s`: not valid\n", cmd->argv[i]), 1);
-		var_value = equal_sign;
-		var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(var_value)));
+		*v_val = equal_sign;
+		size_name = ft_strlen(cmd->argv[i]) - ft_strlen(*v_val);
+		*v_name = ft_substr(cmd->argv[i], 0, size_name);
 	}
-	else
+	else if (equal_sign == NULL)
 	{
-		if (ft_isvalid_envname(cmd->argv[i]) == 0)
-		{
-			var_name = cmd->argv[i];
-			var_value = "";
-		}
+		*v_name = ft_strdup(cmd->argv[i]);
+		*v_val = "";
 	}
-	if (ft_isvalid_envname(var_name) == 0)
-	{
-		ft_loopenv(misc, var_name, var_value);
-		free(var_name);
-	}
-	else
-		return (free(var_name), ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
+}
+
+static int	equal_sign_handler(t_command *cmd, t_misc *misc, int i)
+{
+	char	*v_name;
+	char	*v_val;
+
+	v_name = NULL;
+	v_val = NULL;
+	get_v_val(cmd, i, &v_name, &v_val);
+	if (ft_isvalid_envname(v_name) == 0)
+		ft_loopenv(misc, v_name, v_val);
+	free(v_name);
 	return (0);
 }
 

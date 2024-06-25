@@ -6,7 +6,7 @@ int	ft_heredoc(t_command *cmd)
 	int fd;
 	int i = 1; // Index a passer en pointeur lors du parsing
 	char *input;
-	char *file = ft_strjoin (".tmpfile", ft_itoa(i)); // creation tmp file pour heredoc
+	char *file = ft_strjoin(".tmpfile", ft_itoa(i)); // creation tmp file pour heredoc
 	if (cmd->argv[1] == NULL)
 	{
 		ft_dprintf(2, "minishell: syntax error\n");
