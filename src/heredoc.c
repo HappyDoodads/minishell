@@ -5,8 +5,8 @@ int	ft_heredoc(char *eof, t_command *cmd, t_misc *misc)
 {
 	int fd;
 	char *input;
-
-	if (eof == NULL)
+	char *file = ft_strjoin(".tmpfile", ft_itoa(i)); // creation tmp file pour heredoc
+	if (cmd->argv[1] == NULL)
 	{
 		ft_dprintf(2, "minishell: syntax error\n");
 		return (EXIT_FAILURE);

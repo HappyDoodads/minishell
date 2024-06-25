@@ -1,39 +1,5 @@
 #include "minishell.h"
 
-static void	ft_ascii_sort(t_command *cmd, t_misc *misc)
-{
-	int		i;
-	char	*tmp;
-	char	**cpy_envp;
-
-	cpy_envp = dup_envp(misc->envp);
-	i = 0;
-	while (cpy_envp[i] && cpy_envp[i + 1])
-	{
-		if (ft_strncmp(cpy_envp[i], cpy_envp[i + 1], 1) > 0)
-		{
-			tmp = cpy_envp[i];
-			cpy_envp[i] = cpy_envp[i + 1];
-			cpy_envp[i + 1] = tmp;
-			i = 0;
-		}
-		else
-			i++;
-	}
-	i = 0;
-	while (cpy_envp[i])
-		ft_dprintf(cmd->wr_fd, "%s\n", cpy_envp[i++]);
-	ft_free_split(cpy_envp);
-}
-
-void	replace_env_var(char **envar_addr, char *var_name, char *var_value)
-{
-	if (var_name == NULL)
-		exit(EXIT_FAILURE);
-	free(*envar_addr);
-	*envar_addr = ft_strjoin(var_name, var_value);
-}
-
 static void	ft_new_export(t_misc *misc, char *var_name, char *var_value)
 {
 	int		i;
@@ -85,44 +51,48 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	}
 }
 
+static	void	get_v_val(t_command *cmd, int i, char **v_name, char **v_val)
+{
+	char	*equal_sign;
+	int		size_name;
+
+	equal_sign = ft_strchr(cmd->argv[i], '=');
+	size_name = 0;
+	if (equal_sign != NULL)
+	{
+		*v_val = equal_sign;
+		size_name = ft_strlen(cmd->argv[i]) - ft_strlen(*v_val);
+		*v_name = ft_substr(cmd->argv[i], 0, size_name);
+	}
+	else if (equal_sign == NULL)
+	{
+		*v_name = ft_strdup(cmd->argv[i]);
+		*v_val = "";
+	}
+}
+
+static int	equal_sign_handler(t_command *cmd, t_misc *misc, int i)
+{
+	char	*v_name;
+	char	*v_val;
+
+	v_name = NULL;
+	v_val = NULL;
+	get_v_val(cmd, i, &v_name, &v_val);
+	if (ft_isvalid_envname(v_name) == 0)
+		ft_loopenv(misc, v_name, v_val);
+	free(v_name);
+	return (0);
+}
+
 int	ft_export(t_command *cmd, t_misc *misc)
 {
 	int		i;
-	char	*var_name;
-	char	*var_value;
-	char	*equal_sign;
 
 	i = 0;
 	if (cmd->argv[1] == NULL)
 		return (ft_ascii_sort(cmd, misc), EXIT_SUCCESS);
 	while (cmd->argv[++i])
-	{
-		equal_sign = ft_strchr(cmd->argv[i], '=');
-		if (equal_sign != NULL)
-		{
-			if (equal_sign == cmd->argv[i])
-				return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", cmd->argv[i]), EXIT_FAILURE);
-			var_value = equal_sign;
-			var_name = ft_substr(cmd->argv[i], 0, (ft_strlen(cmd->argv[i]) - ft_strlen(var_value)));
-		}
-		else
-		{
-			if (ft_isvalid_envname(cmd->argv[i]) == 0)
-			{
-				var_name = cmd->argv[i];
-				var_value = "";
-			}
-		}
-		if (ft_isvalid_envname(var_name) == 0)
-		{
-			ft_loopenv(misc, var_name, var_value);
-			free(var_name);
-		}
-		else 
-		{
-			free(var_name);
-			return (ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", var_name), EXIT_FAILURE);
-		}
-	}
+		equal_sign_handler(cmd, misc, i);
 	return (EXIT_SUCCESS);
 }

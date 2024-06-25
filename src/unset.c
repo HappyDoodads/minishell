@@ -1,17 +1,20 @@
 #include "minishell.h"
 
-int	ft_isvalid_envname(char *var_name)
+int	ft_isvalid_envname(char *v_name)
 {
 	int	i;
 
 	i = 1;
-	if (!ft_isalpha(var_name[0]) && var_name[0] != '_')
-		return (ft_dprintf(2, "minishell: `%s': not a valid identifierDEBUG1isvalid\n", var_name), 1);
-	while (var_name[i])
+	if (!ft_isalpha(v_name[0]) && v_name[0] != '_')
 	{
-		if (!ft_isalnum(var_name[i]) && var_name[i] != '_')
-			return (ft_dprintf(2, "minishell: `%s':\
-			not a valid identifierDEBUG2isvalid\n", var_name), 1);
+		ft_dprintf(2, "minishell: `%s': not a valid identifier\n", v_name);
+		return (1);
+	}
+	while (v_name[i])
+	{
+		if (!ft_isalnum(v_name[i]) && v_name[i] != '_')
+			return (ft_dprintf(2, "minishell: `%s': not a valid \
+			identifier\n", v_name), 1);
 		i++;
 	}
 	return (0);

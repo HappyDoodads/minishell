@@ -60,6 +60,7 @@ SRCS	=	main.c \
 			parsing.c \
 			split_args.c \
 			exec.c \
+			export2.c \
 #			signal.c
 			
 
