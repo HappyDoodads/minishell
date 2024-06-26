@@ -112,7 +112,7 @@ int		quote_skip(char *line, int i);
 t_list	*parse_input(char *input, t_misc *misc);
 char	**split_args(const char *s);
 int		redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
-char	*substitute(char *arg, char **envp);
+char	*substitute(char *arg, t_misc *misc);
 
 /////////////////////////////   REDIRECTING   //////////////////////////////////
 

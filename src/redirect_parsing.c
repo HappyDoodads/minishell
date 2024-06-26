@@ -6,16 +6,17 @@ static void	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 
 	if (type == '>' || type == '>' + 1)
 		storage = &(cmd->outfile);
-	else if (type == '<' || type == '<' + 1)
+	else
 		storage = &(cmd->infile);
 	if (type == '>' + 1)
 		cmd->append_out = true;
 	if (*storage != NULL)
 		free(*storage);
 	if (type == '<' + 1)
-		*storage = ft_heredoc(arg, cmd, misc);
+		return ;//*storage = ft_heredoc(arg, misc, storage);
 	else
 		*storage = arg;
+	(void)misc;
 }
 
 static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
@@ -36,7 +37,7 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	i = j;
 	while (cmd_str[j] && cmd_str[j] != ' ')
 		j = quote_skip(cmd_str, j) + 1;
-	filename = substitute(ft_substr(cmd_str, i, j - i), misc->envp);
+	filename = substitute(ft_substr(cmd_str, i, j - i), misc);
 	if (filename == NULL)
 		return (-1);
 	sort_redirect(filename, type + mod, cmd, misc);
@@ -56,7 +57,7 @@ int	redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc)
 		if (cmd_str[i] == '>' || cmd_str[i] == '<')
 			i = filename_parsing(cmd_str, i, cmd, misc);
 		if (i == -1)
-			return (-1);
+			return (EXIT_FAILURE);
 	}
 	return (0);
 }
