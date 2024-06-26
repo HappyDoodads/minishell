@@ -2,10 +2,10 @@
 
 int	ft_cd(t_command *cmd)
 {
-	if (cmd->argv[1] && cmd->argv[2])
+	if (cmd->argv[2])
 		return (ft_dprintf(2, "cd: too many arguments\n"), 1);
-	if (!chdir(cmd->argv[1]))
+	if (chdir(cmd->argv[1]))
 		return (EXIT_SUCCESS);
-	perror("minishell: cd");
+	// print_error_msg("cd", cmd->argv[1], NULL);
 	return (EXIT_FAILURE);
 }
