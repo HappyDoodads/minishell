@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	ft_new_export(t_misc *misc, char *var_name, char *var_value)
+void	ft_new_export(t_misc *misc, char *v_name, char *v_val)
 {
 	int		i;
 	char	**cpy_envp;
@@ -18,14 +18,14 @@ static void	ft_new_export(t_misc *misc, char *var_name, char *var_value)
 		cpy_envp[i] = misc->envp[i];
 		i++;
 	}
-	new_var = ft_strjoin(var_name, var_value);
+	new_var = ft_strjoin(v_name, v_val);
 	cpy_envp[i] = new_var;
 	cpy_envp[i + 1] = NULL;
 	free(misc->envp);
 	misc->envp = cpy_envp;
 }
 
-static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
+void	ft_loopenv(t_misc *misc, char *v_name, char *v_val)
 {
 	int		j;
 	int		flag;
@@ -34,19 +34,19 @@ static	void	ft_loopenv(t_misc *misc, char *var_name, char *var_value)
 	j = 0;
 	while (misc->envp[j])
 	{
-		if ((ft_strncmp(misc->envp[j], var_name, ft_strlen(var_name)) == 0
-				&& !ft_isvalid_envname(var_name)
-				&& misc->envp[j][strlen(var_name)] == '=')
-			|| misc->envp[j][strlen(var_name)] == '\0')
+		if ((ft_strncmp(misc->envp[j], v_name, ft_strlen(v_name)) == 0
+				&& !ft_isvalid_envname(v_name)
+				&& misc->envp[j][strlen(v_name)] == '=')
+			|| misc->envp[j][strlen(v_name)] == '\0')
 		{
-			replace_env_var(&misc->envp[j], var_name, var_value);
+			replace_env_var(&misc->envp[j], v_name, v_val);
 			flag = 1;
 		}
 		j++;
 	}
 	if (!flag)
 	{
-		ft_new_export(misc, var_name, var_value);
+		ft_new_export(misc, v_name, v_val);
 		flag = 0;
 	}
 }

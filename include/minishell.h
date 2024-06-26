@@ -72,7 +72,7 @@ enum e_quote_status
 
 ///////////////////////////////   BUILTINS   ///////////////////////////////////
 
-int		ft_cd(t_command *cmd);
+int		ft_cd(t_command *cmd, t_misc *misc);
 int		ft_pwd(t_command *cmd);
 int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd);
@@ -83,6 +83,7 @@ int		ft_exit(t_command *cmd, t_misc *misc);
 
 void	ft_ascii_sort(t_command *cmd, t_misc *misc);
 void	replace_env_var(char **envar_addr, char *var_name, char *var_value);
+void	ft_loopenv(t_misc *misc, char *v_name, char *v_val);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 ///////////////////////////////    EXEC    /////////////////////////////////////

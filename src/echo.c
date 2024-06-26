@@ -22,4 +22,3 @@ int	ft_echo(t_command *cmd)
 		ft_putchar_fd(end, cmd->wr_fd);
 	return (0);
 }
-

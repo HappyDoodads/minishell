@@ -20,7 +20,7 @@ int	ft_isvalid_envname(char *v_name)
 	return (0);
 }
 
-static void	ft_loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
+static void	loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
 {
 	int	j;
 	int	k;
@@ -65,7 +65,7 @@ int	ft_unset(t_command *cmd, t_misc *misc)
 		cpy_envp = ft_calloc((j), sizeof(char *));
 		if (!cpy_envp)
 			return (EXIT_FAILURE);
-		ft_loopenv(cmd, misc, cpy_envp, i);
+		loopenv(cmd, misc, cpy_envp, i);
 	}
 	return (EXIT_SUCCESS);
 }

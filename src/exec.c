@@ -55,7 +55,7 @@ int	exec_builtin(t_command *command, t_misc *misc)
 
 	name = command->argv[0];
 	if (ft_strncmp(name, "cd", 3) == 0)
-		status = ft_cd(command);
+		status = ft_cd(command, misc);
 	else if (ft_strncmp(name, "echo", 5) == 0)
 		status = ft_echo(command);
 	else if (ft_strncmp(name, "env", 4) == 0)
