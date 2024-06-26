@@ -81,7 +81,7 @@ int		ft_unset(t_command *cmd, t_misc *misc);
 int		ft_isvalid_envname(char *var_name);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
-void	ft_ascii_sort(t_command *cmd, t_misc *misc); //export2
+void	ft_ascii_sort(t_command *cmd, t_misc *misc);
 void	replace_env_var(char **envar_addr, char *var_name, char *var_value);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
@@ -96,7 +96,7 @@ void	free_command(void *data);
 
 /////////////////////////////    HEREDOC   //////////////////////////////
 
-int		ft_heredoc(char *eof, t_command *cmd, t_misc *misc);
+int		ft_heredoc(char *eof, t_misc *misc, char **storage);
 
 ///////////////////////////////     MAIN     //////////////////////////////////
 

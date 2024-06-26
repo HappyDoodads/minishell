@@ -1,18 +1,7 @@
-
 #include "minishell.h"
 
-int	ft_heredoc(char *eof, t_command *cmd, t_misc *misc)
+static void	heredoc_loop(int fd, char *eof, char *input)
 {
-	int fd;
-	char *input;
-	char *file = ft_strjoin(".tmpfile", ft_itoa(i)); // creation tmp file pour heredoc
-	if (cmd->argv[1] == NULL)
-	{
-		ft_dprintf(2, "minishell: syntax error\n");
-		return (EXIT_FAILURE);
-	}
-	cmd->infile = ft_strjoin(".tmpfile", ft_itoa(misc->tmpfile_count++));
-	fd = open(cmd->infile, O_CREAT | O_RDWR | O_APPEND, 0644);
 	while ((1))
 	{
 		input = readline("> ");
@@ -23,8 +12,31 @@ int	ft_heredoc(char *eof, t_command *cmd, t_misc *misc)
 			break ;
 		}
 		ft_dprintf(fd, "%s\n", input);
-			free(input);
+		free(input);
 	}
+}
+
+int	ft_heredoc(char *eof, t_misc *misc, char **storage)
+{
+	int		fd;
+	char	*input;
+	char	*tmp;
+
+	tmp = NULL;
+	input = NULL;
+	if (eof == NULL)
+	{
+		ft_dprintf(2, "minishell: syntax error\n");
+		return (EXIT_FAILURE);
+	}
+	tmp = ft_itoa(misc->tmpfile_count);
+	*storage = ft_strjoin(".tmpfile", tmp);
+	free(tmp);
+	if (*storage == NULL)
+		return (EXIT_FAILURE);
+	misc->tmpfile_count += 1;
+	fd = open(*storage, O_CREAT | O_RDWR | O_APPEND, 0644);
+	heredoc_loop(fd, eof, input);
 	free(eof);
-	return (0);
+	return (EXIT_SUCCESS);
 }
