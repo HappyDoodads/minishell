@@ -47,7 +47,6 @@ void	ft_loopenv(t_misc *misc, char *v_name, char *v_val)
 	if (!flag)
 	{
 		ft_new_export(misc, v_name, v_val);
-		flag = 0;
 	}
 }
 
