@@ -14,16 +14,10 @@ void	update_pwd(char *new_path, t_misc *misc)
 
 int	ft_cd(t_command *cmd, t_misc *misc)
 {
-	char	cwd[PATH_MAX];
-	(void)misc;
-
-	if (cmd->argv[1] && cmd->argv[2])
+	if (cmd->argv[2])
 		return (ft_dprintf(2, "cd: too many arguments\n"), 1);
-	if (!chdir(cmd->argv[1]))
-	{
-		update_pwd(getcwd(cwd, PATH_MAX), misc);
+	if (chdir(cmd->argv[1]))
 		return (EXIT_SUCCESS);
-	}
-	perror("minishell: cd");
+	// print_error_msg("cd", cmd->argv[1], NULL);
 	return (EXIT_FAILURE);
 }
