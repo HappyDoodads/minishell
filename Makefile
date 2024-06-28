@@ -63,7 +63,7 @@ SRCS	=	main.c \
 			exec.c \
 			substitute.c \
 			export2.c \
-#			signal.c
+			signal.c
 			
 
 #env -i ./minishell

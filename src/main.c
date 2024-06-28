@@ -24,8 +24,6 @@ char	**dup_envp(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_misc	misc;
-	//signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, sigquit_handler);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
 	if (dup2(0, STDIN_DUP) != STDIN_DUP || dup2(1, STDOUT_DUP) != STDOUT_DUP)

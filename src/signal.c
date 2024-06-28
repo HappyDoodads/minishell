@@ -9,9 +9,3 @@ void	sigint_handler(int sig_num)
 	rl_redisplay();
 }
 
-void	sigquit_handler(int sig_num)
-{
-	(void)sig_num;
-	rl_redisplay();
-	return ;
-}
