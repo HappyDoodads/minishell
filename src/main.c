@@ -24,8 +24,6 @@ char	**dup_envp(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_misc	misc;
-	//signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, sigquit_handler);
 	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
 	dprintf(2, "%sISSUE: grep a input.txt | cat\n%s", YELLOW, RST);
 	dprintf(2, "%sISSUE: grep a input.txt | wc | ls\n%s", YELLOW, RST);
