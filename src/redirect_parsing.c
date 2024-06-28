@@ -13,7 +13,7 @@ static void	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 	if (*storage != NULL)
 		free(*storage);
 	if (type == '<' + 1)
-		return ;//*storage = ft_heredoc(arg, misc, storage);
+		ft_heredoc(arg, misc, storage);
 	else
 		*storage = arg;
 	(void)misc;
