@@ -26,6 +26,9 @@ int	main(int argc, char **argv, char **envp)
 	t_misc	misc;
 	//signal(SIGINT, sigint_handler);
 	//signal(SIGQUIT, sigquit_handler);
+	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
+	dprintf(2, "%sISSUE: grep a input.txt | cat\n%s", YELLOW, RST);
+	dprintf(2, "%sISSUE: grep a input.txt | wc | ls\n%s", YELLOW, RST);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
 	if (dup2(0, STDIN_DUP) != STDIN_DUP || dup2(1, STDOUT_DUP) != STDOUT_DUP)

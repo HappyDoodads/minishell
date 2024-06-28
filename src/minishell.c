@@ -6,8 +6,6 @@ void	ft_create_prompt(t_misc *misc)
 
 	while (1)
 	{
-		dup2(STDIN_DUP, 0);
-		dup2(STDOUT_DUP, 1);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
 			ft_putendl_fd("readline error", 2);
@@ -23,6 +21,7 @@ void	ft_create_prompt(t_misc *misc)
 			}
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
+			delete_tmpfiles(misc);
 		}
 		else
 			free(input);
@@ -54,7 +53,7 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 		close_pipe(pipefd);
 		old_fd[0] = 0;
 	}
-	dprintf(2, "DEBUG old_fd = {%d, %d}\n", old_fd[0], old_fd[1]);
+	dprintf(2, "%sDEBUG old_fd = {%d, %d}\n%s", MAGENTA, old_fd[0], old_fd[1], RST);
 }
 
 int	command_handler(t_misc *misc)

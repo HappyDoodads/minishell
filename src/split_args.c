@@ -80,8 +80,6 @@ char	**split_args(const char *s)
 	unsigned int	i;
 
 	i = count_args(s);
-	if (i == 0)
-		return (NULL);
 	argv = ft_calloc(i + 1, sizeof(char *));
 	if (!argv)
 		return (NULL);

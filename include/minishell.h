@@ -99,6 +99,7 @@ void	free_command(void *data);
 void	cleanup(t_misc *misc);
 void	ft_close(int fd);
 void	close_pipe(int pipefd[2]);
+void	delete_tmpfiles(t_misc *misc);
 
 /////////////////////////////    HEREDOC   //////////////////////////////
 

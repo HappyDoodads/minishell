@@ -74,12 +74,14 @@ static int	open_redirections(t_command *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	exec_builtin(t_command *command, t_misc *misc)
+int	exec_builtin(t_command *cmd, t_misc *misc)
 {
 	const char	*name;
 	int			(*builtin)(t_command *, t_misc *);
 
-	name = command->argv[0];
+	name = cmd->argv[0];
+	if (!name)
+		return (-1);
 	if (ft_strncmp(name, "cd", 3) == 0)
 		builtin = ft_cd;
 	else if (ft_strncmp(name, "echo", 5) == 0)
@@ -96,31 +98,33 @@ int	exec_builtin(t_command *command, t_misc *misc)
 		builtin = ft_exit;
 	else
 		return (-1);
-	if (open_redirections(command) == EXIT_FAILURE)
+	if (open_redirections(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	return (builtin(command, misc));
+	return (builtin(cmd, misc));
 }
 
-void	exec_command(t_command *command, t_misc *misc)
+void	exec_command(t_command *cmd, t_misc *misc)
 {
 	char	*fullpath;
 	int		status;
 
-	status = exec_builtin(command, misc);
-	dprintf(2, "%s fd(rd, wr): (%d, %d)\n", command->argv[0], command->rd_fd, command->wr_fd);
-	if (status == -1 && open_redirections(command) == EXIT_SUCCESS)
+	status = exec_builtin(cmd, misc);
+	dprintf(2, "%s%s fd(rd, wr): (%d, %d)\n%s",MAGENTA, cmd->argv[0], cmd->rd_fd, cmd->wr_fd, RST);
+	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS && cmd->argv[0])
 	{
-		dup2(command->rd_fd, 0);
-		dup2(command->wr_fd, 1);
-		ft_close(command->rd_fd);
-		ft_close(command->wr_fd);
-		fullpath = get_fullpath(command->argv[0], misc->envp);
-		execve(fullpath, command->argv, misc->envp);
+		dup2(cmd->rd_fd, 0);
+		dup2(cmd->wr_fd, 1);
+		ft_close(cmd->rd_fd);
+		ft_close(cmd->wr_fd);
+		fullpath = get_fullpath(cmd->argv[0], misc->envp);
+		execve(fullpath, cmd->argv, misc->envp);
 		free(fullpath);
 		status = errno;
 	}
-	close(command->rd_fd);
-	close(command->wr_fd);
+	else if (status == -1)
+		status = 1;
+	close(cmd->rd_fd);
+	close(cmd->wr_fd);
 	cleanup(misc);
 	exit(status);
 }

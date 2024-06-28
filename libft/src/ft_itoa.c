@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <marvin@42quebec.com>              +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:45:12 by jdemers           #+#    #+#             */
-/*   Updated: 2023/10/19 15:47:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/06/28 18:11:20 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 static int	ft_numlen(int n)
@@ -54,10 +55,26 @@ char	*ft_itoa(int n)
 	}
 	return (s);
 }
-/*
-#include <stdio.h>
-int	main(void)
+
+char	*ft_itoab(int n, char buf[12])
 {
-	printf("%s\n", ft_itoa(-9));
-	return (0);
-}*/
+	int	i;
+
+	ft_bzero(buf, 12);
+	if (n == -2147483648)
+		return (ft_strlcpy(buf, "-2147483648", 12), buf);
+	if (n < 0)
+	{
+		buf[0] = '-';
+		n *= -1;
+	}
+	else if (n == 0)
+		buf[0] = '0';
+	i = ft_numlen(n) - 1;
+	while (n > 0)
+	{
+		buf[i--] = n % 10 + '0';
+		n /= 10;
+	}
+	return (buf);
+}
