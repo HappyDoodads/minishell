@@ -1,10 +1,11 @@
 #include "minishell.h"
 
-int	ft_echo(t_command *cmd)
+int	ft_echo(t_command *cmd, t_misc *misc)
 {
 	unsigned int	i;
 	char			end;
 
+	(void)misc;
 	i = 1;
 	end = '\n';
 	if (cmd->argv[i] != NULL && ft_strncmp(cmd->argv[i], "-n", 3) == 0)
