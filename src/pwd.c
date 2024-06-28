@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-int	ft_pwd(t_command *cmd)
+int	ft_pwd(t_command *cmd, t_misc *misc)
 {
 	char	cwd[PATH_MAX];
 
+	(void)misc;
 	if (cmd->argv[1] != NULL)
 	{
 		if (cmd->argv[1][0] == '-')

@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_isset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 14:08:28 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/28 11:58:13 by jdemers          ###   ########.fr       */
+/*   Created: 2024/06/25 17:54:08 by jdemers           #+#    #+#             */
+/*   Updated: 2024/06/25 17:58:25 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-t_list	*ft_lstlast(t_list *lst)
+int	ft_isset(int c, const char *set)
 {
-	if (!lst || !lst->next)
-		return (lst);
-	return (ft_lstlast(lst->next));
-}
-
-t_list	*ft_lstfirst(t_list *lst)
-{
-	if (!lst || !lst->prev)
-		return (lst);
-	return (ft_lstfirst(lst->prev));
+	if (c == 0)
+		return (0);
+	while (*set)
+	{
+		if (c == (int)*set)
+			return (1);
+		set++;
+	}
+	return (0);
 }

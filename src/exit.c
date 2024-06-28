@@ -2,20 +2,24 @@
 
 int	ft_exit(t_command *cmd, t_misc *misc)
 {
-	int	status = 0;
-	(void)(cmd);
+	int	stat;
+	int	i;
 
 	ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
-	// if (cmd->argv[1])
-	// 	status = ft_atoi(cmd->argv[1]);
-	// else
-	//	status = misc->prev_status;
-	ft_lstclear(&misc->cmd_list, free_command);
-	ft_free_split(misc->envp);
-	close_all(misc->fd_arr, -1, -1);
-	clear_history();
-	close(STDIN_DUP);
-	close(STDOUT_DUP);
-	exit(status);
+	stat = misc->prev_status;
+	if (cmd->argv[1])
+	{
+		i = 0;
+		if (cmd->argv[1][0] == '-' && ft_isdigit(cmd->argv[1][1]))
+			i += 2;
+		while (ft_isdigit(cmd->argv[1][i]))
+			i++;
+		if (cmd->argv[1][i] == '\0')
+			stat = ft_atoi(cmd->argv[1]);
+		else
+			stat = print_err("exit", cmd->argv[1], "numeric argument required");
+	}
+	cleanup(misc);
+	exit(stat);
 	return (errno);
 }

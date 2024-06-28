@@ -58,8 +58,10 @@ SRCS	=	main.c \
 			unset.c \
 			utils.c \
 			parsing.c \
+			redirect_parsing.c \
 			split_args.c \
 			exec.c \
+			substitute.c \
 			export2.c \
 #			signal.c
 			
