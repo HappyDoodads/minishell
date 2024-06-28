@@ -6,7 +6,8 @@ void	ft_create_prompt(t_misc *misc)
 
 	while (1)
 	{
-		reset_fd_array(misc->fd_arr);
+		dup2(STDIN_DUP, 0);
+		dup2(STDOUT_DUP, 1);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
 			ft_putendl_fd("readline error", 2);
@@ -15,6 +16,11 @@ void	ft_create_prompt(t_misc *misc)
 			add_history(input);
 			misc->cmd_list = parse_input(input, misc);
 			free(input);
+			if (!misc->cmd_list)
+			{
+				misc->prev_status = EXIT_FAILURE;
+				continue ;
+			}
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
 		}
@@ -23,30 +29,55 @@ void	ft_create_prompt(t_misc *misc)
 	}
 }
 
+static void	forking(t_list *cmd_list, t_misc *misc)
+{
+	static int	old_fd[2];
+	int			pipefd[2];
+	t_command	*cmd;
+
+	cmd = cmd_list->data;
+	cmd->rd_fd = old_fd[0];
+	cmd->wr_fd = 1;
+	if (cmd_list->next != NULL)
+	{
+		pipe(pipefd);
+		cmd->wr_fd = pipefd[1];
+	}
+	cmd->pid = fork();
+	if (cmd->pid == 0)
+		exec_command(cmd, misc);
+	close_pipe(old_fd);
+	if (cmd_list->next != NULL)
+		ft_memcpy(old_fd, pipefd, sizeof(int) * 2);
+	else
+	{
+		close_pipe(pipefd);
+		old_fd[0] = 0;
+	}
+	dprintf(2, "DEBUG old_fd = {%d, %d}\n", old_fd[0], old_fd[1]);
+}
+
 int	command_handler(t_misc *misc)
 {
-	t_list	*cmd;
-	pid_t	pid;
-	int		child_n;
+	t_list	*cmd_node;
 	int		status;
 
-	cmd = misc->cmd_list;
+	cmd_node = misc->cmd_list;
 	status = -1;
-	if (cmd->next == NULL)
-		status = exec_builtin(cmd->data, misc);
+	if (cmd_node->next == NULL)
+		status = exec_builtin(cmd_node->data, misc);
 	if (status >= 0)
 		return (status);
-	child_n = 0;
-	while (cmd != NULL)
+	while (cmd_node != NULL)
 	{
-		pid = fork();
-		if (pid == 0)
-			exec_command(cmd->data, misc);
-		child_n++;
-		cmd = cmd->next;
+		forking(cmd_node, misc);
+		cmd_node = cmd_node->next;
 	}
-	close_all(misc->fd_arr, -1, -1);
-	while (child_n-- > 0)
-		wait(&status);
+	cmd_node = misc->cmd_list;
+	while (cmd_node != NULL)
+	{
+		waitpid(((t_command *)cmd_node->data)->pid, &status, 0);
+		cmd_node = cmd_node->next;
+	}
 	return (status);
 }

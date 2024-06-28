@@ -25,7 +25,7 @@
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libft/include/libft.h"
+# include "libft.h"
 
 ///////////////////////////     COLORS    ////////////////////////////////////
 
@@ -48,11 +48,11 @@ typedef struct s_command
 	char	*infile;
 	char	*outfile;
 	bool	append_out;
+	pid_t	pid;
 }			t_command;
 
 typedef struct s_misc
 {
-	int		fd_arr[MAX_FD];
 	char	**envp;
 	int		prev_status;
 	t_list	*cmd_list;
@@ -72,10 +72,10 @@ enum e_quote_status
 
 ///////////////////////////////   BUILTINS   ///////////////////////////////////
 
-int		ft_cd(t_command *cmd);
-int		ft_pwd(t_command *cmd);
+int		ft_cd(t_command *cmd, t_misc *misc);
+int		ft_pwd(t_command *cmd, t_misc *misc);
 int		ft_env(t_command *cmd, t_misc *misc);
-int		ft_echo(t_command *cmd);
+int		ft_echo(t_command *cmd, t_misc *misc);
 int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd, t_misc *misc);
 int		ft_isvalid_envname(char *var_name);
@@ -83,6 +83,7 @@ int		ft_exit(t_command *cmd, t_misc *misc);
 
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
+int		print_err(const char *s1, const char *s2, const char *msg);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 
@@ -92,6 +93,9 @@ void	exec_command(t_command *command, t_misc *misc);
 ////////////////////////////////   FREE    /////////////////////////////////////
 
 void	free_command(void *data);
+void	cleanup(t_misc *misc);
+void	ft_close(int fd);
+void	close_pipe(int pipefd[2]);
 
 ///////////////////////////////     HEREDOC     ////////////////////////////////
 
@@ -112,7 +116,7 @@ int		quote_skip(char *line, int i);
 t_list	*parse_input(char *input, t_misc *misc);
 char	**split_args(const char *s);
 int		redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
-char	*substitute(char *arg, t_misc *misc);
+char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 
 /////////////////////////////   REDIRECTING   //////////////////////////////////
 
@@ -123,11 +127,5 @@ void	sigint_handler(int sig_num);
 void	sigquit_handler(int sig_num);
 
 //////////////////////////////    UTILS    /////////////////////////////////////
-
-void	reset_fd_array(int fd_arr[MAX_FD]);
-void	add_fd(int fd_arr[MAX_FD], int fd);
-int		get_last_fd(int fd_arr[MAX_FD]);
-int		close_all(int fd_arr[MAX_FD], int fd1, int fd2);
-char	**get_envp(void);
 
 #endif

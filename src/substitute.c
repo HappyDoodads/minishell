@@ -1,7 +1,9 @@
 #include "minishell.h"
 
-static bool	quote_check(char c, char *stat)
+static bool	quote_check(char c, char *stat, bool quote_flag)
 {
+	if (quote_flag)
+		return (false);
 	if (*stat == NO_QUOTE && (c == QUOTE || c == DQUOTE))
 		*stat = c;
 	else if (*stat == c)
@@ -22,7 +24,7 @@ static char	*reset_buffer(char buf[42], char *res)
 		joined = ft_strjoin(res, buf);
 		free(res);
 	}
-	ft_bzero(buf, 100);
+	ft_bzero(buf, 42);
 	return (joined);
 }
 
@@ -31,10 +33,10 @@ static char	*append_to_buf(char c, char buf[42], char *res)
 	int	i;
 
 	i = 0;
-	while (buf[i] == '\0')
+	while (buf[i] != '\0')
 		i++;
 	buf[i] = c;
-	if (i == 40)
+	if (i == 40 || (c == '\0' && i > 0))
 		res = reset_buffer(buf, res);
 	return (res);
 }
@@ -68,7 +70,8 @@ static char	*insert_envar(char *var_name, int *arg_i, char *res, t_misc *misc)
 	return (free(res), free(var_val), tmp);
 }
 
-char	*substitute(char *arg, t_misc *misc)
+//	if quote_flag == true, quotation symbols are read as simple text
+char	*substitute(char *arg, t_misc *misc, bool quote_flag)
 {
 	char	buf[42];
 	char	*res;
@@ -80,7 +83,7 @@ char	*substitute(char *arg, t_misc *misc)
 	i = -1;
 	while (arg[++i] && res != NULL)
 	{
-		if (quote_check(arg[i], &stat))
+		if (quote_check(arg[i], &stat, quote_flag))
 			continue ;
 		else if (arg[i] == '$' && stat != QUOTE
 			&& (ft_isalpha(arg[i + 1]) || ft_isset(arg[i + 1], "_?")))
@@ -92,6 +95,7 @@ char	*substitute(char *arg, t_misc *misc)
 		else
 			res = append_to_buf(arg[i], buf, res);
 	}
+	res = append_to_buf('\0', buf, res);
 	free(arg);
 	return (res);
 }

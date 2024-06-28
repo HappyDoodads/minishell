@@ -37,7 +37,7 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	i = j;
 	while (cmd_str[j] && cmd_str[j] != ' ')
 		j = quote_skip(cmd_str, j) + 1;
-	filename = substitute(ft_substr(cmd_str, i, j - i), misc);
+	filename = substitute(ft_substr(cmd_str, i, j - i), misc, false);
 	if (filename == NULL)
 		return (-1);
 	sort_redirect(filename, type + mod, cmd, misc);

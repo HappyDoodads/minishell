@@ -48,29 +48,57 @@ static char	*get_fullpath(char *name, char	**envp)
 	return (ft_free_split(paths), free(name), fullpath);
 }
 
+static int	open_redirections(t_command *cmd)
+{
+	int	fd;
+
+	if (cmd->infile)
+	{
+		fd = open(cmd->infile, O_RDONLY);
+		if (fd == -1)
+			return (print_err(cmd->infile, NULL, NULL));
+		close(cmd->rd_fd);
+		cmd->rd_fd = fd;
+	}
+	if (cmd->outfile)
+	{
+		if (cmd->append_out)
+			fd = open(cmd->outfile, O_WRONLY|O_APPEND|O_CREAT, 420);
+		else
+			fd = open(cmd->outfile, O_WRONLY|O_TRUNC|O_CREAT, 420);
+		if (fd == -1)
+			return (print_err(cmd->outfile, NULL, NULL));
+		close(cmd->wr_fd);
+		cmd->wr_fd = fd;
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	exec_builtin(t_command *command, t_misc *misc)
 {
 	const char	*name;
-	int			status;
+	int			(*builtin)(t_command *, t_misc *);
 
 	name = command->argv[0];
 	if (ft_strncmp(name, "cd", 3) == 0)
-		status = ft_cd(command);
+		builtin = ft_cd;
 	else if (ft_strncmp(name, "echo", 5) == 0)
-		status = ft_echo(command);
+		builtin = ft_echo;
 	else if (ft_strncmp(name, "env", 4) == 0)
-		status = ft_env(command, misc);
+		builtin = ft_env;
 	else if (ft_strncmp(name, "export", 7) == 0)
-		status = ft_export(command, misc);
+		builtin = ft_export;
 	else if (ft_strncmp(name, "pwd", 4) == 0)
-		status = ft_pwd(command);
+		builtin = ft_pwd;
 	else if (ft_strncmp(name, "unset", 6) == 0)
-		status = ft_unset(command, misc);
+		builtin = ft_unset;
 	else if (ft_strncmp(name, "exit", 5) == 0)
-		status = ft_exit(command, misc);
+		builtin = ft_exit;
 	else
 		return (-1);
-	return (status);
+	if (open_redirections(command) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	return (builtin(command, misc));
 }
 
 void	exec_command(t_command *command, t_misc *misc)
@@ -78,12 +106,14 @@ void	exec_command(t_command *command, t_misc *misc)
 	char	*fullpath;
 	int		status;
 
-	close_all(misc->fd_arr, command->wr_fd, command->rd_fd);
 	status = exec_builtin(command, misc);
-	if (status == -1)
+	dprintf(2, "%s fd(rd, wr): (%d, %d)\n", command->argv[0], command->rd_fd, command->wr_fd);
+	if (status == -1 && open_redirections(command) == EXIT_SUCCESS)
 	{
 		dup2(command->rd_fd, 0);
 		dup2(command->wr_fd, 1);
+		ft_close(command->rd_fd);
+		ft_close(command->wr_fd);
 		fullpath = get_fullpath(command->argv[0], misc->envp);
 		execve(fullpath, command->argv, misc->envp);
 		free(fullpath);
@@ -91,6 +121,6 @@ void	exec_command(t_command *command, t_misc *misc)
 	}
 	close(command->rd_fd);
 	close(command->wr_fd);
-	ft_lstclear(&misc->cmd_list, free_command);
+	cleanup(misc);
 	exit(status);
 }

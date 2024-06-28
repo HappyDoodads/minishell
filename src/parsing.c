@@ -11,42 +11,17 @@ int	quote_skip(char *line, int i)
 		i++;
 	if (line[i])
 		return (i);
+	print_err(NULL, NULL, "Opened quotes must always be closed");
 	return (-1);
 }
 
 //	TODO: Gestion d'erreur
 static void	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 {
-	int			pipefd[2];
 	t_command	*command;
 	t_list		*new;
 
 	command = ft_calloc(1, sizeof(t_command));
-	if (misc->fd_arr[0] == -1)
-		command->rd_fd = 0;
-	else
-		command->rd_fd = get_last_fd(misc->fd_arr);
-	pipe(pipefd);
-	command->wr_fd = pipefd[1];
-	add_fd(misc->fd_arr, pipefd[1]);
-	add_fd(misc->fd_arr, pipefd[0]);
-	redirect_parsing(cmd_str, command, misc);
-	command->argv = split_args(cmd_str);
-	new = ft_lstnew(command);
-	ft_lstadd_back(cmd_list, new);
-	free(cmd_str);
-}
-
-static void	parse_last_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
-{
-	t_command	*command;
-	t_list		*new;
-
-	command = ft_calloc(1, sizeof(t_command));
-	command->rd_fd = get_last_fd(misc->fd_arr);
-	if (command->rd_fd == -1)
-		command->rd_fd = 0;
-	command->wr_fd = 1;
 	redirect_parsing(cmd_str, command, misc);
 	command->argv = split_args(cmd_str);
 	new = ft_lstnew(command);
@@ -74,6 +49,6 @@ t_list	*parse_input(char *input, t_misc *misc)
 			start = i + 1;
 		}
 	}
-	parse_last_cmd(ft_substr(input, start, i - start), &cmd_list, misc);
+	parse_cmd(ft_substr(input, start, i - start), &cmd_list, misc);
 	return (cmd_list);
 }
