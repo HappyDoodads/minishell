@@ -10,7 +10,7 @@ void	ft_create_prompt(t_misc *misc)
 		signal(SIGQUIT, SIG_IGN);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
-			ft_putendl_fd("readline error", 2);
+			exit (0);
 		else if (*input)
 		{
 			add_history(input);
@@ -44,6 +44,7 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 		pipe(pipefd);
 		cmd->wr_fd = pipefd[1];
 	}
+	signal(SIGINT, sig_child_handler);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 		exec_command(cmd, misc);

@@ -129,6 +129,8 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 
 void	sigint_handler(int sig_num);
 void	sigquit_handler(int sig_num);
+void	sig_child_handler(int sig_num);
+void	sig_heredoc_handler(int sig_num);
 int		rl_replace_line(const char *text, int clear_undo);
 
 //////////////////////////////    UTILS    /////////////////////////////////////
