@@ -16,12 +16,11 @@ void	cleanup(t_misc *misc)
 	ft_lstclear(&misc->cmd_list, free_command);
 	ft_free_split(misc->envp);
 	clear_history();
-	close(STDIN_DUP);
-	close(STDOUT_DUP);
 }
 
 void	ft_close(int fd)
 {
+	dprintf(2, "%sDEBUG: Calling ft_close(%d)...%s\n", MAGENTA, fd, RST);
 	if (fd > 1)
 		close(fd);
 }

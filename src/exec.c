@@ -81,7 +81,7 @@ int	exec_builtin(t_command *cmd, t_misc *misc)
 
 	name = cmd->argv[0];
 	if (!name)
-		return (-1);
+		return (open_redirections(cmd));
 	if (ft_strncmp(name, "cd", 3) == 0)
 		builtin = ft_cd;
 	else if (ft_strncmp(name, "echo", 5) == 0)
@@ -108,9 +108,9 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	char	*fullpath;
 	int		status;
 
+	dprintf(2, "%sfds(%s)={%d, %d}\n%s",MAGENTA, cmd->argv[0], cmd->rd_fd, cmd->wr_fd, RST);
 	status = exec_builtin(cmd, misc);
-	dprintf(2, "%s%s fd(rd, wr): (%d, %d)\n%s",MAGENTA, cmd->argv[0], cmd->rd_fd, cmd->wr_fd, RST);
-	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS && cmd->argv[0])
+	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
 		dup2(cmd->rd_fd, 0);
 		dup2(cmd->wr_fd, 1);
@@ -122,9 +122,9 @@ void	exec_command(t_command *cmd, t_misc *misc)
 		status = errno;
 	}
 	else if (status == -1)
-		status = 1;
-	close(cmd->rd_fd);
-	close(cmd->wr_fd);
+		status = EXIT_FAILURE;
+	ft_close(cmd->rd_fd);
+	ft_close(cmd->wr_fd);
 	cleanup(misc);
 	exit(status);
 }
