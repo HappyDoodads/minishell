@@ -80,6 +80,11 @@ static int	equal_sign_handler(t_command *cmd, t_misc *misc, int i)
 	get_v_val(cmd, i, &v_name, &v_val);
 	if (ft_isvalid_envname(v_name) == 0)
 		ft_loopenv(misc, v_name, v_val);
+	else
+	{
+		free(v_name);
+		return (EXIT_FAILURE);
+	}
 	free(v_name);
 	return (0);
 }

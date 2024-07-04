@@ -27,16 +27,41 @@ static void	heredoc_loop(int fd, char *eof, char *input, char **storage)
 	}
 }
 
-int	ft_heredoc(char *eof, t_misc *misc, char **storage)
+static int	fork_handler(char *eof, t_misc *misc, char **storage, pid_t	pid)
 {
+	int		status;
 	int		fd;
 	char	*input;
+
+	input = NULL;
+	if (*storage == NULL)
+		return (EXIT_FAILURE);
+	misc->tmpfile_count += 1;
+	if (pid < 0)
+		return (perror("fork failed"), EXIT_FAILURE);
+	if (pid == 0)
+	{
+		fd = open(*storage, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		heredoc_loop(fd, eof, input, storage);
+		return (0);
+	}
+	else
+	{
+		signal (SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		delete_tmpfiles(misc);
+		signal(SIGINT, sigint_handler);
+		ft_create_prompt(misc);
+	}
+	return (0);
+}
+
+int	ft_heredoc(char *eof, t_misc *misc, char **storage)
+{
 	char	*tmp;
 	pid_t	pid;
-	int		status;
 
 	tmp = NULL;
-	input = NULL;
 	pid = fork();
 	if (eof == NULL)
 	{
@@ -49,29 +74,7 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	if (*storage == NULL)
 		return (EXIT_FAILURE);
 	misc->tmpfile_count += 1;
-	if (pid < 0)
-	{
-		perror("fork failed");
-		// unlink(*storage);
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		fd = open(*storage, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		heredoc_loop(fd, eof, input, storage);
-		// unlink(*storage);
-		return (0);
-	}
-	else
-	{
-		signal (SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		signal(SIGINT, sigint_handler);
-		// unlink(*storage);
-		ft_create_prompt(misc);
-		exit(0);
-		//todo check exit 0
-	}
+	fork_handler(eof, misc, storage, pid);
 	free(eof);
 	return (EXIT_SUCCESS);
 }

@@ -23,7 +23,6 @@ void	ft_create_prompt(t_misc *misc)
 			}
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
-			delete_tmpfiles(misc);
 		}
 		else
 			free(input);
