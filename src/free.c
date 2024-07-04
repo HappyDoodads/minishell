@@ -44,5 +44,5 @@ void	delete_tmpfiles(t_misc *misc)
 		ft_itoab(--misc->tmpfile_count, num);
 		unlink(file);
 	}
-	exit (0);
+	// exit (0);
 }

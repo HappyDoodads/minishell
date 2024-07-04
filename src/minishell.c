@@ -6,8 +6,8 @@ void	ft_create_prompt(t_misc *misc)
 
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, sigint_handler);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
 			exit (0);
@@ -23,6 +23,7 @@ void	ft_create_prompt(t_misc *misc)
 			}
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
+			delete_tmpfiles(misc);
 		}
 		else
 			free(input);

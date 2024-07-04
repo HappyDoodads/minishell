@@ -1,57 +1,50 @@
 #include "minishell.h"
 
-static void	heredoc_loop(int fd, char *eof, char *input, char **storage)
+static void	heredoc_loop(char *eof, char **storage)
 {
-	signal(SIGINT, sig_heredoc_handler);
+	char	*input;
+	int		fd;
+
+	signal(SIGINT, SIG_DFL);
+	fd = open(*storage, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	while (1)
 	{
-		fd = open(*storage, O_RDWR | O_APPEND, 0644);
-		if (access (*storage, R_OK | W_OK) != 0)
 		{
-			ft_dprintf(2, "permissions forbidden\n");
-			close(fd);
-			break ;
-		}
-		else
-		{
-			input = readline("> ");
+			ft_putstr_fd("> ", 1);
+			input = get_next_line(0);
 			if (ft_strncmp(input, eof, ft_strlen(eof)) == 0 || !input)
 			{
 				close(fd);
 				free(input);
 				break ;
 			}
-			ft_dprintf(fd, "%s\n", input);
+			ft_putendl_fd(input, fd);
 			free(input);
 		}
 	}
 }
 
-static int	fork_handler(char *eof, t_misc *misc, char **storage, pid_t	pid)
+static int	fork_handler(char *eof, t_misc *misc, char **storage)
 {
 	int		status;
-	int		fd;
-	char	*input;
+	pid_t	pid;
 
-	input = NULL;
-	if (*storage == NULL)
-		return (EXIT_FAILURE);
-	misc->tmpfile_count += 1;
+	pid = fork();
 	if (pid < 0)
 		return (perror("fork failed"), EXIT_FAILURE);
 	if (pid == 0)
 	{
-		fd = open(*storage, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		heredoc_loop(fd, eof, input, storage);
-		return (0);
+		heredoc_loop(eof, storage);
+		exit (0);
 	}
 	else
 	{
-		signal (SIGINT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
-		delete_tmpfiles(misc);
 		signal(SIGINT, sigint_handler);
-		ft_create_prompt(misc);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			return (ft_putchar_fd('\n', 1), EXIT_FAILURE);
+		(void)misc;
 	}
 	return (0);
 }
@@ -59,10 +52,7 @@ static int	fork_handler(char *eof, t_misc *misc, char **storage, pid_t	pid)
 int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 {
 	char	*tmp;
-	pid_t	pid;
 
-	tmp = NULL;
-	pid = fork();
 	if (eof == NULL)
 	{
 		ft_dprintf(2, "minishell: syntax error\n");
@@ -74,7 +64,7 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	if (*storage == NULL)
 		return (EXIT_FAILURE);
 	misc->tmpfile_count += 1;
-	fork_handler(eof, misc, storage, pid);
+	fork_handler(eof, misc, storage);
 	free(eof);
 	return (EXIT_SUCCESS);
 }
