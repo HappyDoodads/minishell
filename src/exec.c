@@ -123,8 +123,11 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	}
 	else if (status == -1)
 		status = EXIT_FAILURE;
-	ft_close(cmd->rd_fd);
-	ft_close(cmd->wr_fd);
+	else
+	{
+		ft_close(cmd->rd_fd);
+		ft_close(cmd->wr_fd);
+	}
 	cleanup(misc);
 	exit(status);
 }
