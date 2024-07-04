@@ -10,7 +10,7 @@ int	ft_exit(t_command *cmd, t_misc *misc)
 	if (cmd->argv[1])
 	{
 		i = 0;
-		if (cmd->argv[1][0] == '-' && ft_isdigit(cmd->argv[1][1]))
+		if (ft_isset(cmd->argv[1][0], "-+") && ft_isdigit(cmd->argv[1][1]))
 			i += 2;
 		while (ft_isdigit(cmd->argv[1][i]))
 			i++;
