@@ -39,6 +39,5 @@ int	ft_cd(t_command *cmd, t_misc *misc)
 		update_old_pwd(old_path, misc);
 		return (EXIT_SUCCESS);
 	}
-	// print_error_msg("cd", cmd->argv[1], NULL);
-	return (EXIT_FAILURE);
+	return (print_err("cd", cmd->argv[1], NULL));
 }

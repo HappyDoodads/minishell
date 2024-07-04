@@ -36,7 +36,7 @@ TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
 
 # Compiler and flags
 CC				=	gcc
-CFLAGS			=	-Wall -Werror -Wextra -g
+CFLAGS			=	-Wall -Werror -Wextra
 #-fsanitize=address
 RM				=	rm -f
 

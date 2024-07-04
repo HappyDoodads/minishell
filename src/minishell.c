@@ -31,12 +31,12 @@ void	ft_create_prompt(t_misc *misc)
 
 static void	forking(t_list *cmd_list, t_misc *misc)
 {
-	static int	old_fd[2];
+	static int	old_fd = 0;
 	int			pipefd[2];
 	t_command	*cmd;
 
 	cmd = cmd_list->data;
-	cmd->rd_fd = old_fd[0];
+	cmd->rd_fd = old_fd;
 	cmd->wr_fd = 1;
 	if (cmd_list->next != NULL)
 	{
@@ -47,21 +47,21 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 		exec_command(cmd, misc);
-	close_pipe(old_fd);
+	ft_close(old_fd);
 	if (cmd_list->next != NULL)
-		ft_memcpy(old_fd, pipefd, sizeof(int) * 2);
-	else
 	{
-		close_pipe(pipefd);
-		old_fd[0] = 0;
+		ft_close(pipefd[1]);
+		old_fd = pipefd[0];
 	}
-	dprintf(2, "%sDEBUG old_fd = {%d, %d}\n%s", MAGENTA, old_fd[0], old_fd[1], RST);
+	else
+		old_fd = 0;
 }
 
 int	command_handler(t_misc *misc)
 {
-	t_list	*cmd_node;
-	int		status;
+	t_list		*cmd_node;
+	t_command	*cmd;
+	int			status;
 
 	cmd_node = misc->cmd_list;
 	status = -1;
@@ -77,7 +77,8 @@ int	command_handler(t_misc *misc)
 	cmd_node = misc->cmd_list;
 	while (cmd_node != NULL)
 	{
-		waitpid(((t_command *)cmd_node->data)->pid, &status, 0);
+		cmd = cmd_node->data;
+		waitpid(cmd->pid, &status, 0);
 		cmd_node = cmd_node->next;
 	}
 	return (status);
