@@ -53,21 +53,21 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	{
 		perror("fork failed");
 		close(fd);
-		unlink(*storage);
+		// unlink(*storage);
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
 	{
 		heredoc_loop(fd, eof, input, storage);
-		unlink(*storage);
+		// unlink(*storage);
 		exit (EXIT_SUCCESS);
 	}
 	else
 	{
-		signal (SIGINT, SIG_IGN);
+		signal (SIGINT, SIG_IGN);g
 		waitpid(pid, &status, 0);
 		signal(SIGINT, sigint_handler);
-		unlink(*storage);
+		// unlink(*storage);
 		ft_create_prompt(misc);
 		exit(0);
 	}
