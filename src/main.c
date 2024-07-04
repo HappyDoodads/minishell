@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_misc	misc;
 
+	signal(SIGQUIT, SIG_IGN);
 	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
 	dprintf(2, "%sISSUE: grep a input.txt | cat\n%s", YELLOW, RST);
 	dprintf(2, "%sISSUE: grep a input.txt | wc | ls\n%s", YELLOW, RST);
