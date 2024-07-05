@@ -6,11 +6,7 @@
 
 # define PWD "pwd"
 # define EXIT "exit"
-# ifndef MAX_FD
-#  define MAX_FD 256
-# endif
-# define STDIN_DUP 3
-# define STDOUT_DUP 4
+# define MALLOC_FAIL 69
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 
@@ -87,6 +83,7 @@ void	ft_loopenv(t_misc *misc, char *v_name, char *v_val);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int		print_err(const char *s1, const char *s2, const char *msg);
+void	set_statcode(int errnum, t_misc *misc);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 

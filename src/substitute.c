@@ -25,6 +25,8 @@ static char	*reset_buffer(char buf[42], char *res)
 		free(res);
 	}
 	ft_bzero(buf, 42);
+	if (!joined)
+		print_err("malloc", NULL, NULL);
 	return (joined);
 }
 
@@ -32,6 +34,8 @@ static char	*append_to_buf(char c, char buf[42], char *res)
 {
 	int	i;
 
+	if (!res)
+		return (NULL);
 	i = 0;
 	while (buf[i] != '\0')
 		i++;
@@ -64,7 +68,7 @@ static char	*insert_envar(char *var_name, int *arg_i, char *res, t_misc *misc)
 			var_val = ft_strdup("");
 	}
 	if (!var_val)
-		return (free(res), NULL);
+		return (free(res), print_err("malloc", NULL, NULL), NULL);
 	tmp = ft_strjoin(res, var_val);
 	*arg_i += len - 1;
 	return (free(res), free(var_val), tmp);
@@ -78,6 +82,8 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag)
 	char	stat;
 	int		i;
 
+	if (!arg)
+		return (print_err("malloc", NULL, NULL));
 	res = reset_buffer(buf, NULL);
 	stat = NO_QUOTE;
 	i = -1;
@@ -95,7 +101,5 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag)
 		else
 			res = append_to_buf(arg[i], buf, res);
 	}
-	res = append_to_buf('\0', buf, res);
-	free(arg);
-	return (res);
+	return (free(arg), append_to_buf('\0', buf, res));
 }

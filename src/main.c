@@ -27,7 +27,6 @@ int	main(int argc, char **argv, char **envp)
 
 	signal(SIGQUIT, SIG_IGN);
 	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
-	dprintf(2, "%sISSUE: cat | cat | ls\n%s", YELLOW, RST);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
 	// if (dup2(0, STDIN_DUP) != STDIN_DUP || dup2(1, STDOUT_DUP) != STDOUT_DUP)

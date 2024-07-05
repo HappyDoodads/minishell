@@ -9,17 +9,14 @@ void	ft_create_prompt(t_misc *misc)
 		signal(SIGINT, sigint_handler);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
-			exit (0);
+			exit(0);
 		else if (*input)
 		{
 			add_history(input);
 			misc->cmd_list = parse_input(input, misc);
 			free(input);
 			if (!misc->cmd_list)
-			{
-				misc->prev_status = EXIT_FAILURE;
 				continue ;
-			}
 			misc->prev_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
 			delete_tmpfiles(misc);
@@ -28,34 +25,6 @@ void	ft_create_prompt(t_misc *misc)
 			free(input);
 	}
 }
-
-// static void	forking(t_list *cmd_list, t_misc *misc)
-// {
-// 	static int	old_fd = 0;
-// 	int			pipefd[2];
-// 	t_command	*cmd;
-
-// 	cmd = cmd_list->data;
-// 	cmd->rd_fd = old_fd;
-// 	cmd->wr_fd = 1;
-// 	if (cmd_list->next != NULL)
-// 	{
-// 		pipe(pipefd);
-// 		cmd->wr_fd = pipefd[1];
-// 	}
-// 	signal(SIGINT, sig_child_handler);
-// 	cmd->pid = fork();
-// 	if (cmd->pid == 0)
-// 		exec_command(cmd, misc);
-// 	ft_close(old_fd);
-// 	if (cmd_list->next != NULL)
-// 	{
-// 		ft_close(pipefd[1]);
-// 		old_fd = pipefd[0];
-// 	}
-// 	else
-// 		old_fd = 0;
-// }
 
 static void	forking(t_list *cmd_list, t_misc *misc)
 {
