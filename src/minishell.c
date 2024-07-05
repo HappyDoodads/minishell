@@ -29,32 +29,54 @@ void	ft_create_prompt(t_misc *misc)
 	}
 }
 
+// static void	forking(t_list *cmd_list, t_misc *misc)
+// {
+// 	static int	old_fd = 0;
+// 	int			pipefd[2];
+// 	t_command	*cmd;
+
+// 	cmd = cmd_list->data;
+// 	cmd->rd_fd = old_fd;
+// 	cmd->wr_fd = 1;
+// 	if (cmd_list->next != NULL)
+// 	{
+// 		pipe(pipefd);
+// 		cmd->wr_fd = pipefd[1];
+// 	}
+// 	signal(SIGINT, sig_child_handler);
+// 	cmd->pid = fork();
+// 	if (cmd->pid == 0)
+// 		exec_command(cmd, misc);
+// 	ft_close(old_fd);
+// 	if (cmd_list->next != NULL)
+// 	{
+// 		ft_close(pipefd[1]);
+// 		old_fd = pipefd[0];
+// 	}
+// 	else
+// 		old_fd = 0;
+// }
+
 static void	forking(t_list *cmd_list, t_misc *misc)
 {
-	static int	old_fd = 0;
-	int			pipefd[2];
+	t_command	*prev_cmd;
 	t_command	*cmd;
 
 	cmd = cmd_list->data;
-	cmd->rd_fd = old_fd;
-	cmd->wr_fd = 1;
-	if (cmd_list->next != NULL)
+	if (cmd_list->prev)
 	{
-		pipe(pipefd);
-		cmd->wr_fd = pipefd[1];
+		prev_cmd = cmd_list->prev->data;
+		ft_memcpy(cmd->pipe_L, prev_cmd->pipe_R, sizeof(int[2]));
 	}
+	cmd->pipe_R[1] = 1;
+	if (cmd_list->next)
+		pipe(cmd->pipe_R);
 	signal(SIGINT, sig_child_handler);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 		exec_command(cmd, misc);
-	ft_close(old_fd);
-	if (cmd_list->next != NULL)
-	{
-		ft_close(pipefd[1]);
-		old_fd = pipefd[0];
-	}
-	else
-		old_fd = 0;
+	if (cmd_list->prev)
+		close_pipe(prev_cmd->pipe_R);
 }
 
 int	command_handler(t_misc *misc)

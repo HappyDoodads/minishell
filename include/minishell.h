@@ -43,8 +43,8 @@
 typedef struct s_command
 {
 	char	**argv;
-	int		rd_fd;
-	int		wr_fd;
+	int		pipe_L[2];
+	int		pipe_R[2];
 	char	*infile;
 	char	*outfile;
 	bool	append_out;

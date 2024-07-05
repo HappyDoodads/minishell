@@ -16,7 +16,7 @@ static void	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 		ft_heredoc(arg, misc, storage);
 	else
 		*storage = arg;
-	(void)misc;
+	dprintf(2, "%sredirection: %s\n%s", YELLOW, *storage, RST);
 }
 
 static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
