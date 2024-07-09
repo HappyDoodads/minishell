@@ -3,21 +3,17 @@
 static unsigned int	ft_arglen(const char *str)
 {
 	unsigned int	len;
-	int				i;
 	char			quote;
 
-	i = 0;
 	len = 0;
 	quote = NO_QUOTE;
-	while (str[i] && (str[i] != ' ' || quote))
+	while (str[len] && (str[len] != ' ' || quote != NO_QUOTE))
 	{
-		if (quote == NO_QUOTE && (str[i] == DQUOTE || str[i] == QUOTE))
-			quote = str[i];
-		else if (quote == str[i])
+		if ((str[len] == DQUOTE || str[len] == QUOTE) && quote == NO_QUOTE)
+			quote = str[len];
+		else if (quote == str[len])
 			quote = NO_QUOTE;
-		else
-			len++;
-		i++;
+		len++;
 	}
 	return (len);
 }
@@ -28,7 +24,7 @@ static unsigned int	count_args(const char *str)
 	char			quote;
 
 	i = 0;
-	quote = 0;
+	quote = NO_QUOTE;
 	while (*str)
 	{
 		if (*str == ' ')
@@ -41,7 +37,7 @@ static unsigned int	count_args(const char *str)
 				if (quote == NO_QUOTE && (*str == DQUOTE || *str == QUOTE))
 					quote = *str;
 				else if (quote == *str)
-					quote = 0;
+					quote = NO_QUOTE;
 				str++;
 			}
 		}
@@ -51,30 +47,18 @@ static unsigned int	count_args(const char *str)
 
 static char	*sub_split(char const **str)
 {
-	unsigned int	i;
+	unsigned int	len;
 	char			*split;
-	char			quote;
 
-	split = ft_calloc(ft_arglen(*str) + 1, sizeof(char));
+	len = ft_arglen(*str);
+	split = ft_substr(*str, 0, len);
 	if (!split)
 		return (NULL);
-	i = 0;
-	quote = NO_QUOTE;
-	while (**str && (**str != ' ' || quote))
-	{
-		if (quote == NO_QUOTE && (**str == DQUOTE || **str == QUOTE))
-			quote = **str;
-		else if (quote == **str)
-			quote = NO_QUOTE;
-		else
-			split[i++] = **str;
-		(*str)++;
-	}
-	split[i] = '\0';
+	*str += len;
 	return (split);
 }
 
-char	**split_args(const char *s)
+char	**split_args(const char *s, t_misc *misc)
 {
 	char			**argv;
 	unsigned int	i;
@@ -91,6 +75,7 @@ char	**split_args(const char *s)
 		else
 		{
 			argv[i] = sub_split(&s);
+			argv[i] = substitute(argv[i], misc, false);
 			if (!argv[i++])
 				return (ft_free_split(argv), NULL);
 		}

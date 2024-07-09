@@ -6,7 +6,6 @@
 
 # define PWD "pwd"
 # define EXIT "exit"
-# define MALLOC_FAIL 69
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 
@@ -115,7 +114,7 @@ int		command_handler(t_misc *misc);
 
 int		quote_skip(char *line, int i);
 t_list	*parse_input(char *input, t_misc *misc);
-char	**split_args(const char *s);
+char	**split_args(const char *s, t_misc *misc);
 int		redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
 char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 

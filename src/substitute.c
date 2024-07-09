@@ -83,7 +83,7 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag)
 	int		i;
 
 	if (!arg)
-		return (print_err("malloc", NULL, NULL));
+		return (print_err("malloc", NULL, NULL), NULL);
 	res = reset_buffer(buf, NULL);
 	stat = NO_QUOTE;
 	i = -1;

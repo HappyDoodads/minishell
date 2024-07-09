@@ -19,7 +19,6 @@ static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 {
 	t_command	*command;
 	t_list		*new;
-	int			status;
 
 	new = NULL;
 	command = ft_calloc(1, sizeof(t_command));
@@ -29,12 +28,12 @@ static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 		free(cmd_str);
 		free(command);
 		free(new);
-		return (print_err("malloc", 0, 0), set_statcode(MALLOC_FAIL, misc), 1);
+		return (print_err("malloc", 0, 0), set_statcode(ENOMEM, misc), 1);
 	}
 	ft_lstadd_back(cmd_list, new);
-	if (redirect_parsing(cmd_str, command, misc) == EXIT_FAILURE)
+	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
 		return (free(cmd_str), EXIT_FAILURE);
-	command->argv = split_args(cmd_str);
+	command->argv = split_args(cmd_str, misc);
 	free(cmd_str);
 	if (command->argv == NULL)
 		return (EXIT_FAILURE);

@@ -38,6 +38,7 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	type = cmd_str[i];
 	cmd_str[i] = ' ';
 	mod = type == cmd_str[j];
+
 	if (mod)
 		cmd_str[j++] = ' ';
 	while (cmd_str[j] == ' ')
@@ -47,8 +48,8 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 		j = quote_skip(cmd_str, j) + 1;
 	filename = substitute(ft_substr(cmd_str, i, j - i), misc, false);
 	if (!filename)
-		return (set_statcode(MALLOC_FAIL, misc), -1);
-	if (sort_redirect(filename, type, cmd, misc) != EXIT_SUCCESS)
+		return (set_statcode(ENOMEM, misc), -1);
+	if (sort_redirect(filename, type + mod, cmd, misc) != EXIT_SUCCESS)
 		return (-1);
 	while (i < j)
 		cmd_str[i++] = ' ';
