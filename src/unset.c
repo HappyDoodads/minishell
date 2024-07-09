@@ -6,17 +6,10 @@ int	ft_isvalid_envname(char *v_name)
 
 	i = 1;
 	if (!ft_isalpha(v_name[0]) && v_name[0] != '_')
-	{
-		ft_dprintf(2, "minishell: `%s': not a valid identifier\n", v_name);
-		return (1);
-	}
-	while (v_name[i])
-	{
+		return (print_err(v_name, NULL, "not a valid identifier"));
+	while (v_name[i++])
 		if (!ft_isalnum(v_name[i]) && v_name[i] != '_')
-			return (ft_dprintf(2, "minishell: `%s': not a valid \
-			identifier\n", v_name), 1);
-		i++;
-	}
+			return (print_err(v_name, NULL, "not a valid identifier"));
 	return (0);
 }
 
@@ -24,24 +17,19 @@ static void	loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
 {
 	int	j;
 	int	k;
+	int	len_argv;
 
 	j = 0;
 	k = 0;
+	len_argv = ft_strlen(cmd->argv[i]);
 	while (misc->envp[j])
 	{
-		if (ft_strncmp(misc->envp[j], cmd->argv[i], \
-			ft_strlen(cmd->argv[i])) == 0
-			&& ((misc->envp[j][ft_strlen(cmd->argv[i])] == '=')
-			|| (misc->envp[j][ft_strlen(cmd->argv[i])] == '\0')))
-		{
-			free(misc->envp[j]);
-		}
+		if ((ft_strncmp(misc->envp[j], cmd->argv[i], len_argv) == 0)
+		&& ((misc->envp[j][len_argv] == '=')
+		|| (misc->envp[j][len_argv] == '\0')))
+			free(misc->envp[j++]);
 		else
-		{
-			cpy_envp[k] = misc->envp[j];
-			k++;
-		}
-		j++;
+			cpy_envp[k++] = misc->envp[j++];
 	}
 	cpy_envp[k] = NULL;
 	free(misc->envp);
@@ -59,6 +47,8 @@ int	ft_unset(t_command *cmd, t_misc *misc)
 		return (EXIT_SUCCESS);
 	while (cmd->argv[++i])
 	{
+		if (ft_isvalid_envname(cmd->argv[i]) == 1)
+			return (EXIT_FAILURE);
 		j = 0;
 		while (misc->envp[j])
 			j++;
