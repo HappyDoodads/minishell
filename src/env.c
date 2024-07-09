@@ -10,7 +10,7 @@ int	ft_env(t_command *cmd, t_misc *misc)
 	while (misc->envp[i])
 	{
 		if (ft_strchr(misc->envp[i], '='))
-			ft_dprintf(cmd->wr_fd, "%s\n", misc->envp[i]);
+			ft_dprintf(cmd->pipe_R[1], "%s\n", misc->envp[i]);
 		i++;
 	}
 	return (1);

@@ -62,7 +62,7 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	*storage = ft_strjoin(".tmpfile", tmp);
 	free(tmp);
 	if (*storage == NULL)
-		return (EXIT_FAILURE);
+		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc->tmpfile_count += 1;
 	fork_handler(eof, misc, storage);
 	free(eof);

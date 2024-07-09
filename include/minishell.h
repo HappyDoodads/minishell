@@ -6,11 +6,6 @@
 
 # define PWD "pwd"
 # define EXIT "exit"
-# ifndef MAX_FD
-#  define MAX_FD 256
-# endif
-# define STDIN_DUP 3
-# define STDOUT_DUP 4
 
 //////////////////////////     INCLUDES    ////////////////////////////////////
 
@@ -43,8 +38,8 @@
 typedef struct s_command
 {
 	char	**argv;
-	int		rd_fd;
-	int		wr_fd;
+	int		pipe_L[2];
+	int		pipe_R[2];
 	char	*infile;
 	char	*outfile;
 	bool	append_out;
@@ -87,6 +82,7 @@ void	ft_loopenv(t_misc *misc, char *v_name, char *v_val);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int		print_err(const char *s1, const char *s2, const char *msg);
+void	set_statcode(int errnum, t_misc *misc);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 
@@ -118,7 +114,7 @@ int		command_handler(t_misc *misc);
 
 int		quote_skip(char *line, int i);
 t_list	*parse_input(char *input, t_misc *misc);
-char	**split_args(const char *s);
+char	**split_args(const char *s, t_misc *misc);
 int		redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
 char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 

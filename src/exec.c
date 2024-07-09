@@ -57,8 +57,8 @@ static int	open_redirections(t_command *cmd)
 		fd = open(cmd->infile, O_RDONLY);
 		if (fd == -1)
 			return (print_err(cmd->infile, NULL, NULL));
-		close(cmd->rd_fd);
-		cmd->rd_fd = fd;
+		close(cmd->pipe_L[0]);
+		cmd->pipe_L[0] = fd;
 	}
 	if (cmd->outfile)
 	{
@@ -68,8 +68,8 @@ static int	open_redirections(t_command *cmd)
 			fd = open(cmd->outfile, O_WRONLY|O_TRUNC|O_CREAT, 420);
 		if (fd == -1)
 			return (print_err(cmd->outfile, NULL, NULL));
-		close(cmd->wr_fd);
-		cmd->wr_fd = fd;
+		ft_close(cmd->pipe_R[1]);
+		cmd->pipe_R[1] = fd;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -108,14 +108,13 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	char	*fullpath;
 	int		status;
 
-	dprintf(2, "%sfds(%s)={%d, %d}\n%s",MAGENTA, cmd->argv[0], cmd->rd_fd, cmd->wr_fd, RST);
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
-		dup2(cmd->rd_fd, 0);
-		dup2(cmd->wr_fd, 1);
-		ft_close(cmd->rd_fd);
-		ft_close(cmd->wr_fd);
+		dup2(cmd->pipe_L[0], 0);
+		dup2(cmd->pipe_R[1], 1);
+		close_pipe(cmd->pipe_L);
+		close_pipe(cmd->pipe_R);
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
 		execve(fullpath, cmd->argv, misc->envp);
 		free(fullpath);
@@ -125,8 +124,8 @@ void	exec_command(t_command *cmd, t_misc *misc)
 		status = EXIT_FAILURE;
 	else
 	{
-		ft_close(cmd->rd_fd);
-		ft_close(cmd->wr_fd);
+		close_pipe(cmd->pipe_L);
+		close_pipe(cmd->pipe_R);
 	}
 	cleanup(misc);
 	exit(status);

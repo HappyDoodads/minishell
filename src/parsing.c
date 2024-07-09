@@ -15,28 +15,40 @@ int	quote_skip(char *line, int i)
 	return (-1);
 }
 
-//	TODO: Gestion d'erreur
-static void	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
+static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 {
 	t_command	*command;
 	t_list		*new;
 
+	new = NULL;
 	command = ft_calloc(1, sizeof(t_command));
-	redirect_parsing(cmd_str, command, misc);
-	command->argv = split_args(cmd_str);
 	new = ft_lstnew(command);
+	if (!cmd_str || !command || !new)
+	{
+		free(cmd_str);
+		free(command);
+		free(new);
+		return (print_err("malloc", 0, 0), set_statcode(ENOMEM, misc), 1);
+	}
 	ft_lstadd_back(cmd_list, new);
+	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
+		return (free(cmd_str), EXIT_FAILURE);
+	command->argv = split_args(cmd_str, misc);
 	free(cmd_str);
+	if (command->argv == NULL)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 t_list	*parse_input(char *input, t_misc *misc)
 {
 	t_list			*cmd_list;
-	unsigned int	start;
+	unsigned int	i_0;
 	int				i;
+	int				stat;
 
 	i = -1;
-	start = 0;
+	i_0 = 0;
 	cmd_list = NULL;
 	while (input[++i])
 	{
@@ -45,10 +57,14 @@ t_list	*parse_input(char *input, t_misc *misc)
 			return (ft_lstclear(&cmd_list, free_command), NULL);
 		if (input[i] == '|')
 		{
-			parse_cmd(ft_substr(input, start, i - start), &cmd_list, misc);
-			start = i + 1;
+			stat = parse_cmd(ft_substr(input, i_0, i - i_0), &cmd_list, misc);
+			if (stat != EXIT_SUCCESS)
+				return (ft_lstclear(&cmd_list, free_command), NULL);
+			i_0 = i + 1;
 		}
 	}
-	parse_cmd(ft_substr(input, start, i - start), &cmd_list, misc);
+	stat = parse_cmd(ft_substr(input, i_0, i - i_0), &cmd_list, misc);
+	if (stat != EXIT_SUCCESS)
+		ft_lstclear(&cmd_list, free_command);
 	return (cmd_list);
 }

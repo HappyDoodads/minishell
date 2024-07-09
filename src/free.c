@@ -6,8 +6,8 @@ void	free_command(void *data)
 
 	command = data;
 	ft_free_split(command->argv);
-	command->rd_fd = -1;
-	command->wr_fd = -1;
+	free(command->infile);
+	free(command->outfile);
 	free(data);
 }
 
@@ -20,8 +20,7 @@ void	cleanup(t_misc *misc)
 
 void	ft_close(int fd)
 {
-	dprintf(2, "%sDEBUG: Calling ft_close(%d)...%s\n", MAGENTA, fd, RST);
-	if (fd > 1)
+	if (fd > 2)
 		close(fd);
 }
 

@@ -22,7 +22,7 @@ void	ft_ascii_sort(t_command *cmd, t_misc *misc)
 	}
 	i = 0;
 	while (cpy_envp[i])
-		ft_dprintf(cmd->wr_fd, "%s\n", cpy_envp[i++]);
+		ft_dprintf(cmd->pipe_R[1], "%s\n", cpy_envp[i++]);
 	ft_free_split(cpy_envp);
 }
 

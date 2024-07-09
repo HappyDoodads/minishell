@@ -1,22 +1,30 @@
 #include "minishell.h"
 
-static void	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
+static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 {
 	char	**storage;
+	int		stat;
 
 	if (type == '>' || type == '>' + 1)
 		storage = &(cmd->outfile);
 	else
 		storage = &(cmd->infile);
-	if (type == '>' + 1)
+	if (type == '>')
+		cmd->append_out = false;
+	else if (type == '>' + 1)
 		cmd->append_out = true;
-	if (*storage != NULL)
-		free(*storage);
+	free(*storage);
+	*storage = NULL;
 	if (type == '<' + 1)
-		ft_heredoc(arg, misc, storage);
+	{
+		stat = ft_heredoc(arg, misc, storage);
+		if (stat != EXIT_SUCCESS)
+			set_statcode(stat, misc);
+		return (stat);
+	}
 	else
 		*storage = arg;
-	(void)misc;
+	return (EXIT_SUCCESS);
 }
 
 static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
@@ -30,6 +38,7 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	type = cmd_str[i];
 	cmd_str[i] = ' ';
 	mod = type == cmd_str[j];
+
 	if (mod)
 		cmd_str[j++] = ' ';
 	while (cmd_str[j] == ' ')
@@ -38,9 +47,10 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	while (cmd_str[j] && cmd_str[j] != ' ')
 		j = quote_skip(cmd_str, j) + 1;
 	filename = substitute(ft_substr(cmd_str, i, j - i), misc, false);
-	if (filename == NULL)
+	if (!filename)
+		return (set_statcode(ENOMEM, misc), -1);
+	if (sort_redirect(filename, type + mod, cmd, misc) != EXIT_SUCCESS)
 		return (-1);
-	sort_redirect(filename, type + mod, cmd, misc);
 	while (i < j)
 		cmd_str[i++] = ' ';
 	return (j - 1);
@@ -57,7 +67,7 @@ int	redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc)
 		if (cmd_str[i] == '>' || cmd_str[i] == '<')
 			i = filename_parsing(cmd_str, i, cmd, misc);
 		if (i == -1)
-			return (EXIT_FAILURE);
+			return (delete_tmpfiles(misc), EXIT_FAILURE);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

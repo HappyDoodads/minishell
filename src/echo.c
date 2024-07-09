@@ -15,11 +15,11 @@ int	ft_echo(t_command *cmd, t_misc *misc)
 	}
 	while (cmd->argv[i] != NULL)
 	{
-		ft_putstr_fd(cmd->argv[i++], cmd->wr_fd);
+		ft_putstr_fd(cmd->argv[i++], cmd->pipe_R[1]);
 		if (cmd->argv[i] != NULL)
-			ft_putchar_fd(' ', cmd->wr_fd);
+			ft_putchar_fd(' ', cmd->pipe_R[1]);
 	}
 	if (end)
-		ft_putchar_fd(end, cmd->wr_fd);
+		ft_putchar_fd(end, cmd->pipe_R[1]);
 	return (0);
 }

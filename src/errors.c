@@ -14,3 +14,8 @@ int	print_err(const char *s1, const char *s2, const char *msg)
 		ft_dprintf(2, "minishell: %s: %s: %s\n", s1, s2, msg);
 	return (EXIT_FAILURE);
 }
+
+void	set_statcode(int errnum, t_misc *misc)
+{
+	misc->prev_status = errnum;
+}
