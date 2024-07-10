@@ -11,19 +11,25 @@ HEADERS			=	-I./include -I$(LIBFT_DIR)/include
 LINKERS			=	-Lreadline -lreadline -lncurses
 LIBS			=	$(RL_H) $(RL_L) $(LIBFT)
 
+# Compiler and flags
+CC				=	gcc
+CFLAGS			=	-Wall -Werror -Wextra -g
+RM				=	rm -f
+
+SRC_DIR	=	./src
+OBJ_DIR	=	./obj
+
 #		config		#
 
 # version = \"$(shell cat .config/version)\"
 
-USER = $(shell whoami)
+#USER = $(shell whoami)
 PWD  = \"$(shell pwd)\"
 
 ifeq ($(shell uname -s), Darwin)
     BIN_DIR = \"/Users/$(USER)/Mini_bin/\"
-    L = "
 else
     BIN_DIR = \"/home/$(USER)/Mini_bin/\"
-    L = '
 endif
 
 ifeq ($(shell test -d /Users/$(USER)/.brew/opt/readline; echo $$?), 0)
@@ -32,16 +38,7 @@ else ifeq ($(shell test -d /Users/$(USER)/homebrew/opt/readline; echo $$?), 0)
     BREW = homebrew
 endif
 
-TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
-
-# Compiler and flags
-CC				=	gcc
-CFLAGS			=	-Wall -Werror -Wextra
-#-fsanitize=address
-RM				=	rm -f
-
-SRC_DIR	=	./src
-OBJ_DIR	=	./obj
+#TEST = $(shell test -e readline/libreadline.a ; echo "$$?")
 
 # Sources are all .c files
 SRCS	=	main.c \
@@ -76,35 +73,26 @@ $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf 'Compiling: %s\n' $(notdir $<)
 
-$(NAME): rl $(LIBFT) $(OBJ_DIR) $(OBJS)
+$(NAME): $(RL_L) $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@$(CC) $(CFLAGS) $(HEADERS) $(LINKERS) $(LIBS) $(OBJS) -o $(NAME)
 
-rl:
-	@if test $(TEST) = 1 ; then \
-		cd readline && ./configure && make ; \
-	else \
-		echo readline already make ; \
-	fi
+$(RL_L):
+	cd $(RL_DIR) && ./configure && make
 
 $(LIBFT):
-	@printf $(L)making libft\n$(L)
-	@make -s -C $(LIBFT_DIR)
-	@printf $(L)libft done\n$(L); 
-
-readline:
-	cd $(RL_DIR) && ./configure && $(MAKE)
+	@make -C$(LIBFT_DIR) && printf 'Compiling: %s\n' $(notdir $(LIBFT))
 
 rm_readline:
-	cd $(RL_DIR) && make distclean
+	@cd $(RL_DIR) && make distclean
 
 # Removes objects
 clean:
 	@$(RM) -rf $(OBJ_DIR)
-	@make -C $(LIBFT_DIR) clean
+	@make -C$(LIBFT_DIR) clean
 	@echo $(shell clear)
-	@printf $(L)clean ok\n$(L)
+#	@printf $(L)clean ok\n$(L)
 
 # Removes objects and executables
 fclean: clean
@@ -112,7 +100,7 @@ fclean: clean
 	@$(RM) -rf minishell.dSYM
 	@rm $(LIBFT)
 	@echo $(shell clear)
-	@printf $(L)fclean ok\n$(L)
+#	@printf $(L)fclean ok\n$(L)
 
 ffclean: rm_readline fclean
 
@@ -121,4 +109,4 @@ run: all
 
 re: fclean all
 
-.PHONY: all rl run mc readline rm_readline
+.PHONY: all clean fclean ffclean run re rm_readline
