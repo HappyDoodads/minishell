@@ -9,7 +9,7 @@ void	ft_create_prompt(t_misc *misc)
 		signal(SIGINT, sigint_handler);
 		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
 		if (!input)
-			exit(0);
+			return ;
 		else if (*input)
 		{
 			add_history(input);

@@ -35,5 +35,7 @@ int	main(int argc, char **argv, char **envp)
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);
 	ft_create_prompt(&misc);
-	return (EXIT_SUCCESS);
+	ft_free_split(misc.envp);
+	clear_history();
+	return (misc.prev_status);
 }
