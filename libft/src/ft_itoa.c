@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:45:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/28 18:11:20 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/10 14:47:54 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,16 @@ char	*ft_itoa(int n)
 	return (s);
 }
 
-char	*ft_itoab(int n, char buf[12])
+char	*ft_itoab(int n, char *buf, size_t size)
 {
 	int	i;
 
-	ft_bzero(buf, 12);
+	ft_bzero(buf, size);
+	i = ft_numlen(n);
+	if (i-- >= size)
+		return (NULL);
 	if (n == -2147483648)
-		return (ft_strlcpy(buf, "-2147483648", 12), buf);
+		return (ft_strlcpy(buf, "-2147483648", size), buf);
 	if (n < 0)
 	{
 		buf[0] = '-';
@@ -70,7 +73,6 @@ char	*ft_itoab(int n, char buf[12])
 	}
 	else if (n == 0)
 		buf[0] = '0';
-	i = ft_numlen(n) - 1;
 	while (n > 0)
 	{
 		buf[i--] = n % 10 + '0';

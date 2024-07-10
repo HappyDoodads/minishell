@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	heredoc_loop(char *eof, char **storage, t_misc *misc)
+static int	heredoc_loop(char *eof, char **storage)
 {
 	char	*input;
 	int		fd;
@@ -9,6 +9,8 @@ static void	heredoc_loop(char *eof, char **storage, t_misc *misc)
 	signal(SIGINT, SIG_DFL);
 	eof_len = ft_strlen(eof);
 	fd = open(*storage, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	if (fd == -1)
+		return (print_err(*storage, NULL, NULL));
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
@@ -24,8 +26,7 @@ static void	heredoc_loop(char *eof, char **storage, t_misc *misc)
 		free(input);
 	}
 	close(fd);
-	cleanup(misc);
-	exit(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 static int	fork_handler(char *eof, char **storage, t_misc *misc)
@@ -35,32 +36,37 @@ static int	fork_handler(char *eof, char **storage, t_misc *misc)
 
 	pid = fork();
 	if (pid < 0)
-		return (perror("fork failed"), EXIT_FAILURE);
+		return (print_err("fork", NULL, NULL));
 	if (pid == 0)
-		heredoc_loop(eof, storage, misc);
+	{
+		status = heredoc_loop(eof, storage);
+		free(eof);
+		cleanup(misc);
+		exit(status);
+	}
 	free(eof);
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, sigint_handler);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		return (ft_putchar_fd('\n', 1), EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	status = WEXITSTATUS(status);
+	if (status == EXIT_FAILURE)
+		misc->tmpfile_count--;
+	return (status);
 }
 
 int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 {
-	char	*tmp;
+	char	buf[21];
 
 	if (eof == NULL)
-	{
-		ft_dprintf(2, "minishell: syntax error\n");
-		return (EXIT_FAILURE);
-	}
-	tmp = ft_itoa(misc->tmpfile_count);
-	*storage = ft_strjoin(".tmpfile", tmp);
-	free(tmp);
+		return (free(eof), print_err("heredoc", NULL, "syntax error"));
+	ft_strlcpy(buf, "/.tmpfile", 21);
+	ft_itoab(misc->tmpfile_count, &buf[9], 12);
+	*storage = ft_strjoin(misc->tmpfile_dir, buf);
 	if (*storage == NULL)
-		return (print_err("malloc", NULL, NULL), ENOMEM);
+		return (free(eof), print_err("malloc", NULL, NULL), ENOMEM);
 	misc->tmpfile_count += 1;
 	return (fork_handler(eof, storage, misc));
 }

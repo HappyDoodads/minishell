@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	misc.prev_status = 0;
 	misc.cmd_list = NULL;
 	misc.tmpfile_count = 0;
+	getcwd(misc.tmpfile_dir, PATH_MAX);
 	ft_create_prompt(&misc);
 	return (EXIT_SUCCESS);
 }

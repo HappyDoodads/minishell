@@ -52,6 +52,7 @@ typedef struct s_misc
 	int		prev_status;
 	t_list	*cmd_list;
 	int		tmpfile_count;
+	char	tmpfile_dir[PATH_MAX];
 }			t_misc;
 
 ///////////////////////////     ENUMS     //////////////////////////////////////

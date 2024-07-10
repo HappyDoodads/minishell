@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:13:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/06/28 18:15:03 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/10 14:57:10 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		ft_strcchr(const char *s, int c);
 int		ft_isset(int c, const char *set);
 char	**ft_free_split(char **split);
 void	ft_void(void *data);
-char	*ft_itoab(int n, char buf[12]);
+char	*ft_itoab(int n, char *buf, size_t size);
 
 typedef struct s_list
 {
