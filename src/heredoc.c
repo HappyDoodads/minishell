@@ -1,30 +1,34 @@
 #include "minishell.h"
 
-static void	heredoc_loop(char *eof, char **storage)
+static void	heredoc_loop(char *eof, char **storage, t_misc *misc)
 {
 	char	*input;
 	int		fd;
+	int		eof_len;
 
 	signal(SIGINT, SIG_DFL);
+	eof_len = ft_strlen(eof);
 	fd = open(*storage, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	while (1)
 	{
+		ft_putstr_fd("> ", 1);
+		input = get_next_line(0);
+		if (!input)
+			break ;
+		if (ft_strncmp(input, eof, eof_len) == 0 && input[eof_len] == '\n')
 		{
-			ft_putstr_fd("> ", 1);
-			input = get_next_line(0);
-			if (ft_strncmp(input, eof, ft_strlen(eof)) == 0 || !input)
-			{
-				close(fd);
-				free(input);
-				break ;
-			}
-			ft_putendl_fd(input, fd);
 			free(input);
+			break ;
 		}
+		ft_putstr_fd(input, fd);
+		free(input);
 	}
+	close(fd);
+	cleanup(misc);
+	exit(EXIT_SUCCESS);
 }
 
-static int	fork_handler(char *eof, t_misc *misc, char **storage)
+static int	fork_handler(char *eof, char **storage, t_misc *misc)
 {
 	int		status;
 	pid_t	pid;
@@ -33,20 +37,14 @@ static int	fork_handler(char *eof, t_misc *misc, char **storage)
 	if (pid < 0)
 		return (perror("fork failed"), EXIT_FAILURE);
 	if (pid == 0)
-	{
-		heredoc_loop(eof, storage);
-		exit (0);
-	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		signal(SIGINT, sigint_handler);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			return (ft_putchar_fd('\n', 1), EXIT_FAILURE);
-		(void)misc;
-	}
-	return (0);
+		heredoc_loop(eof, storage, misc);
+	free(eof);
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	signal(SIGINT, sigint_handler);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (ft_putchar_fd('\n', 1), EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	ft_heredoc(char *eof, t_misc *misc, char **storage)
@@ -64,7 +62,5 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	if (*storage == NULL)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc->tmpfile_count += 1;
-	fork_handler(eof, misc, storage);
-	free(eof);
-	return (EXIT_SUCCESS);
+	return (fork_handler(eof, storage, misc));
 }

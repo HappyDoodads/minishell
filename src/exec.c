@@ -57,7 +57,7 @@ static int	open_redirections(t_command *cmd)
 		fd = open(cmd->infile, O_RDONLY);
 		if (fd == -1)
 			return (print_err(cmd->infile, NULL, NULL));
-		close(cmd->pipe_L[0]);
+		ft_close(cmd->pipe_L[0]);
 		cmd->pipe_L[0] = fd;
 	}
 	if (cmd->outfile)
@@ -108,6 +108,7 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	char	*fullpath;
 	int		status;
 
+	//signal(SIGINT, SIG_DFL);
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{

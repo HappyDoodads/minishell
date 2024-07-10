@@ -38,7 +38,6 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 	type = cmd_str[i];
 	cmd_str[i] = ' ';
 	mod = type == cmd_str[j];
-
 	if (mod)
 		cmd_str[j++] = ' ';
 	while (cmd_str[j] == ' ')

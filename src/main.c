@@ -29,11 +29,10 @@ int	main(int argc, char **argv, char **envp)
 	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
-	// if (dup2(0, STDIN_DUP) != STDIN_DUP || dup2(1, STDOUT_DUP) != STDOUT_DUP)
-	// 	return (ft_dprintf(2, "Could not dup stdin or stdout\n"), EXIT_FAILURE);
 	misc.envp = dup_envp(envp);
 	misc.prev_status = 0;
 	misc.cmd_list = NULL;
+	misc.tmpfile_count = 0;
 	ft_create_prompt(&misc);
 	return (EXIT_SUCCESS);
 }
