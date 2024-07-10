@@ -28,26 +28,22 @@ void	ft_new_export(t_misc *misc, char *v_name, char *v_val)
 void	ft_loopenv(t_misc *misc, char *v_name, char *v_val)
 {
 	int		j;
-	int		flag;
+	size_t	vn_len;
 
-	flag = 0;
-	j = 0;
-	while (misc->envp[j])
+	j = -1;
+	vn_len = ft_strlen(v_name);
+	while (misc->envp[++j])
 	{
-		if ((ft_strncmp(misc->envp[j], v_name, ft_strlen(v_name)) == 0
-				&& !ft_isvalid_envname(v_name)
-				&& misc->envp[j][strlen(v_name)] == '=')
-			|| misc->envp[j][strlen(v_name)] == '\0')
+		if ((ft_strncmp(misc->envp[j], v_name, vn_len) == 0
+			&& (misc->envp[j][vn_len] == '='
+				|| misc->envp[j][vn_len] == '\0')))
 		{
 			replace_env_var(&misc->envp[j], v_name, v_val);
-			flag = 1;
+			break ;
 		}
-		j++;
 	}
-	if (!flag)
-	{
+	if (!misc->envp[j])
 		ft_new_export(misc, v_name, v_val);
-	}
 }
 
 static	void	get_v_val(t_command *cmd, int i, char **v_name, char **v_val)
@@ -78,15 +74,12 @@ static int	equal_sign_handler(t_command *cmd, t_misc *misc, int i)
 	v_name = NULL;
 	v_val = NULL;
 	get_v_val(cmd, i, &v_name, &v_val);
-	if (ft_isvalid_envname(v_name) == 0)
+	if (ft_isvalid_envname(v_name, "export"))
 		ft_loopenv(misc, v_name, v_val);
 	else
-	{
-		free(v_name);
-		return (EXIT_FAILURE);
-	}
+		return (free(v_name), EXIT_FAILURE);
 	free(v_name);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 int	ft_export(t_command *cmd, t_misc *misc)

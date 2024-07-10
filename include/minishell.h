@@ -74,12 +74,13 @@ int		ft_env(t_command *cmd, t_misc *misc);
 int		ft_echo(t_command *cmd, t_misc *misc);
 int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd, t_misc *misc);
-int		ft_isvalid_envname(char *var_name);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
 void	ft_ascii_sort(t_command *cmd, t_misc *misc);
 void	replace_env_var(char **envar_addr, char *var_name, char *var_value);
 void	ft_loopenv(t_misc *misc, char *v_name, char *v_val);
+bool	ft_isvalid_envname(const char *var_name, const char *context);
+
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int		print_err(const char *s1, const char *s2, const char *msg);
@@ -125,7 +126,6 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 //////////////////////////////    SIGNAL    ////////////////////////////////////
 
 void	sigint_handler(int sig_num);
-void	sigquit_handler(int sig_num);
 void	sig_child_handler(int sig_num);
 void	sig_heredoc_handler(int sig_num);
 int		rl_replace_line(const char *text, int clear_undo);

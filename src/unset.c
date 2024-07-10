@@ -1,16 +1,17 @@
 #include "minishell.h"
 
-int	ft_isvalid_envname(char *v_name)
+bool	ft_isvalid_envname(const char *v_name, const char *context)
 {
 	int	i;
 
 	i = 1;
 	if (!ft_isalpha(v_name[0]) && v_name[0] != '_')
-		return (print_err(v_name, NULL, "not a valid identifier"));
-	while (v_name[i++])
-		if (!ft_isalnum(v_name[i]) && v_name[i] != '_')
-			return (print_err(v_name, NULL, "not a valid identifier"));
-	return (0);
+		return (print_err(context, v_name, "not a valid identifier"), false);
+	while (ft_isalnum(v_name[i]) || v_name[i] == '_')
+		i++;
+	if (v_name[i] == '\0')
+		return (true);
+	return (print_err(context, v_name, "not a valid identifier"), false);
 }
 
 static void	loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
@@ -47,7 +48,7 @@ int	ft_unset(t_command *cmd, t_misc *misc)
 		return (EXIT_SUCCESS);
 	while (cmd->argv[++i])
 	{
-		if (ft_isvalid_envname(cmd->argv[i]) == 1)
+		if (!ft_isvalid_envname(cmd->argv[i], "unset"))
 			return (EXIT_FAILURE);
 		j = 0;
 		while (misc->envp[j])
