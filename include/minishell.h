@@ -35,6 +35,12 @@
 
 ///////////////////////////////////STRUCTURES///////////////////////////////////
 
+typedef struct s_env_var
+{
+	char	*name;
+	char	*val;
+}			t_env_var;
+
 typedef struct s_command
 {
 	char	**argv;
