@@ -1,60 +1,58 @@
 #include "minishell.h"
 
-static int	update_env_var(t_envp *env_var, const char *v_val)
+static int	update_export(t_envp *env_v, const char *v_val)
 {
-	free(env_var->val);
+	free(env_v->val);
 	if (v_val)
 	{
-		env_var->val = ft_strdup(v_val);
-		if (!env_var->val)
+		env_v->val = ft_strdup(v_val);
+		if (!env_v->val)
 			return (print_err("malloc", NULL, NULL), ENOMEM);
 	}
 	else
-		env_var->val = NULL;
+		env_v->val = NULL;
 	return (EXIT_SUCCESS);
 }
 
-void	ft_new_export(t_misc *misc, char *v_name, char *v_val)
+static int	new_export(t_envp *env_v, const char *v_name, const char *v_val)
 {
-	int		i;
-	char	**cpy_envp;
-	char	*new_var;
-
-	i = 0;
-	while (misc->envp[i])
-		i++;
-	cpy_envp = ft_calloc((i + 2), sizeof(char *));
-	if (!cpy_envp)
-		return ;
-	i = 0;
-	while (misc->envp[i])
+	env_v->name = ft_strdup(v_name);
+	if (!env_v->name)
+		return (print_err("malloc", NULL, NULL), ENOMEM);
+	env_v->val = ft_strdup(v_val);
+	if (!env_v->val)
 	{
-		cpy_envp[i] = misc->envp[i];
-		i++;
+		free(env_v->name);
+		env_v->name = NULL;
+		return (print_err("malloc", NULL, NULL), ENOMEM);
 	}
-	new_var = ft_strjoin(v_name, v_val);
-	cpy_envp[i] = new_var;
-	cpy_envp[i + 1] = NULL;
-	free(misc->envp);
-	misc->envp = cpy_envp;
+	return (EXIT_SUCCESS);
 }
 
 int	export_loopenv(t_misc *misc, const char *v_name, const char *v_val)
 {
 	int		j;
-	int		status;
 	size_t	vn_len;
+	t_envp	*tmp;
 
 	j = -1;
-	status = 1;
-	vn_len = ft_strlen(v_name);
+	vn_len = ft_strlen(v_name) + 1;
 	while (misc->envp[++j].name)
 	{
 		if (ft_strncmp(misc->envp[j].name, v_name, vn_len) == 0)
-			status = update_env_var(&misc->envp[j], v_val);
+			return (update_export(&misc->envp[j], v_val));
 	}
-	if (!misc->envp[j].name)
-		ft_new_export(misc, v_name, v_val);
+	if (j == misc->envp_size)
+	{
+		tmp = ft_calloc(misc->envp_size + 5, sizeof(t_envp));
+		if (!tmp)
+			return (print_err("malloc", NULL, NULL), ENOMEM);
+		misc->envp_size += 5;
+		ft_memcpy(tmp, misc->envp, sizeof(t_envp) * (j - 1));
+		free(misc->envp);
+		misc->envp = tmp;
+	}
+	return (new_export(&misc->envp[j], v_name, v_val));
 }
 
 static int	get_export_var(t_misc *misc, const char *export)
@@ -86,7 +84,7 @@ int	ft_export(t_command *cmd, t_misc *misc)
 
 	i = 0;
 	if (cmd->argv[1] == NULL)
-		return (ft_ascii_sort(cmd, misc), EXIT_SUCCESS);
+		return (ascii_sort(misc->envp, cmd->pipe_R[1]), EXIT_SUCCESS);
 	status = EXIT_SUCCESS;
 	while (cmd->argv[++i] && status != ENOMEM)
 		status = get_export_var(misc, cmd->argv[i]) || status;

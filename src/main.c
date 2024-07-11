@@ -1,32 +1,32 @@
 #include "minishell.h"
 
-static t_envp	*create_envp(char **arg_envp)
+static int	*create_envp(char **arg_envp, t_misc *misc)
 {
-	t_envp	*envp;
 	int		i;
 	u_int	j;
 
-	i = 0;
-	while (arg_envp[i])
-		i++;
-	envp = ft_calloc(i + 1, sizeof(t_envp));
-	if (!envp)
-		return (NULL);
+	misc->envp_size = 0;
+	while (arg_envp[misc->envp_size])
+		misc->envp_size++;
+	misc->envp_size += 6;
+	misc->envp = ft_calloc(misc->envp_size, sizeof(t_envp));
+	if (!misc->envp)
+		return (ENOMEM);
 	i = -1;
 	while (arg_envp[++i])
 	{
 		j = 0;
 		while (arg_envp[i][j] && arg_envp[i][j] != '=')
 			j++;
-		envp[i].name = ft_substr(arg_envp[i], 0, j);
-		if (!envp[i].name)
-			return (free_envp(envp), NULL);
+		misc->envp[i].name = ft_substr(arg_envp[i], 0, j);
+		if (!misc->envp[i].name)
+			return (free_envp(misc->envp), ENOMEM);
 		if (arg_envp[i][j])
-			envp[i].val = ft_strdup(&arg_envp[i][j + 1]);
-		if (arg_envp[i][j] && !envp[i].val)
-			return (free_envp(envp), NULL);
+			misc->envp[i].val = ft_strdup(&arg_envp[i][j + 1]);
+		if (arg_envp[i][j] && !misc->envp[i].val)
+			return (free_envp(misc->envp), ENOMEM);
 	}
-	return (envp);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -43,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);
 	ft_create_prompt(&misc);
-	ft_free_split(misc.envp);
+	free_envp(misc.envp);
 	clear_history();
 	return (misc.prev_status);
 }

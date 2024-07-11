@@ -55,6 +55,7 @@ typedef struct s_command
 typedef struct s_misc
 {
 	t_envp	*envp;
+	int		envp_size;
 	t_list	*cmd_list;
 	int		prev_status;
 	int		tmpfile_count;
