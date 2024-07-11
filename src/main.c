@@ -1,5 +1,34 @@
 #include "minishell.h"
 
+static t_envp	*create_envp(char **arg_envp)
+{
+	t_envp	*envp;
+	int		i;
+	u_int	j;
+
+	i = 0;
+	while (arg_envp[i])
+		i++;
+	envp = ft_calloc(i + 1, sizeof(t_envp));
+	if (!envp)
+		return (NULL);
+	i = -1;
+	while (arg_envp[++i])
+	{
+		j = 0;
+		while (arg_envp[i][j] && arg_envp[i][j] != '=')
+			j++;
+		envp[i].name = ft_substr(arg_envp[i], 0, j);
+		if (!envp[i].name)
+			return (free_envp(envp), NULL);
+		if (arg_envp[i][j])
+			envp[i].val = ft_strdup(&arg_envp[i][j + 1]);
+		if (arg_envp[i][j] && !envp[i].val)
+			return (free_envp(envp), NULL);
+	}
+	return (envp);
+}
+
 char	**dup_envp(char **envp)
 {
 	char	**new;

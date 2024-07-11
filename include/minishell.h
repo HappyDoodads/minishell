@@ -35,11 +35,11 @@
 
 ///////////////////////////////////STRUCTURES///////////////////////////////////
 
-typedef struct s_env_var
+typedef struct s_envp
 {
 	char	*name;
 	char	*val;
-}			t_env_var;
+}			t_envp;
 
 typedef struct s_command
 {
@@ -100,6 +100,7 @@ void	exec_command(t_command *command, t_misc *misc);
 ////////////////////////////////   FREE    /////////////////////////////////////
 
 void	free_command(void *data);
+void	free_envp(t_envp *envp);
 void	cleanup(t_misc *misc);
 void	ft_close(int fd);
 void	close_pipe(int pipefd[2]);

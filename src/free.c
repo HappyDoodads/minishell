@@ -11,6 +11,20 @@ void	free_command(void *data)
 	free(data);
 }
 
+void	free_envp(t_envp *envp)
+{
+	int	i;
+
+	i = -1;
+	while (envp[++i].name)
+	{
+		free(envp[i].name);
+		free(envp[i].val);
+	}
+	ft_bzero(envp, i * sizeof(t_envp));
+	free(envp);
+}
+
 void	cleanup(t_misc *misc)
 {
 	ft_lstclear(&misc->cmd_list, free_command);
