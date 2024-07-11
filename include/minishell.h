@@ -83,11 +83,9 @@ int		ft_export(t_command *cmd, t_misc *misc);
 int		ft_unset(t_command *cmd, t_misc *misc);
 int		ft_exit(t_command *cmd, t_misc *misc);
 
-void	ft_ascii_sort(t_command *cmd, t_misc *misc);
-void	replace_env_var(char **envar_addr, char *var_name, char *var_value);
-void	ft_loopenv(t_misc *misc, char *v_name, char *v_val);
 bool	ft_isvalid_envname(const char *var_name, const char *context);
-
+int		export_loopenv(t_misc *misc, const char *v_name, const char *v_val);
+void	ascii_sort(const t_envp *envp, int fd_out);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int		print_err(const char *s1, const char *s2, const char *msg);
@@ -111,10 +109,6 @@ void	delete_tmpfiles(t_misc *misc);
 
 int		ft_heredoc(char *eof, t_misc *misc, char **storage);
 
-///////////////////////////////     MAIN     //////////////////////////////////
-
-char	**dup_envp(char **envp);
-
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
 void	ft_create_prompt(t_misc *misc);
@@ -128,14 +122,10 @@ char	**split_args(const char *s, t_misc *misc);
 int		redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
 char	*substitute(char *arg, t_misc *misc, bool quote_flag);
 
-/////////////////////////////   REDIRECTING   //////////////////////////////////
-
-
 //////////////////////////////    SIGNAL    ////////////////////////////////////
 
 void	sigint_handler(int sig_num);
 void	sig_child_handler(int sig_num);
-void	sig_heredoc_handler(int sig_num);
 int		rl_replace_line(const char *text, int clear_undo);
 
 //////////////////////////////    UTILS    /////////////////////////////////////
