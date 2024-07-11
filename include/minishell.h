@@ -54,9 +54,9 @@ typedef struct s_command
 
 typedef struct s_misc
 {
-	char	**envp;
-	int		prev_status;
+	t_envp	*envp;
 	t_list	*cmd_list;
+	int		prev_status;
 	int		tmpfile_count;
 	char	tmpfile_dir[PATH_MAX];
 }			t_misc;

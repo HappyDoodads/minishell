@@ -26,10 +26,3 @@ void	ft_ascii_sort(t_command *cmd, t_misc *misc)
 	ft_free_split(cpy_envp);
 }
 
-void	replace_env_var(char **envar_addr, char *var_name, char *var_value)
-{
-	if (var_name == NULL)
-		exit(EXIT_FAILURE);
-	free(*envar_addr);
-	*envar_addr = ft_strjoin(var_name, var_value);
-}
