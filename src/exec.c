@@ -1,26 +1,20 @@
 #include "minishell.h"
 
-static char	**find_binpaths(char **envp)
+static char	**find_binpaths(const t_envp *envp)
 {
-	int		i;
-	char	**paths;
+	const char	*s_paths;
+	char		**paths;
 
-	i = 0;
-	paths = NULL;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
-		i++;
-	if (envp[i])
-	{
-		if (!envp[i][5])
-			return (NULL);
-		paths = ft_split(envp[i] + 5, ':');
-		if (paths == NULL)
-			return (perror("minishell"), NULL);
-	}
+	s_paths = envp_getval(envp, "PATH");
+	if (!s_paths || !s_paths[0])
+		return (NULL);
+	paths = ft_split(s_paths, ':');
+	if (paths == NULL)
+		return (print_err("malloc", NULL, NULL), NULL);
 	return (paths);
 }
 
-static char	*get_fullpath(char *name, char	**envp)
+static char	*get_fullpath(char *name, t_envp *envp)
 {
 	char	*fullpath;
 	char	**paths;
@@ -107,8 +101,9 @@ void	exec_command(t_command *cmd, t_misc *misc)
 {
 	char	*fullpath;
 	int		status;
+	char	**ss_envp;
 
-	//signal(SIGINT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
@@ -117,7 +112,9 @@ void	exec_command(t_command *cmd, t_misc *misc)
 		close_pipe(cmd->pipe_L);
 		close_pipe(cmd->pipe_R);
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
-		execve(fullpath, cmd->argv, misc->envp);
+		ss_envp = ss_envp_creat(misc->envp);
+		execve(fullpath, cmd->argv, ss_envp);
+		ft_free_split(ss_envp);
 		free(fullpath);
 		status = errno;
 	}

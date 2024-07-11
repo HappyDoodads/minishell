@@ -6,15 +6,15 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:45:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/10 14:47:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/11 14:24:55 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_numlen(int n)
+static unsigned int	ft_numlen(int n)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	if (n == 0)
@@ -31,8 +31,8 @@ static int	ft_numlen(int n)
 
 char	*ft_itoa(int n)
 {
-	char	*s;
-	int		num_len;
+	char			*s;
+	unsigned int	num_len;
 
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
@@ -58,7 +58,7 @@ char	*ft_itoa(int n)
 
 char	*ft_itoab(int n, char *buf, size_t size)
 {
-	int	i;
+	unsigned int	i;
 
 	ft_bzero(buf, size);
 	i = ft_numlen(n);

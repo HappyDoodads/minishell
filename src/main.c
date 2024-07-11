@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int	*create_envp(char **arg_envp, t_misc *misc)
+static int	create_envp(char **arg_envp, t_misc *misc)
 {
 	int		i;
 	u_int	j;
@@ -37,8 +37,9 @@ int	main(int argc, char **argv, char **envp)
 	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
-	misc.envp = create_envp;
-	misc.prev_status = 0;
+	misc.prev_status = create_envp(envp, &misc);
+	if (misc.prev_status == ENOMEM)
+		return (print_err("malloc", NULL, strerror(ENOMEM)), ENOMEM);
 	misc.cmd_list = NULL;
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);

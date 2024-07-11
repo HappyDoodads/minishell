@@ -28,7 +28,7 @@ void	free_envp(t_envp *envp)
 void	cleanup(t_misc *misc)
 {
 	ft_lstclear(&misc->cmd_list, free_command);
-	ft_free_split(misc->envp);
+	free_envp(misc->envp);
 	clear_history();
 }
 

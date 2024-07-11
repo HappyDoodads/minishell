@@ -70,7 +70,7 @@ static int	get_export_var(t_misc *misc, const char *export)
 	if (!ft_isvalid_envname(v_name, "export"))
 		status = EXIT_FAILURE;
 	else if (export[len])
-		status = export_loopenv(misc, v_name, export[len + 1]);
+		status = export_loopenv(misc, v_name, &export[len + 1]);
 	else
 		status = export_loopenv(misc, v_name, NULL);
 	free(v_name);
