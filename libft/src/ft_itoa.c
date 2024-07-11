@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:45:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/10 14:47:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/11 10:42:42 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_numlen(int n)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	if (n == 0)
@@ -58,7 +58,7 @@ char	*ft_itoa(int n)
 
 char	*ft_itoab(int n, char *buf, size_t size)
 {
-	int	i;
+	unsigned int	i;
 
 	ft_bzero(buf, size);
 	i = ft_numlen(n);

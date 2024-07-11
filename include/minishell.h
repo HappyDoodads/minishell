@@ -85,6 +85,7 @@ bool	ft_isvalid_envname(const char *var_name, const char *context);
 
 int		print_err(const char *s1, const char *s2, const char *msg);
 void	set_statcode(int errnum, t_misc *misc);
+int		execve_errno(void);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 
@@ -95,8 +96,6 @@ void	exec_command(t_command *command, t_misc *misc);
 
 void	free_command(void *data);
 void	cleanup(t_misc *misc);
-void	ft_close(int fd);
-void	close_pipe(int pipefd[2]);
 void	delete_tmpfiles(t_misc *misc);
 
 /////////////////////////////    HEREDOC   //////////////////////////////
@@ -130,6 +129,10 @@ void	sig_child_handler(int sig_num);
 void	sig_heredoc_handler(int sig_num);
 int		rl_replace_line(const char *text, int clear_undo);
 
-//////////////////////////////    UTILS    /////////////////////////////////////
+//////////////////////////////    PIPE_UTILS    /////////////////////////////////////
+
+void	ft_close(int fd);
+void	close_pipe(int pipefd[2]);
+void	close_cmd_pipes(t_command *cmd);
 
 #endif

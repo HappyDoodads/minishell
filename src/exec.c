@@ -108,26 +108,23 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	char	*fullpath;
 	int		status;
 
-	//signal(SIGINT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
 		dup2(cmd->pipe_L[0], 0);
 		dup2(cmd->pipe_R[1], 1);
-		close_pipe(cmd->pipe_L);
-		close_pipe(cmd->pipe_R);
+		close_cmd_pipes(cmd);
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
 		execve(fullpath, cmd->argv, misc->envp);
+		status = execve_errno();
 		free(fullpath);
-		status = errno;
 	}
 	else if (status == -1)
 		status = EXIT_FAILURE;
 	else
-	{
-		close_pipe(cmd->pipe_L);
-		close_pipe(cmd->pipe_R);
-	}
+		close_cmd_pipes(cmd);
+	print_err(cmd->argv[0], NULL, "command not found");
 	cleanup(misc);
 	exit(status);
 }

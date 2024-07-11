@@ -24,11 +24,6 @@ void	ft_close(int fd)
 		close(fd);
 }
 
-void	close_pipe(int pipefd[2])
-{
-	ft_close(pipefd[0]);
-	ft_close(pipefd[1]);
-}
 
 void	delete_tmpfiles(t_misc *misc)
 {

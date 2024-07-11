@@ -72,5 +72,9 @@ int	command_handler(t_misc *misc)
 		waitpid(cmd->pid, &status, 0);
 		cmd_node = cmd_node->next;
 	}
+	if (WIFSIGNALED(status))
+		status = 128 + WTERMSIG(status);
+	else
+		status = WEXITSTATUS(status);
 	return (status);
 }
