@@ -18,13 +18,6 @@ void	cleanup(t_misc *misc)
 	clear_history();
 }
 
-void	ft_close(int fd)
-{
-	if (fd > 2)
-		close(fd);
-}
-
-
 void	delete_tmpfiles(t_misc *misc)
 {
 	char	file[PATH_MAX];
