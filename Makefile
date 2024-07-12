@@ -88,13 +88,11 @@ $(RL_L): $(RL_DIR)
 $(LIBFT):
 	@make -C$(LIBFT_DIR) && printf 'Compiled: %s\n' $(notdir $(LIBFT))
 
-# Removes objects
 clean:
 	@$(RM) $(OBJ_DIR)
 	@make -C$(LIBFT_DIR) clean
 	@echo $(shell clear)
 
-# Removes objects and executables
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(LIBFT)
