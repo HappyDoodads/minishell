@@ -19,3 +19,10 @@ void	set_statcode(int errnum, t_misc *misc)
 {
 	misc->prev_status = errnum;
 }
+
+int	execve_errno(void)
+{
+	if (errno == ENOENT)
+		return (127);
+	return (1);
+}

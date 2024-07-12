@@ -53,7 +53,7 @@ SRCS	=	main.c \
 			minishell.c \
 			pwd.c \
 			unset.c \
-			utils.c \
+			pipes_utils.c \
 			parsing.c \
 			redirect_parsing.c \
 			split_args.c \

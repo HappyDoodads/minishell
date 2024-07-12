@@ -32,18 +32,6 @@ void	cleanup(t_misc *misc)
 	clear_history();
 }
 
-void	ft_close(int fd)
-{
-	if (fd > 2)
-		close(fd);
-}
-
-void	close_pipe(int pipefd[2])
-{
-	ft_close(pipefd[0]);
-	ft_close(pipefd[1]);
-}
-
 void	delete_tmpfiles(t_misc *misc)
 {
 	char	file[PATH_MAX];

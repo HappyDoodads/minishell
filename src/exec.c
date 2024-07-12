@@ -109,22 +109,19 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	{
 		dup2(cmd->pipe_L[0], 0);
 		dup2(cmd->pipe_R[1], 1);
-		close_pipe(cmd->pipe_L);
-		close_pipe(cmd->pipe_R);
+		close_cmd_pipes(cmd);
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
 		ss_envp = ss_envp_creat(misc->envp);
 		execve(fullpath, cmd->argv, ss_envp);
+		status = execve_errno();
 		ft_free_split(ss_envp);
 		free(fullpath);
-		status = errno;
 	}
 	else if (status == -1)
 		status = EXIT_FAILURE;
 	else
-	{
-		close_pipe(cmd->pipe_L);
-		close_pipe(cmd->pipe_R);
-	}
+		close_cmd_pipes(cmd);
+	print_err(cmd->argv[0], NULL, "command not found");
 	cleanup(misc);
 	exit(status);
 }
