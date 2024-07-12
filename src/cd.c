@@ -10,12 +10,10 @@ int	ft_cd(t_command *cmd, t_misc *misc)
 	old_path[0] = '=';
 	new_path[0] = '=';
 	getcwd(old_path + 1, PATH_MAX);
-	if (chdir(cmd->argv[1]) == 0)
-	{
-		getcwd(new_path + 1, PATH_MAX);
-		ft_loopenv(misc, "PWD", new_path);
-		ft_loopenv(misc, "OLDPWD", old_path);
-		return (EXIT_SUCCESS);
-	}
-	return (print_err("cd", cmd->argv[1], NULL));
+	if (chdir(cmd->argv[1]) != 0)
+		return (print_err("cd", cmd->argv[1], NULL));
+	getcwd(new_path + 1, PATH_MAX);
+	export_loopenv(misc, "PWD", new_path);
+	export_loopenv(misc, "OLDPWD", old_path);
+	return (EXIT_SUCCESS);
 }

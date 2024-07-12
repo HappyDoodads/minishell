@@ -59,7 +59,6 @@ SRCS	=	main.c \
 			split_args.c \
 			exec.c \
 			substitute.c \
-			export2.c \
 			signal.c
 			
 

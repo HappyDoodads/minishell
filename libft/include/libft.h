@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:13:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/10 14:57:10 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/11 15:17:16 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_str3join(char const *s1, char const *s2, char const *s3);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));

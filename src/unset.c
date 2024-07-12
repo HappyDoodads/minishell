@@ -14,49 +14,39 @@ bool	ft_isvalid_envname(const char *v_name, const char *context)
 	return (print_err(context, v_name, "not a valid identifier"), false);
 }
 
-static void	loopenv(t_command *cmd, t_misc *misc, char **cpy_envp, int i)
+static void	unset_loopenv(t_envp *envp, const char *v_name)
 {
-	int	j;
-	int	k;
-	int	len_argv;
+	int		i;
+	int		j;
+	size_t	n;
 
-	j = 0;
-	k = 0;
-	len_argv = ft_strlen(cmd->argv[i]);
-	while (misc->envp[j])
-	{
-		if ((ft_strncmp(misc->envp[j], cmd->argv[i], len_argv) == 0)
-		&& ((misc->envp[j][len_argv] == '=')
-		|| (misc->envp[j][len_argv] == '\0')))
-			free(misc->envp[j++]);
-		else
-			cpy_envp[k++] = misc->envp[j++];
-	}
-	cpy_envp[k] = NULL;
-	free(misc->envp);
-	misc->envp = cpy_envp;
+	i = 0;
+	n = ft_strlen(v_name) + 1;
+	while (envp[i].name && ft_strncmp(envp[i].name, v_name, n) != 0)
+		i++;
+	if (!envp[i].name)
+		return ;
+	free(envp[i].name);
+	free(envp[i].val);
+	j = 1;
+	while (envp[i + j].name)
+		j++;
+	ft_memmove(&envp[i], &envp[i + 1], sizeof(t_envp) * j);
 }
 
 int	ft_unset(t_command *cmd, t_misc *misc)
 {
-	int		i;
-	int		j;
-	char	**cpy_envp;
+	int	i;
+	int	status;
 
 	i = 0;
-	if (cmd->argv[1] == NULL)
-		return (EXIT_SUCCESS);
+	status = EXIT_SUCCESS;
 	while (cmd->argv[++i])
 	{
-		if (!ft_isvalid_envname(cmd->argv[i], "unset"))
-			return (EXIT_FAILURE);
-		j = 0;
-		while (misc->envp[j])
-			j++;
-		cpy_envp = ft_calloc((j), sizeof(char *));
-		if (!cpy_envp)
-			return (EXIT_FAILURE);
-		loopenv(cmd, misc, cpy_envp, i);
+		if (ft_isvalid_envname(cmd->argv[i], "unset"))
+			unset_loopenv(misc->envp, cmd->argv[i]);
+		else
+			status = EXIT_FAILURE;
 	}
-	return (EXIT_SUCCESS);
+	return (status);
 }

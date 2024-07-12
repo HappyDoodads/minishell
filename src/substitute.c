@@ -45,33 +45,30 @@ static char	*append_to_buf(char c, char buf[42], char *res)
 	return (res);
 }
 
-static char	*insert_envar(char *var_name, int *arg_i, char *res, t_misc *misc)
+static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 {
 	char	*tmp;
-	char	*var_val;
-	int		len;
-	char	**envp;
+	char	*v_val;
+	size_t	len;
 
 	len = 1;
-	if (var_name[0] == '?')
-		var_val = ft_itoa(misc->prev_status);
+	if (v_name[0] == '?')
+		v_val = ft_itoa(misc->prev_status);
 	else
 	{
-		while (ft_isalnum(var_name[len]) || var_name[len] == '_')
+		while (ft_isalnum(v_name[len]) || v_name[len] == '_')
 			len++;
-		envp = misc->envp;
-		while (*envp && ft_strncmp(*envp, var_name, len) != 0)
-			envp++;
-		if (*envp != NULL)
-			var_val = ft_substr(*envp, len + 1, ft_strlen(&(*envp)[len + 1]));
-		else
-			var_val = ft_strdup("");
+		v_name = ft_substr(v_name, 0, len);
+		if (!v_name)
+			return (free(res), print_err("malloc", 0, 0), NULL);
+		v_val = ft_strdup(envp_getval(misc->envp, v_name));
+		free(v_name);
 	}
-	if (!var_val)
-		return (free(res), print_err("malloc", NULL, NULL), NULL);
-	tmp = ft_strjoin(res, var_val);
+	if (!v_val)
+		return (free(res), print_err("malloc", 0, 0), NULL);
+	tmp = ft_strjoin(res, v_val);
 	*arg_i += len - 1;
-	return (free(res), free(var_val), tmp);
+	return (free(res), free(v_val), tmp);
 }
 
 //	if quote_flag == true, quotation symbols are read as simple text

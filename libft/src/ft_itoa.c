@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:45:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/11 10:42:42 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/12 14:59:34 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_numlen(int n)
+static unsigned int	ft_numlen(int n)
 {
 	unsigned int	i;
 
@@ -31,8 +31,8 @@ static int	ft_numlen(int n)
 
 char	*ft_itoa(int n)
 {
-	char	*s;
-	int		num_len;
+	char			*s;
+	unsigned int	num_len;
 
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
