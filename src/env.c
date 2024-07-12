@@ -52,7 +52,7 @@ static t_envp	seek_next_print(const t_envp *envp, const char *prev_n, int out)
 	{
 		n = ft_strlen(envp[j].name) + 1;
 		if (ft_strncmp(envp[i].name, envp[j].name, n) > 0
-				&& ft_strncmp(envp[j].name, prev_n, n) > 0)
+			&& ft_strncmp(envp[j].name, prev_n, n) > 0)
 			i = j;
 	}
 	if (!envp[i].val)

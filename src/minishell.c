@@ -35,7 +35,7 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 	if (cmd_list->prev)
 	{
 		prev_cmd = cmd_list->prev->data;
-		ft_memcpy(cmd->pipe_L, prev_cmd->pipe_R, sizeof(int[2]));
+		ft_memcpy(cmd->pipe_L, prev_cmd->pipe_R, sizeof (int [2]));
 	}
 	cmd->pipe_R[1] = 1;
 	if (cmd_list->next)

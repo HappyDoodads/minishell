@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 
 	signal(SIGQUIT, SIG_IGN);
 	if (argc > 1)
-		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
+		return (ft_dprintf(2, "%s: too many arguments\n", argv[0]), 1);
 	misc.prev_status = create_envp(envp, &misc);
 	if (misc.prev_status == ENOMEM)
 		return (print_err("malloc", NULL, strerror(ENOMEM)), ENOMEM);

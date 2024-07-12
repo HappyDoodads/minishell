@@ -57,9 +57,9 @@ static int	open_redirections(t_command *cmd)
 	if (cmd->outfile)
 	{
 		if (cmd->append_out)
-			fd = open(cmd->outfile, O_WRONLY|O_APPEND|O_CREAT, 420);
+			fd = open(cmd->outfile, O_WRONLY | O_APPEND | O_CREAT, 420);
 		else
-			fd = open(cmd->outfile, O_WRONLY|O_TRUNC|O_CREAT, 420);
+			fd = open(cmd->outfile, O_WRONLY | O_TRUNC | O_CREAT, 420);
 		if (fd == -1)
 			return (print_err(cmd->outfile, NULL, NULL));
 		ft_close(cmd->pipe_R[1]);
