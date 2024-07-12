@@ -129,7 +129,7 @@ void	sig_child_handler(int sig_num);
 void	sig_heredoc_handler(int sig_num);
 int		rl_replace_line(const char *text, int clear_undo);
 
-//////////////////////////////    PIPE_UTILS    /////////////////////////////////////
+//////////////////////////////    PIPES_UTILS    /////////////////////////////////////
 
 void	ft_close(int fd);
 void	close_pipe(int pipefd[2]);
