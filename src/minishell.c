@@ -41,6 +41,7 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 	if (cmd_list->next)
 		pipe(cmd->pipe_R);
 	signal(SIGINT, sig_child_handler);
+	signal(SIGQUIT, sig_child_handler);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 		exec_command(cmd, misc);

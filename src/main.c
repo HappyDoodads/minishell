@@ -26,7 +26,6 @@ int	main(int argc, char **argv, char **envp)
 	t_misc	misc;
 
 	signal(SIGQUIT, SIG_IGN);
-	dprintf(2, "%sISSUE: <<eof cd [dir]\n%s", YELLOW, RST);
 	if (argc > 1)
 		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
 	misc.envp = dup_envp(envp);
