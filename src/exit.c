@@ -5,7 +5,6 @@ int	ft_exit(t_command *cmd, t_misc *misc)
 	int	stat;
 	int	i;
 
-	ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
 	stat = misc->prev_status;
 	if (cmd->argv[1])
 	{
@@ -24,6 +23,6 @@ int	ft_exit(t_command *cmd, t_misc *misc)
 		else
 			return (print_err("exit", NULL, "too many arguments"));
 	}
-	cleanup(misc);
-	exit(stat);
+	misc->exit_flag = true;
+	return (stat);
 }

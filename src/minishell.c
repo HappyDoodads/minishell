@@ -4,13 +4,13 @@ void	ft_create_prompt(t_misc *misc)
 {
 	char	*input;
 
-	while (1)
+	while (!misc->exit_flag)
 	{
 		signal(SIGINT, sigint_handler);
-		input = readline("\001\033[32m\002 Minishell $> \001\e[0m\022\002");
+		input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
 		if (!input)
 			return ;
-		else if (*input)
+		if (*input)
 		{
 			add_history(input);
 			misc->cmd_list = parse_input(input, misc);

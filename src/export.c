@@ -19,6 +19,8 @@ static int	new_export(t_envp *env_v, const char *v_name, const char *v_val)
 	env_v->name = ft_strdup(v_name);
 	if (!env_v->name)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
+	if (!v_val)
+		return (EXIT_SUCCESS);
 	env_v->val = ft_strdup(v_val);
 	if (!env_v->val)
 	{

@@ -43,8 +43,10 @@ int	main(int argc, char **argv, char **envp)
 	misc.cmd_list = NULL;
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);
+	misc.exit_flag = false;
 	ft_create_prompt(&misc);
 	free_envp(misc.envp);
 	clear_history();
+	ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
 	return (misc.prev_status);
 }

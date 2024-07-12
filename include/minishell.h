@@ -60,6 +60,7 @@ typedef struct s_misc
 	int		prev_status;
 	int		tmpfile_count;
 	char	tmpfile_dir[PATH_MAX];
+	bool	exit_flag;
 }			t_misc;
 
 ///////////////////////////     ENUMS     //////////////////////////////////////
