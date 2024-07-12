@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:38 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:39 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	update_export(t_envp *env_v, const char *v_val)
@@ -86,7 +98,7 @@ int	ft_export(t_command *cmd, t_misc *misc)
 
 	i = 0;
 	if (cmd->argv[1] == NULL)
-		return (ascii_sort(misc->envp, cmd->pipe_R[1]), EXIT_SUCCESS);
+		return (ascii_sort(misc->envp, cmd->pipe_r[1]), EXIT_SUCCESS);
 	status = EXIT_SUCCESS;
 	while (cmd->argv[++i] && status != ENOMEM)
 		status = get_export_var(misc, cmd->argv[i]) || status;

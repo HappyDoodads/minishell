@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:54 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:55 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_echo(t_command *cmd, t_misc *misc)
@@ -15,11 +27,11 @@ int	ft_echo(t_command *cmd, t_misc *misc)
 	}
 	while (cmd->argv[i] != NULL)
 	{
-		ft_putstr_fd(cmd->argv[i++], cmd->pipe_R[1]);
+		ft_putstr_fd(cmd->argv[i++], cmd->pipe_r[1]);
 		if (cmd->argv[i] != NULL)
-			ft_putchar_fd(' ', cmd->pipe_R[1]);
+			ft_putchar_fd(' ', cmd->pipe_r[1]);
 	}
 	if (end)
-		ft_putchar_fd(end, cmd->pipe_R[1]);
+		ft_putchar_fd(end, cmd->pipe_r[1]);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:31 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:32 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	heredoc_loop(char *eof, char **storage)
@@ -8,7 +20,7 @@ static int	heredoc_loop(char *eof, char **storage)
 
 	signal(SIGINT, SIG_DFL);
 	eof_len = ft_strlen(eof);
-	fd = open(*storage, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	fd = open(*storage, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (print_err(*storage, NULL, NULL));
 	while (1)

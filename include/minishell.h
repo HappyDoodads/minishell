@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:48:11 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -44,8 +55,8 @@ typedef struct s_envp
 typedef struct s_command
 {
 	char	**argv;
-	int		pipe_L[2];
-	int		pipe_R[2];
+	int		pipe_l[2];
+	int		pipe_r[2];
 	char	*infile;
 	char	*outfile;
 	bool	append_out;

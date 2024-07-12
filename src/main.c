@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:30 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	create_envp(char **arg_envp, t_misc *misc)
@@ -34,7 +46,7 @@ int	main(int argc, char **argv, char **envp)
 	t_misc	misc;
 
 	if (argc > 1)
-		return (ft_dprintf(2,"%s: too many arguments\n" , argv[0]), 1);
+		return (ft_dprintf(2, "%s: too many arguments\n", argv[0]), 1);
 	misc.prev_status = create_envp(envp, &misc);
 	if (misc.prev_status == ENOMEM)
 		return (print_err("malloc", NULL, strerror(ENOMEM)), ENOMEM);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:23 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:24 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_pwd(t_command *cmd, t_misc *misc)
@@ -15,10 +27,10 @@ int	ft_pwd(t_command *cmd, t_misc *misc)
 	}
 	if (getcwd(cwd, PATH_MAX) != NULL)
 	{
-		if (cmd->pipe_R[1] == 1)
-			ft_dprintf(cmd->pipe_R[1], "%s%s%s\n", YELLOW, cwd, RST);
+		if (cmd->pipe_r[1] == 1)
+			ft_dprintf(cmd->pipe_r[1], "%s%s%s\n", YELLOW, cwd, RST);
 		else
-			ft_dprintf(cmd->pipe_R[1], "%s\n", cwd);
+			ft_dprintf(cmd->pipe_r[1], "%s\n", cwd);
 		return (0);
 	}
 	perror("getcwd() error");

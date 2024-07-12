@@ -1,29 +1,28 @@
-NAME			=	minishell
+NAME			:=	minishell
 
-LIBFT_DIR		=	./libft
-LIBFT			=	$(LIBFT_DIR)/libft.a
+LIBFT_DIR		:=	./libft
+LIBFT			:=	$(LIBFT_DIR)/libft.a
 
-RL_DIR			=	./readline
-RL_H			=	$(RL_DIR)/libhistory.a
-RL_L			=	$(RL_DIR)/libreadline.a
+RL_URL			:=	https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
+RL_ARCH			:=	readline.tar.gz
+RL_DIR			:=	./readline
+RL_H			:=	$(RL_DIR)/libhistory.a
+RL_L			:=	$(RL_DIR)/libreadline.a
 
-HEADERS			=	-I./include -I$(LIBFT_DIR)/include
-LINKERS			=	-Lreadline -lreadline -lncurses
-LIBS			=	$(RL_H) $(RL_L) $(LIBFT)
+HEADERS			:=	-I./include -I$(LIBFT_DIR)/include
+LINKERS			:=	-Lreadline -lreadline -lncurses
+LIBS			:=	$(RL_H) $(RL_L) $(LIBFT)
 
 # Compiler and flags
-CC				=	gcc
-CFLAGS			=	-Wall -Werror -Wextra -g
-RM				=	rm -f
+CC				:=	gcc
+CFLAGS			:=	-Wall -Werror -Wextra -g
+RM				:=	rm -rf
 
 SRC_DIR	=	./src
 OBJ_DIR	=	./obj
 
 #		config		#
 
-# version = \"$(shell cat .config/version)\"
-
-#USER = $(shell whoami)
 PWD  = \"$(shell pwd)\"
 
 ifeq ($(shell uname -s), Darwin)
@@ -53,7 +52,7 @@ SRCS	=	main.c \
 			minishell.c \
 			pwd.c \
 			unset.c \
-			pipes_utils.c \
+			fd_utils.c \
 			parsing.c \
 			redirect_parsing.c \
 			split_args.c \
@@ -68,40 +67,41 @@ OBJS	=	$(addprefix $(OBJ_DIR)/, ${SRCS:.c=.o})
 
 all: $(NAME)
 
+$(RL_DIR):
+	@curl -s $(RL_URL) --output $(RL_ARCH)
+	@tar -xf $(RL_ARCH)
+	@mv $(RL_DIR)-8.2 $(RL_DIR)
+	@$(RM) $(RL_ARCH)
+
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf 'Compiling: %s\n' $(notdir $<)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf 'Compiled: %s\n' $(notdir $<)
 
 $(NAME): $(RL_L) $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@$(CC) $(CFLAGS) $(HEADERS) $(LINKERS) $(LIBS) $(OBJS) -o $(NAME)
 
-$(RL_L):
-	cd $(RL_DIR) && ./configure && make
+$(RL_L): $(RL_DIR)
+	@cd $(RL_DIR) && ./configure && make
 
 $(LIBFT):
-	@make -C$(LIBFT_DIR) && printf 'Compiling: %s\n' $(notdir $(LIBFT))
-
-rm_readline:
-	@cd $(RL_DIR) && make distclean
+	@make -C$(LIBFT_DIR) && printf 'Compiled: %s\n' $(notdir $(LIBFT))
 
 # Removes objects
 clean:
-	@$(RM) -rf $(OBJ_DIR)
+	@$(RM) $(OBJ_DIR)
 	@make -C$(LIBFT_DIR) clean
 	@echo $(shell clear)
-#	@printf $(L)clean ok\n$(L)
 
 # Removes objects and executables
 fclean: clean
 	@$(RM) $(NAME)
-	@$(RM) -rf minishell.dSYM
-	@rm $(LIBFT)
-	@echo $(shell clear)
-#	@printf $(L)fclean ok\n$(L)
+	@$(RM) $(LIBFT)
+	@$(RM) minishell.dSYM
 
-ffclean: rm_readline fclean
+ffclean: fclean
+	@$(RM) $(RL_DIR)
 
 run: all
 	@./$(NAME)

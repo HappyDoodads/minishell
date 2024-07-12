@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:52 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:53 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**ss_envp_creat(const t_envp *envp)
@@ -42,7 +54,7 @@ static t_envp	seek_next_print(const t_envp *envp, const char *prev_n, int out)
 	{
 		n = ft_strlen(envp[j].name) + 1;
 		if (ft_strncmp(envp[i].name, envp[j].name, n) > 0
-				&& ft_strncmp(envp[j].name, prev_n, n) > 0)
+			&& ft_strncmp(envp[j].name, prev_n, n) > 0)
 			i = j;
 	}
 	if (!envp[i].val)
@@ -87,7 +99,7 @@ int	ft_env(t_command *cmd, t_misc *misc)
 	int	out;
 
 	i = -1;
-	out = cmd->pipe_R[1];
+	out = cmd->pipe_r[1];
 	while (misc->envp[++i].name)
 	{
 		if (!misc->envp[i].val)

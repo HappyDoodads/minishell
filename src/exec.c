@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 17:47:46 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:47 by jdemers          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	**find_binpaths(const t_envp *envp)
@@ -51,19 +63,19 @@ static int	open_redirections(t_command *cmd)
 		fd = open(cmd->infile, O_RDONLY);
 		if (fd == -1)
 			return (print_err(cmd->infile, NULL, NULL));
-		ft_close(cmd->pipe_L[0]);
-		cmd->pipe_L[0] = fd;
+		ft_close(cmd->pipe_l[0]);
+		cmd->pipe_l[0] = fd;
 	}
 	if (cmd->outfile)
 	{
 		if (cmd->append_out)
-			fd = open(cmd->outfile, O_WRONLY|O_APPEND|O_CREAT, 420);
+			fd = open(cmd->outfile, O_WRONLY | O_APPEND | O_CREAT, 420);
 		else
-			fd = open(cmd->outfile, O_WRONLY|O_TRUNC|O_CREAT, 420);
+			fd = open(cmd->outfile, O_WRONLY | O_TRUNC | O_CREAT, 420);
 		if (fd == -1)
 			return (print_err(cmd->outfile, NULL, NULL));
-		ft_close(cmd->pipe_R[1]);
-		cmd->pipe_R[1] = fd;
+		ft_close(cmd->pipe_r[1]);
+		cmd->pipe_r[1] = fd;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -106,8 +118,8 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
-		dup2(cmd->pipe_L[0], 0);
-		dup2(cmd->pipe_R[1], 1);
+		dup2(cmd->pipe_l[0], 0);
+		dup2(cmd->pipe_r[1], 1);
 		close_cmd_pipes(cmd);
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
 		ss_envp = ss_envp_creat(misc->envp);

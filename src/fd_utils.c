@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   fd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/12 17:47:20 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:20 by jdemers          ###   ########.fr       */
+/*   Created: 2024/07/12 17:47:36 by jdemers           #+#    #+#             */
+/*   Updated: 2024/07/12 17:47:37 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sigint_handler(int sig_num)
+void	ft_close(int fd)
 {
-	(void)sig_num;
-	rl_on_new_line();
-	ft_putchar_fd('\n', 1);
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (fd > 2)
+		close(fd);
 }
 
-void	sig_child_handler(int sig_num)
+void	close_pipe(int pipefd[2])
 {
-	if (sig_num == 3)
-		ft_putstr_fd("Quit: 3", 1);
-	ft_putchar_fd('\n', 1);
-	rl_redisplay();
+	ft_close(pipefd[0]);
+	ft_close(pipefd[1]);
+}
+
+void	close_cmd_pipes(t_command *cmd)
+{
+	close_pipe(cmd->pipe_l);
+	close_pipe(cmd->pipe_r);
 }
