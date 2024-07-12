@@ -35,18 +35,38 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 	if (cmd_list->prev)
 	{
 		prev_cmd = cmd_list->prev->data;
-		ft_memcpy(cmd->pipe_L, prev_cmd->pipe_R, sizeof (int [2]));
+		ft_memcpy(cmd->pipe_l, prev_cmd->pipe_r, sizeof (int [2]));
 	}
-	cmd->pipe_R[1] = 1;
+	cmd->pipe_r[1] = 1;
 	if (cmd_list->next)
-		pipe(cmd->pipe_R);
+		pipe(cmd->pipe_r);
 	signal(SIGINT, sig_child_handler);
 	signal(SIGQUIT, sig_child_handler);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 		exec_command(cmd, misc);
 	if (cmd_list->prev)
-		close_pipe(prev_cmd->pipe_R);
+		close_pipe(prev_cmd->pipe_r);
+}
+
+static int	waitpid_loop(t_list *cmd_list)
+{
+	t_command	*cmd;
+	int			stat;
+
+	while (cmd_list)
+	{
+		cmd = cmd_list->data;
+		waitpid(cmd->pid, &stat, 0);
+		cmd_list = cmd_list->next;
+	}
+	if (WIFSIGNALED(stat))
+		stat = 128 + WTERMSIG(stat);
+	else if (!WIFEXITED(stat))
+		stat = print_err("undefined behaviour", 0, "process stopping");
+	else
+		stat = WEXITSTATUS(stat);
+	return (stat);
 }
 
 int	command_handler(t_misc *misc)
@@ -66,16 +86,6 @@ int	command_handler(t_misc *misc)
 		forking(cmd_node, misc);
 		cmd_node = cmd_node->next;
 	}
-	cmd_node = misc->cmd_list;
-	while (cmd_node != NULL)
-	{
-		cmd = cmd_node->data;
-		waitpid(cmd->pid, &status, 0);
-		cmd_node = cmd_node->next;
-	}
-	if (WIFSIGNALED(status))
-		status = 128 + WTERMSIG(status);
-	else
-		status = WEXITSTATUS(status);
+	status = waitpid_loop(misc->cmd_list);
 	return (status);
 }

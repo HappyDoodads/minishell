@@ -97,7 +97,7 @@ int	ft_env(t_command *cmd, t_misc *misc)
 	int	out;
 
 	i = -1;
-	out = cmd->pipe_R[1];
+	out = cmd->pipe_r[1];
 	while (misc->envp[++i].name)
 	{
 		if (!misc->envp[i].val)

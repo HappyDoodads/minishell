@@ -1,4 +1,3 @@
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -44,8 +43,8 @@ typedef struct s_envp
 typedef struct s_command
 {
 	char	**argv;
-	int		pipe_L[2];
-	int		pipe_R[2];
+	int		pipe_l[2];
+	int		pipe_r[2];
 	char	*infile;
 	char	*outfile;
 	bool	append_out;

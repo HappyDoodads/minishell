@@ -86,7 +86,7 @@ int	ft_export(t_command *cmd, t_misc *misc)
 
 	i = 0;
 	if (cmd->argv[1] == NULL)
-		return (ascii_sort(misc->envp, cmd->pipe_R[1]), EXIT_SUCCESS);
+		return (ascii_sort(misc->envp, cmd->pipe_r[1]), EXIT_SUCCESS);
 	status = EXIT_SUCCESS;
 	while (cmd->argv[++i] && status != ENOMEM)
 		status = get_export_var(misc, cmd->argv[i]) || status;

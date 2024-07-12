@@ -15,10 +15,10 @@ int	ft_pwd(t_command *cmd, t_misc *misc)
 	}
 	if (getcwd(cwd, PATH_MAX) != NULL)
 	{
-		if (cmd->pipe_R[1] == 1)
-			ft_dprintf(cmd->pipe_R[1], "%s%s%s\n", YELLOW, cwd, RST);
+		if (cmd->pipe_r[1] == 1)
+			ft_dprintf(cmd->pipe_r[1], "%s%s%s\n", YELLOW, cwd, RST);
 		else
-			ft_dprintf(cmd->pipe_R[1], "%s\n", cwd);
+			ft_dprintf(cmd->pipe_r[1], "%s\n", cwd);
 		return (0);
 	}
 	perror("getcwd() error");
