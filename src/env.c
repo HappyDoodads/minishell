@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-// static void	print_env_var(t_envp env_v, int fd_out)
-// {
-// 	if (!env_v.val)
-// 		ft_dprintf(fd_out, "%s\n", env_v.name);
-// 	else if (!env_v.val[0])
-// 		ft_dprintf(fd_out, "%s=''\n", env_v.name);
-// 	else
-// 		ft_dprintf(fd_out, "%s=%s\n", env_v.name, env_v.val);
-// }
-
 char	**ss_envp_creat(const t_envp *envp)
 {
 	char	**ss_envp;
@@ -56,11 +46,11 @@ static t_envp	seek_next_print(const t_envp *envp, const char *prev_n, int out)
 			i = j;
 	}
 	if (!envp[i].val)
-		ft_dprintf(out, "%s\n", envp[i].name);
+		ft_dprintf(out, "declare -x %s\n", envp[i].name);
 	else if (!envp[i].val[0])
-		ft_dprintf(out, "%s=''\n", envp[i].name);
+		ft_dprintf(out, "declare -x %s=''\n", envp[i].name);
 	else
-		ft_dprintf(out, "%s=%s\n", envp[i].name, envp[i].val);
+		ft_dprintf(out, "declare -x %s=%s\n", envp[i].name, envp[i].val);
 	return (envp[i]);
 }
 
@@ -101,9 +91,9 @@ int	ft_env(t_command *cmd, t_misc *misc)
 	while (misc->envp[++i].name)
 	{
 		if (!misc->envp[i].val)
-			ft_dprintf(out, "%s\n", misc->envp[i].name);
+			continue ;
 		else if (!misc->envp[i].val[0])
-			ft_dprintf(out, "%s=''\n", misc->envp[i].name);
+			ft_dprintf(out, "%s=\n", misc->envp[i].name);
 		else
 			ft_dprintf(out, "%s=%s\n", misc->envp[i].name, misc->envp[i].val);
 	}

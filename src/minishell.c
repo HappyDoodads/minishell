@@ -7,6 +7,7 @@ void	ft_create_prompt(t_misc *misc)
 	while (!misc->exit_flag)
 	{
 		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
 		if (!input)
 			return ;

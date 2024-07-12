@@ -103,7 +103,6 @@ void	exec_command(t_command *cmd, t_misc *misc)
 	int		status;
 	char	**ss_envp;
 
-	signal(SIGINT, SIG_DFL);
 	status = exec_builtin(cmd, misc);
 	if (status == -1 && open_redirections(cmd) == EXIT_SUCCESS)
 	{
