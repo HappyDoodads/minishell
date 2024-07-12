@@ -72,7 +72,6 @@ static int	waitpid_loop(t_list *cmd_list)
 int	command_handler(t_misc *misc)
 {
 	t_list		*cmd_node;
-	t_command	*cmd;
 	int			status;
 
 	cmd_node = misc->cmd_list;
