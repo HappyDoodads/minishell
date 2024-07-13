@@ -23,6 +23,11 @@ OBJ_DIR	=	./obj
 
 #		config		#
 
+YELLOW	:=	"\001\033[33m\002"
+GREEN	:=	"\001\033[32m\002"
+BLUE	:=	"\001\033[34m\002"
+RST		:=	"\001\e[0m\022\002"
+
 PWD  = \"$(shell pwd)\"
 
 ifeq ($(shell uname -s), Darwin)
@@ -68,25 +73,28 @@ OBJS	=	$(addprefix $(OBJ_DIR)/, ${SRCS:.c=.o})
 all: $(NAME)
 
 $(RL_DIR):
+	@printf "%breadline-8.2 not found!\n%bFetching...%b" $(YELLOW) $(BLUE) $(RST)
 	@curl -s $(RL_URL) --output $(RL_ARCH)
 	@tar -xf $(RL_ARCH)
 	@mv $(RL_DIR)-8.2 $(RL_DIR)
 	@$(RM) $(RL_ARCH)
+	@printf "  %bDone!\n%bCompiling...%b" $(GREEN) $(BLUE) $(RST)
+	@cd $(RL_DIR) && ./configure >/dev/null && make -s 2>/dev/null \
+		&& printf " %bDone!\n%b" $(GREEN) $(RST)
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf 'Compiled: %s\n' $(notdir $<)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) \
+		&& printf "%bCompiling:%b %s\n" $(GREEN) $(RST) $(notdir $<)
 
-$(NAME): $(RL_L) $(LIBFT) $(OBJ_DIR) $(OBJS)
+$(NAME): $(RL_DIR) $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@$(CC) $(CFLAGS) $(HEADERS) $(LINKERS) $(LIBS) $(OBJS) -o $(NAME)
 
-$(RL_L): $(RL_DIR)
-	@cd $(RL_DIR) && ./configure && make
-
 $(LIBFT):
-	@make -C$(LIBFT_DIR) && printf 'Compiled: %s\n' $(notdir $(LIBFT))
+	@printf "%bCompiling libft...%b" $(BLUE) $(RST)
+	@make -C$(LIBFT_DIR) && printf " %bDone!\n%b" $(GREEN) $(RST)
 
 clean:
 	@$(RM) $(OBJ_DIR)
@@ -106,4 +114,4 @@ run: all
 
 re: fclean all
 
-.PHONY: all clean fclean ffclean run re rm_readline
+.PHONY: all clean fclean ffclean run re
