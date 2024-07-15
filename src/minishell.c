@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:28 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:41:45 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static void	forking(t_list *cmd_list, t_misc *misc)
 		prev_cmd = cmd_list->prev->data;
 		ft_memcpy(cmd->pipe_l, prev_cmd->pipe_r, sizeof (int [2]));
 	}
-	cmd->pipe_r[1] = 1;
 	if (cmd_list->next)
 		pipe(cmd->pipe_r);
 	signal(SIGINT, sig_child_handler);
