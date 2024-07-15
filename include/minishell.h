@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 13:39:46 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 14:12:51 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_misc
 	int		tmpfile_count;
 	char	tmpfile_dir[PATH_MAX];
 	bool	exit_flag;
+	char	*delet_this;
 }			t_misc;
 
 ///////////////////////////     ENUMS     //////////////////////////////////////

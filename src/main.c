@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:30 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:33:33 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_misc	misc;
 
-	if (argc > 1)
-		return (ft_dprintf(2, "%s: too many arguments\n", argv[0]), 1);
+	if (argc > 2 && ft_strncmp(argv[1], "-c", 3) == 0)
+		misc.delet_this = ft_strdup(argv[2]);
+	else
+		misc.delet_this = NULL;
 	misc.prev_status = create_envp(envp, &misc);
 	if (misc.prev_status == ENOMEM)
 		return (print_err("malloc", NULL, strerror(ENOMEM)), ENOMEM);
