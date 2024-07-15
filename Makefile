@@ -105,6 +105,8 @@ fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(LIBFT)
 	@$(RM) minishell.dSYM
+	@$(RM) dev/out
+	@$(RM) diff.txt
 
 ffclean: fclean
 	@$(RM) $(RL_DIR)

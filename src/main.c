@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 15:33:33 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 16:36:19 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_create_prompt(&misc);
 	free_envp(misc.envp);
 	clear_history();
-	ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
+	if (!misc.delet_this)
+		ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
 	return (misc.prev_status);
 }

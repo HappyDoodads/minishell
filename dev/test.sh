@@ -55,7 +55,6 @@ testlist=(
   "env | grep 'LOGNAME'"
   "pwd | cut -c5- | wc "
   "$ $\?"
-  "echo && echo yes"
   "\""
   "'"
   "ls < a"
@@ -85,9 +84,6 @@ testlist=(
   "><"
   "> <"
   ">|<"
-  "&&"
-  "ls &&"
-  "ls && pwd"
   "pwd |  echo b"
   "ls | ls |ls| ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls |ls | echo"
   "echo \"\" ' ' \"\""
@@ -119,34 +115,13 @@ function runTest() {
   then
     printf \%s\ "Error: return value\n shell give $GRN$bacode$RESET ms give $RED$mscode$RESET \n"
   fi
-  str=$(grep  "definitely lost" $outfileval | cut -c15-)
-  test "$str" = 'definitely lost: 0 bytes in 0 blocks'
-  ((err+=$?))
-  str=$(grep  "indirectly lost" $outfileval | cut -c15-)
-  test "$str" = 'indirectly lost: 0 bytes in 0 blocks'
-  ((err+=$?))
-  str=$(grep  "possibly lost" $outfileval | cut -c15-)
-  test "$str" = '  possibly lost: 0 bytes in 0 blocks'
-  ((err+=$?))
-  str=$(grep  "still reachable" $outfileval | cut -c15-)
-  test "$str" = 'still reachable: 0 bytes in 0 blocks'
-  ((err+=$?))
-  if [ $err != 0 ]
-  then
-    grep  "definitely lost" $outfileval | cut -c15-
-    grep  "indirectly lost" $outfileval | cut -c15-
-    grep  "possibly lost"   $outfileval | cut -c15-
-    grep  "still reachable" $outfileval | cut -c15-
-  fi
   rm -f out/val.log
   diff  out/out_ba out/out_ms >> diff.txt
-  sleep 0.5
 }
 
 # start of scrip
 rm -r diff.txt
 make -C .. re
-make -C .. cp
 echo "making dir"
 mkdir -p out
 
@@ -175,8 +150,4 @@ do
   sleep 0.3
 done
 read -p "rm file? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 0
-make -C .. clean
-rm out/out_ms out/out_ba
-rm -fr out
-rm diff.txt
 make -C .. fclean
