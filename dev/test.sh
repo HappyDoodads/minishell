@@ -42,10 +42,10 @@ testlist=(
   "|"
   "hello\"\"gorge"
   "echo hello\"\"gorge"
-  "echo '\"    	  	\"'"
-  "										"
+  "echo '\"    	  \"'"
+  "				"
   "		  			''"
-  "''									"
+  "''			"
   "echo a | echo"
   "echo   | echo"
   "echo a | echo a"
@@ -149,5 +149,5 @@ do
   fi
   sleep 0.3
 done
-read -p "rm file? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 0
+read -p "clean project? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 0
 make -C .. fclean
