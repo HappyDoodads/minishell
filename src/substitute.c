@@ -6,16 +6,14 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:14 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:14 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 14:02:35 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	quote_check(char c, char *stat, bool quote_flag)
+static bool	quote_check(char c, char *stat)
 {
-	if (quote_flag)
-		return (false);
 	if (*stat == NO_QUOTE && (c == QUOTE || c == DQUOTE))
 		*stat = c;
 	else if (*stat == c)
@@ -83,8 +81,9 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 	return (free(res), free(v_val), tmp);
 }
 
-//	if quote_flag == true, quotation symbols are read as simple text
-char	*substitute(char *arg, t_misc *misc, bool quote_flag)
+//	if quote_ign == true, quotation symbols are read as simple text
+//	if v_ign == true, $ symbol is read as simple text
+char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 {
 	char	buf[42];
 	char	*res;
@@ -98,9 +97,9 @@ char	*substitute(char *arg, t_misc *misc, bool quote_flag)
 	i = -1;
 	while (arg[++i] && res != NULL)
 	{
-		if (quote_check(arg[i], &stat, quote_flag))
+		if (quote_ign == false && quote_check(arg[i], &stat))
 			continue ;
-		else if (arg[i] == '$' && stat != QUOTE
+		else if (var_ign == false && arg[i] == '$' && stat != QUOTE
 			&& (ft_isalpha(arg[i + 1]) || ft_isset(arg[i + 1], "_?")))
 		{
 			i++;

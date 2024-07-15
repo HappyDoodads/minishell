@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:22 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 13:52:07 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,25 @@ static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
 {
 	int		j;
 	char	type;
-	bool	mod;
-	char	*filename;
+	char	*arg;
 
 	j = i + 1;
 	type = cmd_str[i];
 	cmd_str[i] = ' ';
-	mod = type == cmd_str[j];
-	if (mod)
+	if (type == cmd_str[j])
+	{
 		cmd_str[j++] = ' ';
+		type++;
+	}
 	while (cmd_str[j] == ' ')
 		j++;
 	i = j;
 	while (cmd_str[j] && cmd_str[j] != ' ')
 		j = quote_skip(cmd_str, j) + 1;
-	filename = substitute(ft_substr(cmd_str, i, j - i), misc, false);
-	if (!filename)
+	arg = substitute(ft_substr(cmd_str, i, j - i), misc, false, type == 61);
+	if (!arg)
 		return (set_statcode(ENOMEM, misc), -1);
-	if (sort_redirect(filename, type + mod, cmd, misc) != EXIT_SUCCESS)
+	if (sort_redirect(arg, type, cmd, misc) != EXIT_SUCCESS)
 		return (-1);
 	while (i < j)
 		cmd_str[i++] = ' ';

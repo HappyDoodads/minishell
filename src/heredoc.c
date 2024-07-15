@@ -6,13 +6,13 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:31 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:32 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 13:56:24 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	heredoc_loop(char *eof, char **storage)
+static int	heredoc_loop(char *eof, char **storage, t_misc *misc)
 {
 	char	*input;
 	int		fd;
@@ -34,11 +34,11 @@ static int	heredoc_loop(char *eof, char **storage)
 			free(input);
 			break ;
 		}
+		input = substitute(input, misc, true, false);
 		ft_putstr_fd(input, fd);
 		free(input);
 	}
-	close(fd);
-	return (EXIT_SUCCESS);
+	return (close(fd), EXIT_SUCCESS);
 }
 
 static int	fork_handler(char *eof, char **storage, t_misc *misc)
@@ -51,7 +51,7 @@ static int	fork_handler(char *eof, char **storage, t_misc *misc)
 		return (print_err("fork", NULL, NULL));
 	if (pid == 0)
 	{
-		status = heredoc_loop(eof, storage);
+		status = heredoc_loop(eof, storage, misc);
 		free(eof);
 		cleanup(misc);
 		exit(status);
