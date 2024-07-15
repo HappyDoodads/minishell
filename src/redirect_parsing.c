@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 13:52:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 18:41:53 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,47 +39,54 @@ static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 	return (EXIT_SUCCESS);
 }
 
-static int	filename_parsing(char *cmd_str, int i, t_command *cmd, t_misc *misc)
+static char	*arg_parsing(char *cmd_str, int *i, char type, t_misc *misc)
 {
 	int		j;
-	char	type;
 	char	*arg;
 
-	j = i + 1;
-	type = cmd_str[i];
-	cmd_str[i] = ' ';
-	if (type == cmd_str[j])
-	{
-		cmd_str[j++] = ' ';
-		type++;
-	}
-	while (cmd_str[j] == ' ')
-		j++;
-	i = j;
+	while (cmd_str[*i] == ' ')
+		(*i)++;
+	j = *i;
 	while (cmd_str[j] && cmd_str[j] != ' ')
-		j = quote_skip(cmd_str, j) + 1;
-	arg = substitute(ft_substr(cmd_str, i, j - i), misc, false, type == 61);
+	{
+		if (cmd_str[j] == '<' || cmd_str[j] == '>')
+		{
+			set_statcode(2, misc);
+			return (print_err(NULL, NULL, "syntax error"), NULL);
+		}
+		j = quote_skip(cmd_str, j, misc) + 1;
+	}
+	arg = ft_substr(cmd_str, *i, j - *i);
+	arg = substitute(arg, misc, false, type == 61);
 	if (!arg)
-		return (set_statcode(ENOMEM, misc), -1);
-	if (sort_redirect(arg, type, cmd, misc) != EXIT_SUCCESS)
-		return (-1);
-	while (i < j)
-		cmd_str[i++] = ' ';
-	return (j - 1);
+		return (set_statcode(ENOMEM, misc), NULL);
+	while (*i < j)
+		cmd_str[(*i)++] = ' ';
+	*i -= 1;
+	return (arg);
 }
 
 int	redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc)
 {
-	int	i;
+	int		i;
+	char	type;
+	char	*arg;
 
 	i = -1;
 	while (cmd_str[++i])
 	{
-		i = quote_skip(cmd_str, i);
-		if (cmd_str[i] == '>' || cmd_str[i] == '<')
-			i = filename_parsing(cmd_str, i, cmd, misc);
-		if (i == -1)
-			return (delete_tmpfiles(misc), EXIT_FAILURE);
+		i = quote_skip(cmd_str, i, misc);
+		if (cmd_str[i] != '>' && cmd_str[i] != '<')
+			continue ;
+		type = cmd_str[i] + (cmd_str[i] == cmd_str[i + 1]);
+		cmd_str[i] = ' ';
+		if (type == 61 || type == 63)
+			cmd_str[i + 1] = ' ';
+		arg = arg_parsing(cmd_str, &i, type, misc);
+		if (!arg)
+			return (EXIT_FAILURE);
+		if (sort_redirect(arg, type, cmd, misc) != EXIT_SUCCESS)
+			return (free(arg), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
