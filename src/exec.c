@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:46 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:47 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:19:12 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,12 +127,12 @@ void	exec_command(t_command *cmd, t_misc *misc)
 		status = execve_errno();
 		ft_free_split(ss_envp);
 		free(fullpath);
+		print_err(cmd->argv[0], NULL, "command not found");
 	}
 	else if (status == -1)
 		status = EXIT_FAILURE;
 	else
 		close_cmd_pipes(cmd);
-	print_err(cmd->argv[0], NULL, "command not found");
 	cleanup(misc);
 	exit(status);
 }

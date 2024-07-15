@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:26 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:15:41 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 		return (print_err("malloc", 0, 0), set_statcode(ENOMEM, misc), 1);
 	}
 	ft_lstadd_back(cmd_list, new);
+	command->pipe_r[1] = 1;
 	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
 		return (free(cmd_str), EXIT_FAILURE);
 	command->argv = split_args(cmd_str, misc);
