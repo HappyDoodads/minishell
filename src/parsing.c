@@ -6,13 +6,13 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 15:15:41 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 18:07:58 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	quote_skip(char *line, int i)
+int	quote_skip(char *line, int i, t_misc *misc)
 {
 	char	quote;
 
@@ -23,7 +23,8 @@ int	quote_skip(char *line, int i)
 		i++;
 	if (line[i])
 		return (i);
-	print_err(NULL, NULL, "Opened quotes must always be closed");
+	print_err(NULL, NULL, "syntax error");
+	set_statcode(2, misc);
 	return (-1);
 }
 
@@ -65,7 +66,7 @@ t_list	*parse_input(char *input, t_misc *misc)
 	cmd_list = NULL;
 	while (input[++i])
 	{
-		i = quote_skip(input, i);
+		i = quote_skip(input, i, misc);
 		if (i == -1)
 			return (ft_lstclear(&cmd_list, free_command), NULL);
 		if (input[i] == '|')

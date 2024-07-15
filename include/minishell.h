@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 14:12:51 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 18:46:28 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int			command_handler(t_misc *misc);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
 
-int			quote_skip(char *line, int i);
+int			quote_skip(char *line, int i, t_misc *misc);
 t_list		*parse_input(char *input, t_misc *misc);
 char		**split_args(const char *s, t_misc *misc);
 int			redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
