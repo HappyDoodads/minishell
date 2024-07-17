@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:52 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:53 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 09:44:18 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static t_envp	seek_next_print(const t_envp *envp, const char *prev_n, int out)
 	else if (!envp[i].val[0])
 		ft_dprintf(out, "declare -x %s=''\n", envp[i].name);
 	else
-		ft_dprintf(out, "declare -x %s=%s\n", envp[i].name, envp[i].val);
+		ft_dprintf(out, "declare -x %s=\"%s\"\n", envp[i].name, envp[i].val);
 	return (envp[i]);
 }
 
