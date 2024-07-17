@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:14 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 12:50:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 14:58:07 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static char	*reset_buffer(char buf[42], char *res)
 		free(res);
 	}
 	ft_bzero(buf, 42);
-	if (!joined)
-		print_err("malloc", NULL, NULL);
 	return (joined);
 }
 
@@ -65,6 +63,8 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 	char	*v_val;
 	size_t	len;
 
+	if (!res)
+		return (NULL);
 	len = 1;
 	if (v_name[0] == '?')
 		v_val = ft_itoa(misc->prev_status);
@@ -74,19 +74,19 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 			len++;
 		v_name = ft_substr(v_name, 0, len);
 		if (!v_name)
-			return (free(res), print_err("malloc", 0, 0), NULL);
+			return (free(res), NULL);
 		v_val = ft_strdup(envp_getval(misc->envp, v_name));
 		free(v_name);
 	}
 	if (!v_val)
-		return (free(res), print_err("malloc", 0, 0), NULL);
+		return (free(res), NULL);
 	tmp = ft_strjoin(res, v_val);
 	*arg_i += len - 1;
 	return (free(res), free(v_val), tmp);
 }
 
-//	if quote_ign == true, quotation symbols are read as simple text
-//	if v_ign == true, env. variable symbol ($) is read as simple text
+//	if quote_ign == true, quotation symbols are not removed from string
+//	if var_ign == true, env. variable symbol ($) is read as simple text
 char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 {
 	char	buf[42];
@@ -95,13 +95,13 @@ char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 	int		i;
 
 	if (!arg)
-		return (print_err("malloc", NULL, NULL), NULL);
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
 	res = reset_buffer(buf, NULL);
 	quote = NO_QUOTE;
 	i = -1;
 	while (arg[++i] && res != NULL)
 	{
-		if (quote_ign == false && quote_check(arg[i], &quote))
+		if (quote_check(arg[i], &quote) && quote_ign == false)
 			continue ;
 		else if (var_ign == false && arg[i] == '$' && quote != SQUOTE
 			&& (ft_isalpha(arg[i + 1]) || ft_isset(arg[i + 1], "_?")))

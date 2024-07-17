@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 19:20:29 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 16:44:50 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ static char	*arg_parsing(char *cmd_str, int *i, char type, t_misc *misc)
 	int		j;
 	char	*arg;
 
-	while (cmd_str[*i] == ' ')
+	while (ft_isspace(cmd_str[*i]))
 		(*i)++;
 	j = *i;
 	if (!cmd_str[j])
 		return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);
-	while (cmd_str[j] && cmd_str[j] != ' ')
+	while (cmd_str[j] && !ft_isspace(cmd_str[j]))
 	{
 		if (cmd_str[j] == '<' || cmd_str[j] == '>')
 			return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);

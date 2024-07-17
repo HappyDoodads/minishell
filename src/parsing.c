@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 12:59:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 15:38:22 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,43 @@ int	quote_skip(char *line, int i, t_misc *misc)
 	return (-1);
 }
 
-static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
+static t_command	*malloc_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 {
 	t_command	*command;
 	t_list		*new;
 
-	new = NULL;
+	if (!cmd_str)
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
 	command = ft_calloc(1, sizeof(t_command));
+	if (!command)
+	{
+		free(cmd_str);
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
+	}
 	new = ft_lstnew(command);
-	if (!cmd_str || !command || !new)
+	if (!new)
 	{
 		free(cmd_str);
 		free(command);
-		free(new);
-		set_stat(ENOMEM, misc);
-		return (print_err("malloc", NULL, NULL));
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
 	}
 	ft_lstadd_back(cmd_list, new);
+	return (command);
+}
+
+static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
+{
+	t_command	*command;
+
+	command = malloc_cmd(cmd_str, cmd_list, misc);
+	if (!command)
+		return (EXIT_FAILURE);
 	command->pipe_r[1] = 1;
 	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
 		return (free(cmd_str), EXIT_FAILURE);
+	cmd_str = substitute(cmd_str, misc, true, false);
+	if (!cmd_str)
+		return (set_stat(ENOMEM, misc), print_err("malloc", NULL, NULL));
 	command->argv = split_args(cmd_str, misc);
 	free(cmd_str);
 	if (command->argv == NULL)

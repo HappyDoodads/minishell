@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 19:17:36 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 14:09:55 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	set_stat(int errnum, t_misc *misc)
 
 int	execve_errno(void)
 {
-	if (errno == ENOENT)
+	if (errno == ENOENT || errno == EACCES)
 		return (127);
 	return (1);
 }

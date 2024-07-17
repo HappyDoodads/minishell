@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:16 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 12:50:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 16:39:31 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,16 @@ char	**split_args(const char *s, t_misc *misc)
 	i = count_args(s);
 	argv = ft_calloc(i + 1, sizeof(char *));
 	if (!argv)
-		return (NULL);
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
 	i = 0;
 	while (*s)
 	{
-		if (*s == ' ')
+		if (ft_isspace(*s))
 			s++;
 		else
 		{
 			argv[i] = sub_split(&s);
-			argv[i] = substitute(argv[i], misc, false, false);
+			argv[i] = substitute(argv[i], misc, false, true);
 			if (!argv[i++])
 				return (ft_free_split(argv), NULL);
 		}
