@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:54 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:55 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 11:48:34 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,31 @@
 int	ft_echo(t_command *cmd, t_misc *misc)
 {
 	unsigned int	i;
+	unsigned int	j;
+	int flag = 2;
 	char			end;
 
 	(void)misc;
 	i = 1;
 	end = '\n';
-	if (cmd->argv[i] != NULL && ft_strncmp(cmd->argv[i], "-n", 3) == 0)
+	while (cmd->argv[i] && !ft_strncmp(cmd->argv[i], "-n", 2))
 	{
+		j = 2;
 		end = 0;
+		while (cmd->argv[i][j])
+		{
+			if (cmd->argv[i][j] != 'n' && cmd->argv[i][j] != '\0')
+			{
+				flag = i;
+				break ;
+			}
+			j++;
+		}
 		i++;
+		if (flag != 2)
+			break ;
 	}
+	i = flag;
 	while (cmd->argv[i] != NULL)
 	{
 		ft_putstr_fd(cmd->argv[i++], cmd->pipe_r[1]);
