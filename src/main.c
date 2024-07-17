@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:30 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 13:08:08 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_dprintf(2, "%s: too many arguments\n", argv[0]), 1);
 	misc.prev_status = create_envp(envp, &misc);
 	if (misc.prev_status == ENOMEM)
-		return (print_err("malloc", NULL, strerror(ENOMEM)), ENOMEM);
+		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc.cmd_list = NULL;
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);

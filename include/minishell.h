@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 17:28:29 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 12:50:54 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ enum e_quote_status
 {
 	NO_QUOTE = 0,
 	DQUOTE = 34,
-	QUOTE = 39
+	SQUOTE = 39
 };
 
 /**********************************PROTOTYPES**********************************/
@@ -103,7 +103,7 @@ const char	*envp_getval(const t_envp *envp, const char *v_name);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int			print_err(const char *s1, const char *s2, const char *msg);
-void		set_statcode(int errnum, t_misc *misc);
+void		set_stat(int errnum, t_misc *misc);
 int			execve_errno(void);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////

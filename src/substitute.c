@@ -6,18 +6,18 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:14 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 14:02:35 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 12:50:54 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	quote_check(char c, char *stat)
+static bool	quote_check(char c, char *quote)
 {
-	if (*stat == NO_QUOTE && (c == QUOTE || c == DQUOTE))
-		*stat = c;
-	else if (*stat == c)
-		*stat = NO_QUOTE;
+	if (*quote == NO_QUOTE && (c == SQUOTE || c == DQUOTE))
+		*quote = c;
+	else if (*quote == c)
+		*quote = NO_QUOTE;
 	else
 		return (false);
 	return (true);
@@ -40,12 +40,16 @@ static char	*reset_buffer(char buf[42], char *res)
 	return (joined);
 }
 
-static char	*append_to_buf(char c, char buf[42], char *res)
+static char	*append_to_buf(char c, char buf[42], char *res, t_misc *misc)
 {
 	int	i;
 
 	if (!res)
+	{
+		print_err("malloc", NULL, NULL);
+		set_stat(ENOMEM, misc);
 		return (NULL);
+	}
 	i = 0;
 	while (buf[i] != '\0')
 		i++;
@@ -82,24 +86,24 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 }
 
 //	if quote_ign == true, quotation symbols are read as simple text
-//	if v_ign == true, $ symbol is read as simple text
+//	if v_ign == true, env. variable symbol ($) is read as simple text
 char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 {
 	char	buf[42];
 	char	*res;
-	char	stat;
+	char	quote;
 	int		i;
 
 	if (!arg)
 		return (print_err("malloc", NULL, NULL), NULL);
 	res = reset_buffer(buf, NULL);
-	stat = NO_QUOTE;
+	quote = NO_QUOTE;
 	i = -1;
 	while (arg[++i] && res != NULL)
 	{
-		if (quote_ign == false && quote_check(arg[i], &stat))
+		if (quote_ign == false && quote_check(arg[i], &quote))
 			continue ;
-		else if (var_ign == false && arg[i] == '$' && stat != QUOTE
+		else if (var_ign == false && arg[i] == '$' && quote != SQUOTE
 			&& (ft_isalpha(arg[i + 1]) || ft_isset(arg[i + 1], "_?")))
 		{
 			i++;
@@ -107,7 +111,7 @@ char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 			res = insert_envar(&arg[i], &i, res, misc);
 		}
 		else
-			res = append_to_buf(arg[i], buf, res);
+			res = append_to_buf(arg[i], buf, res, misc);
 	}
-	return (free(arg), append_to_buf('\0', buf, res));
+	return (free(arg), append_to_buf('\0', buf, res, misc));
 }

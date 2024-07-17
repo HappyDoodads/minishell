@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 18:07:58 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 12:59:07 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	quote_skip(char *line, int i, t_misc *misc)
 {
 	char	quote;
 
-	if (line[i] != QUOTE && line[i] != DQUOTE)
+	if (line[i] != SQUOTE && line[i] != DQUOTE)
 		return (i);
 	quote = line[i++];
 	while (line[i] && line[i] != quote)
@@ -24,7 +24,7 @@ int	quote_skip(char *line, int i, t_misc *misc)
 	if (line[i])
 		return (i);
 	print_err(NULL, NULL, "syntax error");
-	set_statcode(2, misc);
+	set_stat(2, misc);
 	return (-1);
 }
 
@@ -41,7 +41,8 @@ static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 		free(cmd_str);
 		free(command);
 		free(new);
-		return (print_err("malloc", 0, 0), set_statcode(ENOMEM, misc), 1);
+		set_stat(ENOMEM, misc);
+		return (print_err("malloc", NULL, NULL));
 	}
 	ft_lstadd_back(cmd_list, new);
 	command->pipe_r[1] = 1;

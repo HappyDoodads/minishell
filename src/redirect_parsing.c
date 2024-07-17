@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 18:41:53 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/15 19:20:29 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 	{
 		stat = ft_heredoc(arg, misc, storage);
 		if (stat != EXIT_SUCCESS)
-			set_statcode(stat, misc);
+			set_stat(stat, misc);
 		return (stat);
 	}
 	else
@@ -47,19 +47,18 @@ static char	*arg_parsing(char *cmd_str, int *i, char type, t_misc *misc)
 	while (cmd_str[*i] == ' ')
 		(*i)++;
 	j = *i;
+	if (!cmd_str[j])
+		return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);
 	while (cmd_str[j] && cmd_str[j] != ' ')
 	{
 		if (cmd_str[j] == '<' || cmd_str[j] == '>')
-		{
-			set_statcode(2, misc);
-			return (print_err(NULL, NULL, "syntax error"), NULL);
-		}
+			return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);
 		j = quote_skip(cmd_str, j, misc) + 1;
 	}
 	arg = ft_substr(cmd_str, *i, j - *i);
 	arg = substitute(arg, misc, false, type == 61);
 	if (!arg)
-		return (set_statcode(ENOMEM, misc), NULL);
+		return (set_stat(ENOMEM, misc), NULL);
 	while (*i < j)
 		cmd_str[(*i)++] = ' ';
 	*i -= 1;
