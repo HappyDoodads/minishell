@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:54 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 11:48:34 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/17 14:09:24 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	ft_echo(t_command *cmd, t_misc *misc)
 		if (flag != 2)
 			break ;
 	}
-	i = flag;
+	if (end == 0)
+		i = flag;
 	while (cmd->argv[i] != NULL)
 	{
 		ft_putstr_fd(cmd->argv[i++], cmd->pipe_r[1]);
