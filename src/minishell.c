@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 16:54:22 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 17:08:12 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,13 @@ void	ft_create_prompt(t_misc *misc)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
+		if (misc->delet_this)
+		{
+			input = misc->delet_this;
+			misc->exit_flag = true;
+		}
+		else
+			input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
 		if (!input)
 			return ;
 		if (*input)
