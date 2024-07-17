@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:16 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 13:53:38 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 08:58:07 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**split_args(const char *s, t_misc *misc)
 	i = 0;
 	while (*s)
 	{
-		if (*s == ' ')
+		if (*s == ' ' || *s == '\t')
 			s++;
 		else
 		{
