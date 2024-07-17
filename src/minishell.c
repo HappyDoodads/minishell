@@ -6,43 +6,30 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 18:46:41 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 16:54:22 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_create_prompt(t_misc *misc)
+static int	empty_cmd_check(t_misc *misc)
 {
-	char	*input;
+	t_list		*cmd_list;
+	t_command	*cmd;
 
-	while (!misc->exit_flag)
+	cmd_list = misc->cmd_list;
+	while (cmd_list)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
-		if (misc->delet_this)
+		cmd = cmd_list->data;
+		if (!cmd->argv[0] && !cmd->infile && !cmd->outfile)
 		{
-			input = misc->delet_this;
-			misc->exit_flag = true;
+			if (misc->cmd_list->next)
+				return (print_err(NULL, NULL, "syntax error"), 2);
+			return (misc->prev_status);
 		}
-		else
-			input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
-		if (!input)
-			return ;
-		if (*input)
-		{
-			add_history(input);
-			misc->cmd_list = parse_input(input, misc);
-			free(input);
-			if (!misc->cmd_list)
-				continue ;
-			misc->prev_status = command_handler(misc);
-			ft_lstclear(&misc->cmd_list, free_command);
-			delete_tmpfiles(misc);
-		}
-		else
-			free(input);
+		cmd_list = cmd_list->next;
 	}
+	return (-1);
 }
 
 static void	forking(t_list *cmd_list, t_misc *misc)
@@ -87,13 +74,42 @@ static int	waitpid_loop(t_list *cmd_list)
 	return (stat);
 }
 
+void	ft_create_prompt(t_misc *misc)
+{
+	char	*input;
+
+	while (!misc->exit_flag)
+	{
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
+		if (!input)
+			return ;
+		if (*input)
+		{
+			add_history(input);
+			misc->cmd_list = parse_input(input, misc);
+			free(input);
+			if (!misc->cmd_list)
+				continue ;
+			misc->prev_status = command_handler(misc);
+			ft_lstclear(&misc->cmd_list, free_command);
+			delete_tmpfiles(misc);
+		}
+		else
+			free(input);
+	}
+}
+
 int	command_handler(t_misc *misc)
 {
 	t_list		*cmd_node;
 	int			status;
 
+	status = empty_cmd_check(misc);
+	if (status >= 0)
+		return (status);
 	cmd_node = misc->cmd_list;
-	status = -1;
 	if (cmd_node->next == NULL)
 		status = exec_builtin(cmd_node->data, misc);
 	if (status >= 0)
