@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 13:15:25 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:41:33 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	main(int argc, char **argv, char **envp)
 		misc.delet_this = ft_strdup(argv[2]);
 	else
 		misc.delet_this = NULL;
-	misc.prev_status = create_envp(envp, &misc);
-	if (misc.prev_status == ENOMEM)
+	g_status = create_envp(envp, &misc);
+	if (g_status == ENOMEM)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc.cmd_list = NULL;
 	misc.tmpfile_count = 0;
@@ -61,5 +61,5 @@ int	main(int argc, char **argv, char **envp)
 	clear_history();
 	if (!misc.delet_this)
 		ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
-	return (misc.prev_status);
+	return (g_status);
 }

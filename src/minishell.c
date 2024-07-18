@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 17:08:12 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:45:22 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	empty_cmd_check(t_misc *misc)
 		{
 			if (misc->cmd_list->next)
 				return (print_err(NULL, NULL, "syntax error"), 2);
-			return (misc->prev_status);
+			return (g_status);
 		}
 		cmd_list = cmd_list->next;
 	}
@@ -98,7 +98,7 @@ void	ft_create_prompt(t_misc *misc)
 			free(input);
 			if (!misc->cmd_list)
 				continue ;
-			misc->prev_status = command_handler(misc);
+			g_status = command_handler(misc);
 			ft_lstclear(&misc->cmd_list, free_command);
 			delete_tmpfiles(misc);
 		}

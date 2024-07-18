@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 16:44:50 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:24:05 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 	{
 		stat = ft_heredoc(arg, misc, storage);
 		if (stat != EXIT_SUCCESS)
-			set_stat(stat, misc);
+			set_stat(stat);
 		return (stat);
 	}
 	else
@@ -48,17 +48,17 @@ static char	*arg_parsing(char *cmd_str, int *i, char type, t_misc *misc)
 		(*i)++;
 	j = *i;
 	if (!cmd_str[j])
-		return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);
+		return (set_stat(2), print_err(0, 0, "syntax error"), NULL);
 	while (cmd_str[j] && !ft_isspace(cmd_str[j]))
 	{
 		if (cmd_str[j] == '<' || cmd_str[j] == '>')
-			return (set_stat(2, misc), print_err(0, 0, "syntax error"), NULL);
-		j = quote_skip(cmd_str, j, misc) + 1;
+			return (set_stat(2), print_err(0, 0, "syntax error"), NULL);
+		j = quote_skip(cmd_str, j) + 1;
 	}
 	arg = ft_substr(cmd_str, *i, j - *i);
 	arg = substitute(arg, misc, false, type == 61);
 	if (!arg)
-		return (set_stat(ENOMEM, misc), NULL);
+		return (set_stat(ENOMEM), NULL);
 	while (*i < j)
 		cmd_str[(*i)++] = ' ';
 	*i -= 1;
@@ -74,7 +74,7 @@ int	redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc)
 	i = -1;
 	while (cmd_str[++i])
 	{
-		i = quote_skip(cmd_str, i, misc);
+		i = quote_skip(cmd_str, i);
 		if (cmd_str[i] != '>' && cmd_str[i] != '<')
 			continue ;
 		type = cmd_str[i] + (cmd_str[i] == cmd_str[i + 1]);

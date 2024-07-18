@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:14 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 14:58:07 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:29:23 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ static char	*reset_buffer(char buf[42], char *res)
 	return (joined);
 }
 
-static char	*append_to_buf(char c, char buf[42], char *res, t_misc *misc)
+static char	*append_to_buf(char c, char buf[42], char *res)
 {
 	int	i;
 
 	if (!res)
 	{
 		print_err("malloc", NULL, NULL);
-		set_stat(ENOMEM, misc);
+		set_stat(ENOMEM);
 		return (NULL);
 	}
 	i = 0;
@@ -67,7 +67,7 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 		return (NULL);
 	len = 1;
 	if (v_name[0] == '?')
-		v_val = ft_itoa(misc->prev_status);
+		v_val = ft_itoa(g_status);
 	else
 	{
 		while (ft_isalnum(v_name[len]) || v_name[len] == '_')
@@ -95,7 +95,7 @@ char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 	int		i;
 
 	if (!arg)
-		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
+		return (set_stat(ENOMEM), print_err("malloc", 0, 0), NULL);
 	res = reset_buffer(buf, NULL);
 	quote = NO_QUOTE;
 	i = -1;
@@ -111,7 +111,7 @@ char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 			res = insert_envar(&arg[i], &i, res, misc);
 		}
 		else
-			res = append_to_buf(arg[i], buf, res, misc);
+			res = append_to_buf(arg[i], buf, res);
 	}
-	return (free(arg), append_to_buf('\0', buf, res, misc));
+	return (free(arg), append_to_buf('\0', buf, res));
 }
