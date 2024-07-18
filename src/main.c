@@ -6,11 +6,47 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:41:33 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 18:11:33 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	use_input(char *input, t_misc *misc)
+{
+	add_history(input);
+	misc->cmd_list = parse_input(input, misc);
+	free(input);
+	if (!misc->cmd_list)
+		return ;
+	g_status = command_handler(misc);
+	ft_lstclear(&misc->cmd_list, free_command);
+	delete_tmpfiles(misc);
+}
+
+static void	create_prompt(t_misc *misc)
+{
+	char	*input;
+
+	while (!misc->exit_flag)
+	{
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		if (misc->delet_this)
+		{
+			input = misc->delet_this;
+			misc->exit_flag = true;
+		}
+		else
+			input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
+		if (!input)
+			return ;
+		if (*input)
+			use_input(input, misc);
+		else
+			free(input);
+	}
+}
 
 static int	create_envp(char **arg_envp, t_misc *misc)
 {
@@ -56,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	misc.tmpfile_count = 0;
 	getcwd(misc.tmpfile_dir, PATH_MAX);
 	misc.exit_flag = false;
-	ft_create_prompt(&misc);
+	create_prompt(&misc);
 	free_envp(misc.envp);
 	clear_history();
 	if (!misc.delet_this)

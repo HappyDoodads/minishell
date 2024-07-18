@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:38:05 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:59:27 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ int			ft_heredoc(char *eof, t_misc *misc, char **storage);
 
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
-void		ft_create_prompt(t_misc *misc);
 int			command_handler(t_misc *misc);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////

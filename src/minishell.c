@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 17:38:19 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:57:51 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,39 +72,6 @@ static int	waitpid_loop(t_list *cmd_list)
 	else
 		stat = WEXITSTATUS(stat);
 	return (stat);
-}
-
-void	ft_create_prompt(t_misc *misc)
-{
-	char	*input;
-
-	while (!misc->exit_flag)
-	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
-		if (misc->delet_this)
-		{
-			input = misc->delet_this;
-			misc->exit_flag = true;
-		}
-		else
-			input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
-		if (!input)
-			return ;
-		if (*input)
-		{
-			add_history(input);
-			misc->cmd_list = parse_input(input, misc);
-			free(input);
-			if (!misc->cmd_list)
-				continue ;
-			g_status = command_handler(misc);
-			ft_lstclear(&misc->cmd_list, free_command);
-			delete_tmpfiles(misc);
-		}
-		else
-			free(input);
-	}
 }
 
 int	command_handler(t_misc *misc)
