@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:38:51 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:38:13 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ int	execve_errno(const char *cmd_name)
 		return (print_err(cmd_name, NULL, "command not found"), 127);
 	if (errno == EACCES)
 		return (print_err(cmd_name, NULL, NULL), 126);
-	return (print_err(cmd_name, NULL, NULL));
+	return (EXIT_FAILURE);
 }
