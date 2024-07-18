@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:24:05 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:44:02 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc)
 		if (!arg)
 			return (EXIT_FAILURE);
 		if (sort_redirect(arg, type, cmd, misc) != EXIT_SUCCESS)
-			return (free(arg), EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
