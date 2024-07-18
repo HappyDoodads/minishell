@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 18:11:33 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 18:47:54 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,13 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc > 2 && ft_strncmp(argv[1], "-c", 3) == 0)
 		misc.delet_this = ft_strdup(argv[2]);
-	else
+	else if (argc == 1)
 		misc.delet_this = NULL;
+	else
+	{
+		print_err(argv[1], NULL, "invalid option");
+		return (ft_dprintf(2, "Usage: %s [-c input]", argv[0]), 2);
+	}
 	g_status = create_envp(envp, &misc);
 	if (g_status == ENOMEM)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
