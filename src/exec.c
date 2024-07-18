@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:46 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 15:19:12 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:28:17 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,9 @@ void	exec_command(t_command *cmd, t_misc *misc)
 		fullpath = get_fullpath(cmd->argv[0], misc->envp);
 		ss_envp = ss_envp_creat(misc->envp);
 		execve(fullpath, cmd->argv, ss_envp);
-		status = execve_errno();
+		status = execve_errno(cmd->argv[0]);
 		ft_free_split(ss_envp);
 		free(fullpath);
-		print_err(cmd->argv[0], NULL, "command not found");
 	}
 	else if (status == -1)
 		status = EXIT_FAILURE;

@@ -105,7 +105,7 @@ di=0
 function runTest() {
   printf "$YEL --- --- ---$RESET\n"
   rm -fr a b
-  bash           -c "${testlist[$j]}" > out/out_ba
+  bash -c "${testlist[$j]}" > out/out_ba
   bacode=$?
   rm -fr a b
   $val ../minishell -c "${testlist[$j]}" > out/out_ms
@@ -147,7 +147,7 @@ do
   then
     echo '- - - - -'
   fi
-  sleep 0.3
+  sleep 0.1
 done
 read -p "clean project? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 0
 make -C .. fclean
