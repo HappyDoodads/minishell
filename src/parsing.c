@@ -6,17 +6,17 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 18:07:58 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:25:09 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	quote_skip(char *line, int i, t_misc *misc)
+int	quote_skip(char *line, int i)
 {
 	char	quote;
 
-	if (line[i] != QUOTE && line[i] != DQUOTE)
+	if (line[i] != SQUOTE && line[i] != DQUOTE)
 		return (i);
 	quote = line[i++];
 	while (line[i] && line[i] != quote)
@@ -24,29 +24,47 @@ int	quote_skip(char *line, int i, t_misc *misc)
 	if (line[i])
 		return (i);
 	print_err(NULL, NULL, "syntax error");
-	set_statcode(2, misc);
+	set_stat(2);
 	return (-1);
+}
+
+static t_command	*malloc_cmd(char *cmd_str, t_list **cmd_list)
+{
+	t_command	*command;
+	t_list		*new;
+
+	if (!cmd_str)
+		return (set_stat(ENOMEM), print_err("malloc", 0, 0), NULL);
+	command = ft_calloc(1, sizeof(t_command));
+	if (!command)
+	{
+		free(cmd_str);
+		return (set_stat(ENOMEM), print_err("malloc", 0, 0), NULL);
+	}
+	new = ft_lstnew(command);
+	if (!new)
+	{
+		free(cmd_str);
+		free(command);
+		return (set_stat(ENOMEM), print_err("malloc", 0, 0), NULL);
+	}
+	ft_lstadd_back(cmd_list, new);
+	return (command);
 }
 
 static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 {
 	t_command	*command;
-	t_list		*new;
 
-	new = NULL;
-	command = ft_calloc(1, sizeof(t_command));
-	new = ft_lstnew(command);
-	if (!cmd_str || !command || !new)
-	{
-		free(cmd_str);
-		free(command);
-		free(new);
-		return (print_err("malloc", 0, 0), set_statcode(ENOMEM, misc), 1);
-	}
-	ft_lstadd_back(cmd_list, new);
+	command = malloc_cmd(cmd_str, cmd_list);
+	if (!command)
+		return (EXIT_FAILURE);
 	command->pipe_r[1] = 1;
 	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
 		return (free(cmd_str), EXIT_FAILURE);
+	cmd_str = substitute(cmd_str, misc, true, false);
+	if (!cmd_str)
+		return (set_stat(ENOMEM), print_err("malloc", NULL, NULL));
 	command->argv = split_args(cmd_str, misc);
 	free(cmd_str);
 	if (command->argv == NULL)
@@ -66,7 +84,7 @@ t_list	*parse_input(char *input, t_misc *misc)
 	cmd_list = NULL;
 	while (input[++i])
 	{
-		i = quote_skip(input, i, misc);
+		i = quote_skip(input, i);
 		if (i == -1)
 			return (ft_lstclear(&cmd_list, free_command), NULL);
 		if (input[i] == '|')

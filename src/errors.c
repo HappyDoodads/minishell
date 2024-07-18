@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:50 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:11:39 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@ int	print_err(const char *s1, const char *s2, const char *msg)
 	return (EXIT_FAILURE);
 }
 
-void	set_statcode(int errnum, t_misc *misc)
+void	set_stat(int errnum)
 {
-	misc->prev_status = errnum;
+	g_status = errnum;
 }
 
-int	execve_errno(void)
+int	execve_errno(const char *cmd_name)
 {
 	if (errno == ENOENT)
-		return (127);
-	return (1);
+		return (print_err(cmd_name, NULL, "command not found"), 127);
+	if (errno == EACCES)
+		return (print_err(cmd_name, NULL, NULL), 126);
+	return (print_err(cmd_name, NULL, NULL));
 }

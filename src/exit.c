@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:42 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:44 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:12:20 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_exit(t_command *cmd, t_misc *misc)
 	int	stat;
 	int	i;
 
-	stat = misc->prev_status;
+	stat = g_status;
 	if (cmd->argv[1])
 	{
 		i = 0;

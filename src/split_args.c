@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:16 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 08:58:07 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:34:53 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static unsigned int	ft_arglen(const char *str)
 	quote = NO_QUOTE;
 	while (str[len] && (str[len] != ' ' || quote != NO_QUOTE))
 	{
-		if ((str[len] == DQUOTE || str[len] == QUOTE) && quote == NO_QUOTE)
+		if ((str[len] == DQUOTE || str[len] == SQUOTE) && quote == NO_QUOTE)
 			quote = str[len];
 		else if (quote == str[len])
 			quote = NO_QUOTE;
@@ -46,7 +46,7 @@ static unsigned int	count_args(const char *str)
 			i++;
 			while (*str && (*str != ' ' || quote))
 			{
-				if (quote == NO_QUOTE && (*str == DQUOTE || *str == QUOTE))
+				if (quote == NO_QUOTE && (*str == DQUOTE || *str == SQUOTE))
 					quote = *str;
 				else if (quote == *str)
 					quote = NO_QUOTE;
@@ -78,16 +78,16 @@ char	**split_args(const char *s, t_misc *misc)
 	i = count_args(s);
 	argv = ft_calloc(i + 1, sizeof(char *));
 	if (!argv)
-		return (NULL);
+		return (set_stat(ENOMEM, misc), print_err("malloc", 0, 0), NULL);
 	i = 0;
 	while (*s)
 	{
-		if (*s == ' ' || *s == '\t')
+		if (ft_isspace(*s))
 			s++;
 		else
 		{
 			argv[i] = sub_split(&s);
-			argv[i] = substitute(argv[i], misc, false, false);
+			argv[i] = substitute(argv[i], misc, false, true);
 			if (!argv[i++])
 				return (ft_free_split(argv), NULL);
 		}

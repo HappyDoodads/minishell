@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:13:12 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/11 15:17:16 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/17 16:41:44 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		ft_isset(int c, const char *set);
 char	**ft_free_split(char **split);
 void	ft_void(void *data);
 char	*ft_itoab(int n, char *buf, size_t size);
+int		ft_isspace(int c);
 
 typedef struct s_list
 {
