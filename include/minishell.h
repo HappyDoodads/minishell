@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/17 12:50:54 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:56:49 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ const char	*envp_getval(const t_envp *envp, const char *v_name);
 
 int			print_err(const char *s1, const char *s2, const char *msg);
 void		set_stat(int errnum, t_misc *misc);
-int			execve_errno(void);
+int			execve_errno(const char *cmd_name);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
 
