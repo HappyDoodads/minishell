@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 13:58:50 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:11:39 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	print_err(const char *s1, const char *s2, const char *msg)
 	return (EXIT_FAILURE);
 }
 
-void	set_stat(int errnum, t_misc *misc)
+void	set_stat(int errnum)
 {
-	misc->prev_status = errnum;
+	g_status = errnum;
 }
 
 int	execve_errno(const char *cmd_name)

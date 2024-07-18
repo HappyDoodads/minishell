@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 13:56:49 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:23:37 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define WHITE "\e[1;36m"
 
 ///////////////////////////////////STRUCTURES///////////////////////////////////
+int	g_status;
 
 typedef struct s_envp
 {
@@ -68,7 +69,6 @@ typedef struct s_misc
 	t_envp	*envp;
 	t_list	*cmd_list;
 	int		envp_size;
-	int		prev_status;
 	int		tmpfile_count;
 	char	tmpfile_dir[PATH_MAX];
 	bool	exit_flag;
@@ -103,7 +103,7 @@ const char	*envp_getval(const t_envp *envp, const char *v_name);
 ///////////////////////////////   ERRORS    ////////////////////////////////////
 
 int			print_err(const char *s1, const char *s2, const char *msg);
-void		set_stat(int errnum, t_misc *misc);
+void		set_stat(int errnum);
 int			execve_errno(const char *cmd_name);
 
 ///////////////////////////////    EXEC    /////////////////////////////////////
@@ -129,7 +129,7 @@ int			command_handler(t_misc *misc);
 
 ///////////////////////////////   PARSING   ////////////////////////////////////
 
-int			quote_skip(char *line, int i, t_misc *misc);
+int			quote_skip(char *line, int i);
 t_list		*parse_input(char *input, t_misc *misc);
 char		**split_args(const char *s, t_misc *misc);
 int			redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
