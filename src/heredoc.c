@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:31 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/15 13:56:24 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 15:54:13 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	fork_handler(char *eof, char **storage, t_misc *misc)
 		cleanup(misc);
 		exit(status);
 	}
-	free(eof);
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, sigint_handler);
@@ -73,12 +72,12 @@ int	ft_heredoc(char *eof, t_misc *misc, char **storage)
 	char	buf[21];
 
 	if (eof == NULL)
-		return (free(eof), print_err("heredoc", NULL, "syntax error"));
+		return (print_err("heredoc", NULL, "syntax error"));
 	ft_strlcpy(buf, "/.tmpfile", 21);
 	ft_itoab(misc->tmpfile_count, &buf[9], 12);
 	*storage = ft_strjoin(misc->tmpfile_dir, buf);
 	if (*storage == NULL)
-		return (free(eof), print_err("malloc", NULL, NULL), ENOMEM);
+		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc->tmpfile_count += 1;
 	return (fork_handler(eof, storage, misc));
 }

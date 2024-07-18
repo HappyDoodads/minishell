@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:27 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:16:48 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:09:52 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	command_handler(t_misc *misc)
 	if (cmd_node->next == NULL)
 		status = exec_builtin(cmd_node->data, misc);
 	if (status >= 0)
-		return (status);
+		return (close_cmd_pipes(cmd_node->data), status);
 	while (cmd_node != NULL)
 	{
 		forking(cmd_node, misc);
