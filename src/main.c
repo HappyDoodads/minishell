@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 18:11:33 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 22:13:55 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,24 @@
 
 static void	use_input(char *input, t_misc *misc)
 {
+	t_list	*eof_node;
+
+	if (!*input)
+		return (free(input));
 	add_history(input);
 	misc->cmd_list = parse_input(input, misc);
 	free(input);
 	if (!misc->cmd_list)
 		return ;
+	eof_node = misc->eof_list;
+	while (eof_node)
+	{
+		if (heredoc_fork(eof_node->data, misc->tmpfile_count, misc) != 0)
+			return ;
+		misc->tmpfile_count++;
+		eof_node = eof_node->next;
+	}
 	g_status = command_handler(misc);
-	ft_lstclear(&misc->cmd_list, free_command);
-	delete_tmpfiles(misc);
 }
 
 static void	create_prompt(t_misc *misc)
@@ -41,10 +51,12 @@ static void	create_prompt(t_misc *misc)
 			input = readline("\001\033[32m\002Minishell $> \001\e[0m\022\002");
 		if (!input)
 			return ;
-		if (*input)
-			use_input(input, misc);
-		else
-			free(input);
+		use_input(input, misc);
+		if (misc->cmd_list)
+			ft_lstclear(&misc->cmd_list, free_command);
+		if (misc->eof_list)
+			ft_lstclear(&misc->eof_list, free);
+		delete_tmpfiles(misc);
 	}
 }
 
@@ -89,12 +101,13 @@ int	main(int argc, char **argv, char **envp)
 	if (g_status == ENOMEM)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc.cmd_list = NULL;
-	misc.tmpfile_count = 0;
-	getcwd(misc.tmpfile_dir, PATH_MAX);
+	misc.eof_list = NULL;
+	getcwd(misc.tmpfile_path, PATH_MAX);
+	ft_strlcat(misc.tmpfile_path, "/.tmp", PATH_MAX);
 	misc.exit_flag = false;
+	misc.tmpfile_count = 0;
 	create_prompt(&misc);
-	free_envp(misc.envp);
-	clear_history();
+	cleanup(&misc);
 	if (!misc.delet_this)
 		ft_dprintf(2, "%sexit minishell\n%s", RED, RST);
 	return (g_status);

@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:21 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 16:44:02 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:04:08 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 {
 	char	**storage;
-	int		stat;
 
 	if (type == '>' || type == '>' + 1)
 		storage = &(cmd->outfile);
@@ -26,13 +25,11 @@ static int	sort_redirect(char *arg, int type, t_command *cmd, t_misc *misc)
 	else if (type == '>' + 1)
 		cmd->append_out = true;
 	free(*storage);
-	*storage = NULL;
 	if (type == '<' + 1)
 	{
-		stat = ft_heredoc(arg, misc, storage);
-		if (stat != EXIT_SUCCESS)
-			set_stat(stat);
-		return (stat);
+		*storage = ft_heredoc(arg, misc);
+		if (*storage == NULL)
+			return (set_stat(ENOMEM), EXIT_FAILURE);
 	}
 	else
 		*storage = arg;

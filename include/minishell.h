@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 17:59:27 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 22:08:49 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@
 ///////////////////////////////////STRUCTURES///////////////////////////////////
 int	g_status;
 
+typedef struct s_heredoc
+{
+	const char	*file;
+	char		*eof;
+}				t_heredoc;
+
 typedef struct s_envp
 {
 	char	*name;
@@ -68,9 +74,10 @@ typedef struct s_misc
 {
 	t_envp	*envp;
 	t_list	*cmd_list;
+	t_list	*eof_list;
 	int		envp_size;
+	char	tmpfile_path[PATH_MAX];
 	int		tmpfile_count;
-	char	tmpfile_dir[PATH_MAX];
 	bool	exit_flag;
 	char	*delet_this;
 }			t_misc;
@@ -121,7 +128,8 @@ void		delete_tmpfiles(t_misc *misc);
 
 ////////////////////////////////    HEREDOC   //////////////////////////////////
 
-int			ft_heredoc(char *eof, t_misc *misc, char **storage);
+char		*ft_heredoc(char *eof, t_misc *misc);
+int			heredoc_fork(const char *eof, int i, t_misc *misc);
 
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
