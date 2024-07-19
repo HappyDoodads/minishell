@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:34 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:35 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:39:46 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	free_envp(t_envp *envp)
 void	cleanup(t_misc *misc)
 {
 	ft_lstclear(&misc->cmd_list, free_command);
+	ft_lstclear(&misc->eof_list, free);
 	free_envp(misc->envp);
 	clear_history();
 }
@@ -50,8 +51,9 @@ void	delete_tmpfiles(t_misc *misc)
 	char	*num;
 	size_t	buf_left;
 
-	ft_strlcpy(file, misc->tmpfile_dir, PATH_MAX);
-	ft_strlcat(file, "/.tmpfile", PATH_MAX);
+	if (misc->tmpfile_count == 0)
+		return ;
+	ft_strlcpy(file, misc->tmpfile_path, PATH_MAX);
 	buf_left = ft_strlen(file);
 	num = file + buf_left;
 	buf_left = PATH_MAX - buf_left;

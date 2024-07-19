@@ -6,13 +6,13 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:31 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 16:22:35 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:03:45 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	heredoc_loop(char *eof, char **storage, t_misc *misc)
+static int	heredoc_loop(const char *eof, const char *file, t_misc *misc)
 {
 	char	*input;
 	int		fd;
@@ -20,9 +20,9 @@ static int	heredoc_loop(char *eof, char **storage, t_misc *misc)
 
 	signal(SIGINT, SIG_DFL);
 	eof_len = ft_strlen(eof);
-	fd = open(*storage, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (print_err(*storage, NULL, NULL));
+		return (print_err(file, NULL, NULL));
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
@@ -41,7 +41,7 @@ static int	heredoc_loop(char *eof, char **storage, t_misc *misc)
 	return (close(fd), EXIT_SUCCESS);
 }
 
-static int	fork_handler(char *eof, char **storage, t_misc *misc)
+static int	fork_handler(const char *eof, const char *file, t_misc *misc)
 {
 	int		status;
 	pid_t	pid;
@@ -51,34 +51,43 @@ static int	fork_handler(char *eof, char **storage, t_misc *misc)
 		return (print_err("fork", NULL, NULL));
 	if (pid == 0)
 	{
-		status = heredoc_loop(eof, storage, misc);
-		free(eof);
+		status = heredoc_loop(eof, file, misc);
 		cleanup(misc);
 		exit(status);
 	}
-	free(eof);
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, sigint_handler);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		return (ft_putchar_fd('\n', 1), EXIT_FAILURE);
 	status = WEXITSTATUS(status);
-	if (status == EXIT_FAILURE)
-		misc->tmpfile_count--;
 	return (status);
 }
 
-int	ft_heredoc(char *eof, t_misc *misc, char **storage)
+int	heredoc_fork(const char *eof, int i, t_misc *misc)
 {
-	char	buf[21];
+	char	file[PATH_MAX];
+	char	num[12];
 
-	if (eof == NULL)
-		return (free(eof), print_err("heredoc", NULL, "syntax error"));
-	ft_strlcpy(buf, "/.tmpfile", 21);
-	ft_itoab(misc->tmpfile_count, &buf[9], 12);
-	*storage = ft_strjoin(misc->tmpfile_dir, buf);
-	if (*storage == NULL)
-		return (free(eof), print_err("malloc", NULL, NULL), ENOMEM);
-	misc->tmpfile_count += 1;
-	return (fork_handler(eof, storage, misc));
+	ft_strlcpy(file, misc->tmpfile_path, PATH_MAX);
+	ft_itoab(i, num, 12);
+	ft_strlcat(file, num, PATH_MAX);
+	return (fork_handler(eof, file, misc));
+}
+
+char	*ft_heredoc(char *eof, t_misc *misc)
+{
+	char	*file;
+	char	buf[12];
+	t_list	*node;
+
+	ft_itoab(ft_lstsize(misc->eof_list), buf, 12);
+	file = ft_strjoin(misc->tmpfile_path, buf);
+	if (!file)
+		return (free(eof), print_err("malloc", NULL, NULL), NULL);
+	node = ft_lstnew(eof);
+	if (!node)
+		return (free(file), free(eof), print_err("malloc", 0, 0), NULL);
+	ft_lstadd_back(&misc->eof_list, node);
+	return (file);
 }
