@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:23 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/12 17:47:24 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/19 15:28:45 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,9 @@ int	ft_pwd(t_command *cmd, t_misc *misc)
 	if (cmd->argv[1] != NULL)
 	{
 		if (cmd->argv[1][0] == '-')
-			ft_dprintf(2, "pwd: bad option: %s\n", cmd->argv[1]);
-		else
-			ft_dprintf(2, "pwd: too many arguments\n");
-		return (1);
+			return(ft_dprintf(2, "pwd: invalid option: %s\n", cmd->argv[1]), 1);
 	}
-	if (getcwd(cwd, PATH_MAX) != NULL)
-	{
-		if (cmd->pipe_r[1] == 1)
-			ft_dprintf(cmd->pipe_r[1], "%s%s%s\n", YELLOW, cwd, RST);
-		else
-			ft_dprintf(cmd->pipe_r[1], "%s\n", cwd);
-		return (0);
-	}
-	perror("getcwd() error");
-	return (errno);
+	getcwd(cwd, PATH_MAX);
+	ft_dprintf(cmd->pipe_r[1], "%s\n", cwd);
+	return (0);
 }
