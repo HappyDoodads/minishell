@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/22 15:11:08 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 17:22:59 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ static void	create_prompt(t_misc *misc)
 		if (!input)
 			return ;
 		use_input(input, misc);
-		if (misc->cmd_list)
-			ft_lstclear(&misc->cmd_list, free_command);
-		if (misc->heredoc_list)
-			ft_lstclear(&misc->heredoc_list, free);
+		ft_lstclear(&misc->cmd_list, free_command);
+		ft_lstclear(&misc->heredoc_list, free_heredoc);
 		delete_tmpfiles(misc);
 	}
 }

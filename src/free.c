@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:34 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/22 14:31:53 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 17:24:34 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	free_heredoc(void *data)
 	heredoc = data;
 	free(heredoc->eof);
 	free(heredoc->file);
+	free(heredoc);
 }
 
 void	free_envp(t_envp *envp)
@@ -49,7 +50,7 @@ void	free_envp(t_envp *envp)
 void	cleanup(t_misc *misc)
 {
 	ft_lstclear(&misc->cmd_list, free_command);
-	ft_lstclear(&misc->heredoc_list, free);
+	ft_lstclear(&misc->heredoc_list, free_heredoc);
 	free_envp(misc->envp);
 	rl_clear_history();
 }
