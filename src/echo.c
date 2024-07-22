@@ -6,7 +6,7 @@
 /*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:54 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 11:58:31 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:58:07 by jcoquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_echo(t_command *cmd, t_misc *misc)
 	while (cmd->argv[i])
 	{
 		j = check_option(cmd, i);
-		if (cmd->argv[i][j] == '\0')
+		if (cmd->argv[i][j] == '\0' && cmd->argv[i][0] != 0)
 		{
 			i++;
 			j = 0;
