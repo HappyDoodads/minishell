@@ -6,21 +6,23 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:14 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:29:23 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:02:43 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	quote_check(char c, char *quote)
+static bool	quote_check(char c, char *quote, int flag)
 {
+	if (flag == IN_HEREDOC)
+		return (false);
 	if (*quote == NO_QUOTE && (c == SQUOTE || c == DQUOTE))
 		*quote = c;
 	else if (*quote == c)
 		*quote = NO_QUOTE;
 	else
 		return (false);
-	return (true);
+	return (flag != CMD_STR);
 }
 
 static char	*reset_buffer(char buf[42], char *res)
@@ -87,7 +89,7 @@ static char	*insert_envar(char *v_name, int *arg_i, char *res, t_misc *misc)
 
 //	if quote_ign == true, quotation symbols are not removed from string
 //	if var_ign == true, env. variable symbol ($) is read as simple text
-char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
+char	*substitute(char *arg, t_misc *misc, int flag)
 {
 	char	buf[42];
 	char	*res;
@@ -101,9 +103,9 @@ char	*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign)
 	i = -1;
 	while (arg[++i] && res != NULL)
 	{
-		if (quote_check(arg[i], &quote) && quote_ign == false)
+		if (quote_check(arg[i], &quote, flag))
 			continue ;
-		else if (var_ign == false && arg[i] == '$' && quote != SQUOTE
+		else if (flag != NO_SUBST && arg[i] == '$' && quote != SQUOTE
 			&& (ft_isalpha(arg[i + 1]) || ft_isset(arg[i + 1], "_?")))
 		{
 			i++;

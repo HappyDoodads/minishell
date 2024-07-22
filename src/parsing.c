@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:25 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:25:09 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:16:20 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	parse_cmd(char *cmd_str, t_list **cmd_list, t_misc *misc)
 	command->pipe_r[1] = 1;
 	if (redirect_parsing(cmd_str, command, misc) != EXIT_SUCCESS)
 		return (free(cmd_str), EXIT_FAILURE);
-	cmd_str = substitute(cmd_str, misc, true, false);
+	cmd_str = substitute(cmd_str, misc, CMD_STR);
 	if (!cmd_str)
 		return (set_stat(ENOMEM), print_err("malloc", NULL, NULL));
 	command->argv = split_args(cmd_str, misc);

@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:49 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 17:38:13 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 16:47:32 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	set_stat(int errnum)
 
 int	execve_errno(const char *cmd_name)
 {
-	if (errno == ENOENT)
+	if (errno == ENOENT || (errno == EACCES && cmd_name[0] == 0))
 		return (print_err(cmd_name, NULL, "command not found"), 127);
 	if (errno == EACCES)
 		return (print_err(cmd_name, NULL, NULL), 126);

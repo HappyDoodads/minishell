@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:48:09 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 22:08:49 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:52:25 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ int	g_status;
 
 typedef struct s_heredoc
 {
-	const char	*file;
-	char		*eof;
-}				t_heredoc;
+	char	*file;
+	char	*eof;
+	bool	has_quotes;
+}			t_heredoc;
 
 typedef struct s_envp
 {
@@ -74,7 +75,7 @@ typedef struct s_misc
 {
 	t_envp	*envp;
 	t_list	*cmd_list;
-	t_list	*eof_list;
+	t_list	*heredoc_list;
 	int		envp_size;
 	char	tmpfile_path[PATH_MAX];
 	int		tmpfile_count;
@@ -88,7 +89,23 @@ enum e_quote_status
 {
 	NO_QUOTE = 0,
 	DQUOTE = 34,
-	SQUOTE = 39
+	SQUOTE = 39,
+};
+
+enum e_substitute_flag
+{
+	FILENAME = 42,
+	NO_SUBST = 43,
+	CMD_STR = 101,
+	IN_HEREDOC = 418,
+};
+
+enum e_redirect_type
+{
+	INPUT = 60,
+	HEREDOC,
+	OUTPUT,
+	APPEND,
 };
 
 /**********************************PROTOTYPES**********************************/
@@ -122,6 +139,7 @@ void		exec_command(t_command *command, t_misc *misc);
 ////////////////////////////////   FREE    /////////////////////////////////////
 
 void		free_command(void *data);
+void		free_heredoc(void *data);
 void		free_envp(t_envp *envp);
 void		cleanup(t_misc *misc);
 void		delete_tmpfiles(t_misc *misc);
@@ -129,7 +147,7 @@ void		delete_tmpfiles(t_misc *misc);
 ////////////////////////////////    HEREDOC   //////////////////////////////////
 
 char		*ft_heredoc(char *eof, t_misc *misc);
-int			heredoc_fork(const char *eof, int i, t_misc *misc);
+int			heredoc_fork(t_heredoc *heredoc, t_misc *misc);
 
 ///////////////////////////////   MINISHELL   //////////////////////////////////
 
@@ -141,13 +159,14 @@ int			quote_skip(char *line, int i);
 t_list		*parse_input(char *input, t_misc *misc);
 char		**split_args(const char *s, t_misc *misc);
 int			redirect_parsing(char *cmd_str, t_command *cmd, t_misc *misc);
-char		*substitute(char *arg, t_misc *misc, bool quote_ign, bool var_ign);
+char		*substitute(char *arg, t_misc *misc, int flag);
 
 //////////////////////////////    SIGNAL    ////////////////////////////////////
 
 void		sigint_handler(int sig_num);
 void		sig_child_handler(int sig_num);
 int			rl_replace_line(const char *text, int clear_undo);
+void		rl_clear_history(void);
 
 //////////////////////////////    PIPES_UTILS    ///////////////////////////////
 
