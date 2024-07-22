@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:46:55 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/19 15:47:44 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/22 17:39:04 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_cd(t_command *cmd, t_misc *misc)
 	if (cmd->argv[1] != NULL)
 	{
 		if (cmd->argv[1][0] == '-')
-			return(ft_dprintf(2, "cd: invalid option: %s\n", cmd->argv[1]), 1);
+			return (print_err("cd", "invalid option", cmd->argv[1]));
 	}
 	old_path[0] = '=';
 	new_path[0] = '=';

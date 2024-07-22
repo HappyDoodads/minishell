@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquet <jcoquet@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:23 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/19 15:28:45 by jcoquet          ###   ########.fr       */
+/*   Updated: 2024/07/22 17:39:15 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_pwd(t_command *cmd, t_misc *misc)
 	if (cmd->argv[1] != NULL)
 	{
 		if (cmd->argv[1][0] == '-')
-			return(ft_dprintf(2, "pwd: invalid option: %s\n", cmd->argv[1]), 1);
+			return (print_err("pwd", "invalid option", cmd->argv[1]));
 	}
 	getcwd(cwd, PATH_MAX);
 	ft_dprintf(cmd->pipe_r[1], "%s\n", cwd);
