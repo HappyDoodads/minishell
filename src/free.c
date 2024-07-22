@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:34 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 21:39:46 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:31:53 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@ void	free_command(void *data)
 	free(command->infile);
 	free(command->outfile);
 	free(data);
+}
+
+void	free_heredoc(void *data)
+{
+	t_heredoc	*heredoc;
+
+	heredoc = data;
+	free(heredoc->eof);
+	free(heredoc->file);
 }
 
 void	free_envp(t_envp *envp)
@@ -40,9 +49,9 @@ void	free_envp(t_envp *envp)
 void	cleanup(t_misc *misc)
 {
 	ft_lstclear(&misc->cmd_list, free_command);
-	ft_lstclear(&misc->eof_list, free);
+	ft_lstclear(&misc->heredoc_list, free);
 	free_envp(misc->envp);
-	clear_history();
+	rl_clear_history();
 }
 
 void	delete_tmpfiles(t_misc *misc)

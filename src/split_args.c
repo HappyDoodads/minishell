@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:16 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/18 14:46:01 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:16:42 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	**split_args(const char *s, t_misc *misc)
 		else
 		{
 			argv[i] = sub_split(&s);
-			argv[i] = substitute(argv[i], misc, false, true);
+			argv[i] = substitute(argv[i], misc, NO_SUBST);
 			if (!argv[i++])
 				return (ft_free_split(argv), NULL);
 		}

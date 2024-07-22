@@ -6,7 +6,7 @@
 /*   By: jdemers <jdemers@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 17:47:29 by jdemers           #+#    #+#             */
-/*   Updated: 2024/07/19 13:18:29 by jdemers          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:11:08 by jdemers          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ static void	use_input(char *input, t_misc *misc)
 	free(input);
 	if (!misc->cmd_list)
 		return ;
-	eof_node = misc->eof_list;
+	eof_node = misc->heredoc_list;
 	while (eof_node)
 	{
-		if (heredoc_fork(eof_node->data, misc->tmpfile_count, misc) != 0)
+		if (heredoc_fork(eof_node->data, misc) != 0)
 			return ;
 		misc->tmpfile_count++;
 		eof_node = eof_node->next;
@@ -54,8 +54,8 @@ static void	create_prompt(t_misc *misc)
 		use_input(input, misc);
 		if (misc->cmd_list)
 			ft_lstclear(&misc->cmd_list, free_command);
-		if (misc->eof_list)
-			ft_lstclear(&misc->eof_list, free);
+		if (misc->heredoc_list)
+			ft_lstclear(&misc->heredoc_list, free);
 		delete_tmpfiles(misc);
 	}
 }
@@ -106,7 +106,7 @@ int	main(int argc, char **argv, char **envp)
 	if (g_status == ENOMEM)
 		return (print_err("malloc", NULL, NULL), ENOMEM);
 	misc.cmd_list = NULL;
-	misc.eof_list = NULL;
+	misc.heredoc_list = NULL;
 	getcwd(misc.tmpfile_path, PATH_MAX);
 	ft_strlcat(misc.tmpfile_path, "/.tmp", PATH_MAX);
 	misc.exit_flag = false;
